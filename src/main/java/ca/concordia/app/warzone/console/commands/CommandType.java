@@ -7,6 +7,10 @@ public enum CommandType {
     SHOW_MAP("showmap"),
     SAVE_MAP("savemap"),
     EDIT_MAP("editmap"),
+    LOAD_MAP("loadmap"),
+    ASSIGN_COUNTRIES("assigncountries"),
+    GAME_PLAYER("gameplayer"),
+    DEPLOY("deploy"),
     VALIDATE_MAP("validatemap")
     ;
 

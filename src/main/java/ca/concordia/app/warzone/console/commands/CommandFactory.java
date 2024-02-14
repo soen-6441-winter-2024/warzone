@@ -17,8 +17,15 @@ public class CommandFactory {
             return new EditNeighborCommand(optionsOrSubCommands);
         } else if(commandName.equals(CommandType.SAVE_MAP.toString())) {
             return new SaveMapCommand(optionsOrSubCommands);
+        }else if(commandName.equals(CommandType.LOAD_MAP.toString())) {
+            return new LoadMapCommand(optionsOrSubCommands);
+        }else if(commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
+            return new AssignCountriesCommand(optionsOrSubCommands);
+        }else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
+            return new GamePlayerCommand(optionsOrSubCommands);
+        }else if(commandName.equals(CommandType.DEPLOY.toString())) {
+            return new DeployCommand(optionsOrSubCommands);
         }
-
 
         return null;
     }
