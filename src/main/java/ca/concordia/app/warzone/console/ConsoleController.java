@@ -13,6 +13,12 @@ import java.util.Scanner;
 @Component
 public class ConsoleController implements CommandLineRunner {
 
+    private CommandFactory commandFactory;
+
+    public ConsoleController(CommandFactory commandFactory) {
+        this.commandFactory = commandFactory;
+    }
+
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Welcome to the game \n\n");
@@ -28,22 +34,25 @@ public class ConsoleController implements CommandLineRunner {
                 continue;
             }
 
-            Command command = null;
             try {
-                command = this.getCommand(fullCommand);
+                Command command = this.getCommand(fullCommand);
+                String[] optionsOrSubCommands = this.getOptions(fullCommand);
+                command.run(optionsOrSubCommands);
             } catch (InvalidCommandException e) {
                 System.out.println("Invalid command provided: " + e.getMessage());
-                continue;
             }
 
-            command.run();
         } while (!"quit".equals(fullCommand));
+    }
+
+    private String[] getOptions(String fullCommand) {
+        String[] splittedFullCommand = fullCommand.split(" ");
+        return Arrays.copyOfRange(splittedFullCommand, 1, splittedFullCommand.length);
     }
 
     private Command getCommand(String fullCommand) throws InvalidCommandException {
         String[] splittedFullCommand = fullCommand.split(" ");
         String firstCommand = splittedFullCommand[0];
-
-        return CommandFactory.NewCommand(firstCommand, Arrays.copyOfRange(splittedFullCommand, 1, splittedFullCommand.length));
-    }
+        return commandFactory.newCommand(firstCommand);
+    }/**/
 }

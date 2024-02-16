@@ -15,7 +15,7 @@ public class LoadMapCommand extends Command {
     }
 
     @Override
-    public void run() {
+    public void run(String[] subCommandsAndOptions) {
 //        Saves the current map being edited
         System.out.println("Loading Map file: " + this.filename);
     }
