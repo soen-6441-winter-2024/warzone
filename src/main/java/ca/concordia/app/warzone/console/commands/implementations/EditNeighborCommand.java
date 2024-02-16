@@ -52,7 +52,7 @@ public class EditNeighborCommand extends Command {
     }
 
     @Override
-    public void run() {
+    public void run(String[] subCommandsAndOptions) {
         for (SubCommand subCommand : this.subCommands) {
             subCommand.run();
         }

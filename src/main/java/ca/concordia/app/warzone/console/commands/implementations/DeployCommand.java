@@ -16,7 +16,7 @@ public class DeployCommand extends Command {
     }
 
     @Override
-    public void run() {
+    public void run(String[] subCommandsAndOptions) {
 //        Saves the current map being edited
         System.out.println("Deploying the Country: " + this.l_countryID + " with # armies " + this.l_num);
     }

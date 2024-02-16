@@ -9,5 +9,5 @@ public abstract class Command {
 
     protected SubCommand[] subCommands;
 
-    abstract public void run();
+    abstract public void run(String[] subCommandsAndOptions);
 }
