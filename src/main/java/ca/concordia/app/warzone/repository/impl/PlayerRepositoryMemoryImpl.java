@@ -17,6 +17,10 @@ public class PlayerRepositoryMemoryImpl implements PlayerRepository {
         values.put(domain.get_playerName(), domain);
     }
 
+    public void delete(Player player){
+        values.remove(player.get_playerName(), player);
+    }
+
     @Override
     public Optional<Player> findByName(String name) {
         return Optional.ofNullable(values.get(name));

@@ -22,12 +22,8 @@ public class AddGamePlayerSubCommand extends SubCommand {
 
     @Override
     public String run() {
-        // Call AddContinent from the service class
         PlayerDto dto = new PlayerDto();
         dto.setD_playerName(this.options[0]);
-        String response = gameEngineController.addPlayer(dto);
-        System.out.println(response);
-        System.out.println("Adding a Game Player with name: " + this.options[0]);
         return gameEngineController.addPlayer(dto);
     }
 }

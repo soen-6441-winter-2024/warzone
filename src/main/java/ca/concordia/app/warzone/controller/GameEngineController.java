@@ -47,7 +47,12 @@ public class GameEngineController {
     }
 
     public String addPlayer(PlayerDto playerDto){
-        playerService.add(playerDto);
-        return "Country " + playerDto.get_playerName() + " added";
+        String playerName = playerDto.get_playerName();
+        String response = playerService.add(playerDto);
+        return response;
+    }
+
+    public  String removePlayer(String playerName){
+        return playerService.remove(playerName);
     }
 }
