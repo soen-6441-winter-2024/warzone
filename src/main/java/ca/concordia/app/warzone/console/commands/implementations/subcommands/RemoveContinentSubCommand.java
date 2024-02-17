@@ -20,8 +20,10 @@ public class RemoveContinentSubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call RemoveContinent from the service class
         System.out.println("Removing a continent with value: " + this.options[0]);
+
+        return null;
     }
 }

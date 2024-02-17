@@ -19,9 +19,9 @@ public class RemoveCountrySubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call RemoveContinent from the service class
         System.out.println("Removing a country with value: " + this.options[0]);
-        controller.removeCountry(this.options[0]);
+        return controller.removeCountry(this.options[0]);
     }
 }

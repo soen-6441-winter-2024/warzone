@@ -21,10 +21,10 @@ public class AddCountrySubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call AddCountry from the service class
         System.out.println("Adding a country with values: " + this.options[0] + " " + this.options[1]);
         CountryDto dto = new CountryDto(this.options[0], this.options[1]);
-        controller.addCountry(dto);
+        return controller.addCountry(dto);
     }
 }

@@ -16,8 +16,9 @@ public class AddGamePlayerSubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call AddContinent from the service class
         System.out.println("Adding a Game Player with name: " + this.options[0]);
+        return null;
     }
 }

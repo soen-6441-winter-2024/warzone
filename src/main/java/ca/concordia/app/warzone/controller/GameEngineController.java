@@ -4,28 +4,25 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
-import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GameEngineController {
 
-    private ContinentService service;
-    private CountryService countryService;
-
-    public GameEngineController(ContinentService service, CountryService countryService) {
-        this.service = service;
-        this.countryService = countryService;
-    }
-
-    private MapService mapService = new MapService();
+    private final ContinentService continentService;
+    private final CountryService countryService;
 
     private Phase current = Phase.MAP_EDITOR;
+
+    public GameEngineController(ContinentService continentService, CountryService countryService) {
+        this.continentService = continentService;
+        this.countryService = countryService;
+    }
 
     public String addContinent(ContinentDto continentDto) {
 
         if (Phase.MAP_EDITOR.equals(current)) {
-            return service.add(continentDto);
+            return continentService.add(continentDto);
         } else {
             return "Invalid Phase";
         }
@@ -35,11 +32,12 @@ public class GameEngineController {
         return null;
     }
 
-    public void removeCountry(String option) {
-
+    public String removeCountry(String option) {
+        return null;
     }
 
-    public void addCountry(CountryDto dto) {
+    public String addCountry(CountryDto dto) {
         countryService.add(dto);
+        return "Country " + dto.id() + " added";
     }
 }

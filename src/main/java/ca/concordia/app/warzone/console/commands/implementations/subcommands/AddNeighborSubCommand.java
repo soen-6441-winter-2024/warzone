@@ -15,7 +15,8 @@ public class AddNeighborSubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         System.out.println("Adding a neighbor with values: " + this.options[0] + " " + this.options[1]);
+        return null;
     }
 }

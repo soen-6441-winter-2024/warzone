@@ -15,8 +15,9 @@ public class RemoveGamePlayerSubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call RemoveContinent from the service class
         System.out.println("Removing a Game Player with name: " + this.options[0]);
+        return null;
     }
 }

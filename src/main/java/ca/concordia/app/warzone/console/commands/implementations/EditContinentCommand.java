@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class EditContinentCommand extends Command {
     final Pattern subCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
-    private GameEngineController controller;
+    private final GameEngineController controller;
 
     public EditContinentCommand(GameEngineController controller) {
         this.controller = controller;
@@ -31,7 +31,7 @@ public class EditContinentCommand extends Command {
     }
 
     @Override
-    public void run(String[] subCommandsAndOptions) {
+    public String run(String[] subCommandsAndOptions) {
 
         String subCommands = Strings.join(Arrays.asList(subCommandsAndOptions), ' ');
 
@@ -59,8 +59,12 @@ public class EditContinentCommand extends Command {
             throw new InvalidCommandException("at least once subcommand is required");
         }
 
+        StringBuilder result = new StringBuilder();
+
         for (SubCommand subCommand : subCommandsArr) {
-            subCommand.run();
+            result.append(subCommand.run()).append("\n");
         }
+
+        return result.toString();
     }
 }

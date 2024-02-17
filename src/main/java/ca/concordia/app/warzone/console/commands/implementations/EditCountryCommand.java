@@ -30,7 +30,7 @@ public class EditCountryCommand extends Command {
     }
 
     @Override
-    public void run(String[] subCommandsAndOptions) {
+    public String run(String[] subCommandsAndOptions) {
 
         String subCommands = Strings.join(Arrays.asList(subCommandsAndOptions), ' ');
 
@@ -60,8 +60,12 @@ public class EditCountryCommand extends Command {
             throw new InvalidCommandException("at least once subcommand is required");
         }
 
+        StringBuilder result = new StringBuilder();
+
         for (SubCommand subCommand : subCommandsArr) {
-            subCommand.run();
+            result.append(subCommand.run()).append("\n");
         }
+
+        return result.toString();
     }
 }

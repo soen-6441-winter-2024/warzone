@@ -15,8 +15,9 @@ public class RemoveNeighborSubCommand extends SubCommand {
     }
 
     @Override
-    public void run() {
+    public String run() {
         // Call RemoveContinent from the service class
         System.out.println("Removing a neighbor with values: " + this.options[0] + " " + this.options[1]);
+        return null;
     }
 }

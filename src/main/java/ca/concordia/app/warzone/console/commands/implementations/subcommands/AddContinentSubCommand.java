@@ -9,7 +9,7 @@ import ca.concordia.app.warzone.service.ContinentService;
 
 public class AddContinentSubCommand extends SubCommand {
 
-    private GameEngineController gameEngineController;
+    private final GameEngineController gameEngineController;
 
     public AddContinentSubCommand(String[] options, GameEngineController gameEngineController) throws InvalidCommandException {
         this.type = SubCommandType.ADD;
@@ -23,14 +23,13 @@ public class AddContinentSubCommand extends SubCommand {
 
 
     @Override
-    public void run() {
+    public String run() {
         // Call AddContinent from the service class
         System.out.println("Adding a continent with values: " + this.options[0] + " " + this.options[1]);
 
         ContinentDto dto = new ContinentDto();
         dto.setId(this.options[0]);
         dto.setValue(this.options[1]);
-        String response = gameEngineController.addContinent(dto);
-        System.out.println(response);
+        return gameEngineController.addContinent(dto);
     }
 }

@@ -13,7 +13,14 @@ import java.util.Scanner;
 @Component
 public class ConsoleController implements CommandLineRunner {
 
-    private CommandFactory commandFactory;
+    public static final String INITIAL_PAGE = """
+        Welcome to the warzone game \n
+        
+        First, let's start editing a map
+        
+        type 'help' to show available commands
+        """;
+    private final CommandFactory commandFactory;
 
     public ConsoleController(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
@@ -21,7 +28,7 @@ public class ConsoleController implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Welcome to the game \n\n");
+        System.out.println(INITIAL_PAGE);
 
         Scanner scanner = new Scanner(System.in);
         String fullCommand;
@@ -36,8 +43,8 @@ public class ConsoleController implements CommandLineRunner {
 
             try {
                 Command command = this.getCommand(fullCommand);
-                String[] optionsOrSubCommands = this.getOptions(fullCommand);
-                command.run(optionsOrSubCommands);
+                String[] options = this.getOptions(fullCommand);
+                System.out.println(command.run(options));
             } catch (InvalidCommandException e) {
                 System.out.println("Invalid command provided: " + e.getMessage());
             }
@@ -54,5 +61,5 @@ public class ConsoleController implements CommandLineRunner {
         String[] splittedFullCommand = fullCommand.split(" ");
         String firstCommand = splittedFullCommand[0];
         return commandFactory.newCommand(firstCommand);
-    }/**/
+    }
 }

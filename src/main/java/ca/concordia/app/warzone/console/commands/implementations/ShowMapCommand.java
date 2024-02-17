@@ -11,7 +11,9 @@ public class ShowMapCommand extends Command {
     }
 
     @Override
-    public void run(String[] subCommandsAndOptions) {
+    public String run(String[] subCommandsAndOptions) {
         System.out.println("Showing a map!");
+
+        return null;
     }
 }
