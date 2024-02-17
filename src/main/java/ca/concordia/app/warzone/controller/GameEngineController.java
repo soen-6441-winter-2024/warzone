@@ -2,8 +2,10 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
+import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
+import ca.concordia.app.warzone.service.PlayerService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,11 +14,14 @@ public class GameEngineController {
     private final ContinentService continentService;
     private final CountryService countryService;
 
+    private final PlayerService playerService;
+
     private Phase current = Phase.MAP_EDITOR;
 
-    public GameEngineController(ContinentService continentService, CountryService countryService) {
+    public GameEngineController(ContinentService continentService, CountryService countryService, PlayerService playerService) {
         this.continentService = continentService;
         this.countryService = countryService;
+        this.playerService = playerService;
     }
 
     public String addContinent(ContinentDto continentDto) {
@@ -39,5 +44,10 @@ public class GameEngineController {
     public String addCountry(CountryDto dto) {
         countryService.add(dto);
         return "Country " + dto.id() + " added";
+    }
+
+    public String addPlayer(PlayerDto playerDto){
+        playerService.add(playerDto);
+        return "Country " + playerDto.get_playerName() + " added";
     }
 }

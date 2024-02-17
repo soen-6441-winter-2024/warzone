@@ -11,9 +11,12 @@ public class CommandFactory {
 
     private EditCountryCommand editCountryCommand;
 
-    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand) {
+    private GamePlayerCommand editGamePlayerCommand;
+
+    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, GamePlayerCommand editGamePlayerCommand) {
         this.editContinentCommand = editContinentCommand;
         this.editCountryCommand = editCountryCommand;
+        this.editGamePlayerCommand = editGamePlayerCommand;
     }
 
     public Command newCommand(String commandName) throws InvalidCommandException {
@@ -21,6 +24,9 @@ public class CommandFactory {
             return editContinentCommand;
         } else if(commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
             return editCountryCommand;
+        }
+        else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
+            return editGamePlayerCommand;
         }
 //        } else if(commandName.equals(CommandType.SHOW_MAP.toString())) {
 //            return new ShowMapCommand();
@@ -34,8 +40,7 @@ public class CommandFactory {
 //            return new LoadMapCommand(optionsOrSubCommands);
 //        }else if(commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
 //            return new AssignCountriesCommand(optionsOrSubCommands);
-//        }else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
-//            return new GamePlayerCommand(optionsOrSubCommands);
+//        }
 //        }else if(commandName.equals(CommandType.DEPLOY.toString())) {
 //            return new DeployCommand(optionsOrSubCommands);
 //        }

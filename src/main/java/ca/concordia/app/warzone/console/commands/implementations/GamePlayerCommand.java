@@ -6,27 +6,39 @@ import ca.concordia.app.warzone.console.commands.SubCommand;
 import ca.concordia.app.warzone.console.commands.SubCommandType;
 import ca.concordia.app.warzone.console.commands.implementations.subcommands.*;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.GameEngineController;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class GamePlayerCommand extends Command {
 
     final Pattern subCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
+    private final GameEngineController controller;
 
-    public GamePlayerCommand(String[] subCommandsAndOptions) throws InvalidCommandException {
+    public  GamePlayerCommand(GameEngineController controller){
+        this.controller = controller;
+        init();
+    }
+
+    private void init(){
         this.type = CommandType.GAME_PLAYER;
+    }
+
+    @Override
+    public String run(String[] subCommandsAndOptions) {
 
         String subCommands = Strings.join(Arrays.asList(subCommandsAndOptions), ' ');
 
         Matcher matcher = subCommandsPattern.matcher(subCommands);
 
-        ArrayList<SubCommand> subCommandsArr = new ArrayList<>();
-
+        ArrayList<SubCommand> subCommandArr = new ArrayList<>();
 
         while (matcher.find()) {
             if (matcher.group().equals(subCommands)) {
@@ -37,25 +49,24 @@ public class GamePlayerCommand extends Command {
             String singleSubCommand = singleSubcommandAndOptions[0].substring(1);
 
             if (singleSubCommand.equals(SubCommandType.ADD.toString())) {
-                subCommandsArr.add(new AddGamePlayerSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length)));
+                subCommandArr.add(new AddGamePlayerSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
             } else if (singleSubCommand.equals(SubCommandType.REMOVE.toString())) {
-                subCommandsArr.add(new RemoveGamePlayerSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length)));
+                subCommandArr.add(new RemoveGamePlayerSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
             }
         }
 
-        if (subCommandsArr.isEmpty()) {
-            throw new InvalidCommandException("at least once subcommand is required");
+        if (subCommandArr.isEmpty()) {
+            throw new InvalidCommandException("incorrect command format");
         }
 
-        this.subCommands = subCommandsArr.toArray(new SubCommand[0]);
-    }
+        StringBuilder result = new StringBuilder();
 
-    @Override
-    public String run(String[] subCommandsAndOptions) {
-        for (SubCommand subCommand : this.subCommands) {
-            subCommand.run();
+        for (SubCommand subCommand : subCommandArr) {
+            result.append(subCommand.run()).append("\n");
         }
 
-        return null;
+        return result.toString();
+
+
     }
 }
