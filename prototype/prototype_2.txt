@@ -1,0 +1,35 @@
+Welcome to warzone game!
+
+First, let's start editing a map
+
+=>_
+
+=> help (show commands available)
+
+=> editcontinent -add continentID continentvalue -remove continentID
+=> editcountry -add countryID continentID -remove countryID
+=> editneighbor -add countryID neighborcountryID -remove countryID neighborcountryID\
+=> showmap
+=> savemap filename
+=> editmap filename
+=> validatemap
+
+=> nextphase
+
+Startup phase: let's load a map first.
+
+=> help (show commands available)
+
+=> showmap
+=> loadmap filename
+=> gameplayer -add playername -remove playername
+=> assigncountries
+
+=> nextphase
+
+3) Start main loop: 
+Game has started, let's issue order for player # n:
+
+=> help (show commands available)
+
+=> deploy countryID num

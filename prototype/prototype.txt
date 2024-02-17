@@ -1,0 +1,45 @@
+Select the game phase:
+
+1) Map editor
+2) Startup phase
+3) Start main loop
+
+execute 'main_menu' to return to this page
+
+=> _
+
+----------------
+1) Map editor phase: Shows command line
+
+=> help (show commands available)
+
+=> editcontinent -add continentID continentvalue -remove continentID
+=> editcountry -add countryID continentID -remove countryID
+=> editneighbor -add countryID neighborcountryID -remove countryID neighborcountryID\
+=> showmap
+=> savemap filename
+=> editmap filename
+=> validatemap
+
+=> main_menu (go back to the main menu)
+
+-------------------
+2) Startup phase: Shows command line
+
+=> help (show commands available)
+
+=> showmap
+=> loadmap filename
+=> gameplayer -add playername -remove playername
+=> assigncountries
+
+=> main_menu (go back to the main menu)
+
+------------------
+3) Start main loop: Starts looping on the list of players
+
+=> help (show commands available)
+
+=> deploy countryID num 
+
+=> main_menu (discards the game and go back to the main menu)

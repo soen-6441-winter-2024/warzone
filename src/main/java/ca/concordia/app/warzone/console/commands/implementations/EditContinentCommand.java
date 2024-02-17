@@ -4,22 +4,35 @@ import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.commands.CommandType;
 import ca.concordia.app.warzone.console.commands.SubCommand;
 import ca.concordia.app.warzone.console.commands.SubCommandType;
-import ca.concordia.app.warzone.console.commands.implementations.subcommands.*;
+import ca.concordia.app.warzone.console.commands.implementations.subcommands.AddContinentSubCommand;
+import ca.concordia.app.warzone.console.commands.implementations.subcommands.RemoveContinentSubCommand;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.MapEditorController;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@Component
 public class EditContinentCommand extends Command {
     final Pattern subCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
+    private final MapEditorController controller;
 
-    public EditContinentCommand(String[] subCommandsAndOptions) throws InvalidCommandException {
+    public EditContinentCommand(MapEditorController controller) {
+        this.controller = controller;
+        init();
+    }
+
+    private void init() {
         this.type = CommandType.EDIT_CONTINENT;
+    }
+
+    @Override
+    public String run(String[] subCommandsAndOptions) {
 
         String subCommands = Strings.join(Arrays.asList(subCommandsAndOptions), ' ');
 
@@ -37,9 +50,9 @@ public class EditContinentCommand extends Command {
             String singleSubCommand = singleSubcommandAndOptions[0].substring(1);
 
             if (singleSubCommand.equals(SubCommandType.ADD.toString())) {
-                subCommandsArr.add(new AddContinentSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length)));
+                subCommandsArr.add(new AddContinentSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
             } else if (singleSubCommand.equals(SubCommandType.REMOVE.toString())) {
-                subCommandsArr.add(new RemoveContinentSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length)));
+                subCommandsArr.add(new RemoveContinentSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
             }
         }
 
@@ -47,13 +60,12 @@ public class EditContinentCommand extends Command {
             throw new InvalidCommandException("at least once subcommand is required");
         }
 
-        this.subCommands = subCommandsArr.toArray(new SubCommand[0]);
-    }
+        StringBuilder result = new StringBuilder();
 
-    @Override
-    public void run() {
-        for (SubCommand subCommand : this.subCommands) {
-            subCommand.run();
+        for (SubCommand subCommand : subCommandsArr) {
+            result.append(subCommand.run()).append("\n");
         }
+
+        return result.toString();
     }
 }

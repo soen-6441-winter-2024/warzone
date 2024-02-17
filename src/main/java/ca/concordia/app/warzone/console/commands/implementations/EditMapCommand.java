@@ -15,8 +15,9 @@ public class EditMapCommand extends Command {
     }
 
     @Override
-    public void run() {
+    public String run(String[] subCommandsAndOptions) {
 //        Opens the file and loads it, entering the "map editor" phase
         System.out.println("Opening file: " + this.filename);
+        return null;
     }
 }
