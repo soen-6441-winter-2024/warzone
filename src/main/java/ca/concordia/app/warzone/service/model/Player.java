@@ -34,7 +34,7 @@ public class Player {
     /**
      * Adds a country to the list of countries assigned to the player.
      *
-     * @param country the country to add
+     * @param p_country the country to add
      */
     public void addCountry(Country p_country){
         d_countriesAssigned.add(p_country);
@@ -52,7 +52,7 @@ public class Player {
     /**
      * Sets the player name.
      *
-     * @param playerName the player name to set
+     * @param p_playerName the player name to set
      */
     public void setPlayerName(String p_playerName){
         this.d_playerName = p_playerName;
@@ -70,7 +70,7 @@ public class Player {
     /**
      * Sets the list of countries assigned to the player.
      *
-     * @param countriesAssigned the list of countries assigned to the player
+     * @param p_countriesAssigned the list of countries assigned to the player
      */
     public void setCountriesAssigned(List<Country> p_countriesAssigned){
         this.d_countriesAssigned = p_countriesAssigned;

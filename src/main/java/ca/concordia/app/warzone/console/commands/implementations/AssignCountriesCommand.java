@@ -33,7 +33,7 @@ public class AssignCountriesCommand extends Command {
 
     /**
      * Runs the assign countries command.
-     * @param subCommandsAndOptions The array of subcommands and options.
+     * @param p_subCommandsAndOptions The array of subcommands and options.
      * @return The result of the command execution.
      */
     @Override

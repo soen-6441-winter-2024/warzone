@@ -30,7 +30,7 @@ public class EditCountryCommand extends Command {
 
     /**
      * Constructor for EditCountryCommand.
-     * @param controller The MapEditorController instance.
+     * @param p_controller The MapEditorController instance.
      */
     public EditCountryCommand(MapEditorController p_controller) {
         this.d_Controller = p_controller;
