@@ -2,8 +2,10 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
+import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -11,10 +13,12 @@ import java.util.Optional;
 public class MapEditorController {
     private ContinentService continentService;
     private CountryService countryService;
+    private MapService mapService;
 
-    public MapEditorController(ContinentService continentService, CountryService countryService) {
+    public MapEditorController(ContinentService continentService, CountryService countryService, MapService mapService) {
         this.continentService = continentService;
         this.countryService = countryService;
+        this.mapService = mapService;
     }
 
     private Phase current = Phase.MAP_EDITOR;
@@ -85,6 +89,16 @@ public class MapEditorController {
                 return "Neighbor Country  not found.";
             }
         } else {
+            return "Invalid Phase";
+        }
+    }
+
+    public String saveMap(MapDto mapDto) {
+
+        if (Phase.MAP_EDITOR.equals(current)) {
+            return mapService.saveMap(mapDto);
+        }
+        else {
             return "Invalid Phase";
         }
     }
