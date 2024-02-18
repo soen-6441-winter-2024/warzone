@@ -11,19 +11,19 @@ public class AddGamePlayerSubCommand extends SubCommand {
     private final GameEngineController gameEngineController;
 
     public AddGamePlayerSubCommand(String[] options, GameEngineController gameEngineController) throws InvalidCommandException {
-        this.type = SubCommandType.ADD;
+        this.d_Type = SubCommandType.ADD;
         if (options.length != 1) {
             throw new InvalidCommandException("invalid options length, expected 1");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.gameEngineController = gameEngineController;
     }
 
     @Override
     public String run() {
         PlayerDto dto = new PlayerDto();
-        dto.setD_playerName(this.options[0]);
+        dto.setPlayerName(this.d_Options[0]);
         return gameEngineController.addPlayer(dto);
     }
 }

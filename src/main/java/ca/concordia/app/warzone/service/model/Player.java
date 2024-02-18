@@ -3,49 +3,84 @@ package ca.concordia.app.warzone.service.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a player in the game.
+ */
 public class Player {
-    private static int d_lastPlayerID = 0;
-    private int d_playerID;
-    private String d_playerName;
-    private List<Country> d_countriesAssigned;
-
+    private static int d_lastPlayerID = 0; // Static member for the last player ID
+    private int d_playerID; // Data member for player ID
+    private String d_playerName; // Data member for player name
+    private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
     private int numberOfReinforcementsAvailable;
 
+    /**
+     * Default constructor for Player.
+     * Initializes player ID and countries assigned list.
+     */
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
     }
 
-    public int get_playerID(){
+    /**
+     * Retrieves the player ID.
+     *
+     * @return the player ID
+     */
+    public int getPlayerID(){
         return d_playerID;
     }
 
-    public void addCountry(Country country){
-        d_countriesAssigned.add(country);
+    /**
+     * Adds a country to the list of countries assigned to the player.
+     *
+     * @param country the country to add
+     */
+    public void addCountry(Country p_country){
+        d_countriesAssigned.add(p_country);
     }
 
-
-    public String get_playerName(){
+    /**
+     * Retrieves the player name.
+     *
+     * @return the player name
+     */
+    public String getPlayerName(){
         return d_playerName;
     }
 
-    public void set_playerName(String d_playerName){
-        this.d_playerName = d_playerName;
+    /**
+     * Sets the player name.
+     *
+     * @param playerName the player name to set
+     */
+    public void setPlayerName(String p_playerName){
+        this.d_playerName = p_playerName;
     }
 
-    public List<Country> get_countriesAssigned(){
+    /**
+     * Retrieves the list of countries assigned to the player.
+     *
+     * @return the list of countries assigned to the player
+     */
+    public List<Country> getCountriesAssigned(){
         return d_countriesAssigned;
     }
 
-    public void set_countriesAssigned(List<Country> d_countriesAssigned){
-        this.d_countriesAssigned = d_countriesAssigned;
+    /**
+     * Sets the list of countries assigned to the player.
+     *
+     * @param countriesAssigned the list of countries assigned to the player
+     */
+    public void setCountriesAssigned(List<Country> p_countriesAssigned){
+        this.d_countriesAssigned = p_countriesAssigned;
     }
 
     public int getNumberOfReinforcements() {
         return numberOfReinforcementsAvailable;
     }
 
-    public void setNumberOfReinforcements(int numberOfReinforcements) {
-        this.numberOfReinforcementsAvailable = numberOfReinforcements;
+    public void setNumberOfReinforcements(int p_numberOfReinforcements) {
+        this.numberOfReinforcementsAvailable = p_numberOfReinforcements;
     }
 }

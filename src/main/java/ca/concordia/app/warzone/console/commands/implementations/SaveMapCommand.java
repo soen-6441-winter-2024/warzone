@@ -8,32 +8,46 @@ import ca.concordia.app.warzone.controller.MapEditorController;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
-
-
+/**
+ * Represents a command to save a map.
+ */
 @Component
 public class SaveMapCommand extends Command {
 
-    private final MapEditorController mapEditorController;
+    /** The controller for map editing. */
+    private final MapEditorController d_MapEditorController;
 
-    public SaveMapCommand(MapEditorController mapEditorController) {
-        this.mapEditorController = mapEditorController;
+    /**
+     * Constructs a SaveMapCommand object.
+     *
+     * @param p_mapEditorController The controller for map editing.
+     */
+    public SaveMapCommand(MapEditorController p_mapEditorController) {
+        this.d_MapEditorController = p_mapEditorController;
         init();
     }
 
+    /**
+     * Initializes the command type.
+     */
     private void init() {
-        this.type = CommandType.SAVE_MAP;
+        this.d_Type = CommandType.SAVE_MAP;
     }
 
+    /**
+     * Runs the save map command.
+     *
+     * @param p_options The options for saving the map.
+     * @return The result of the command execution.
+     */
     @Override
-    public String run(String[] options) {
-        if (options.length != 1) {
+    public String run(String[] p_options) {
+        if (p_options.length != 1) {
             throw new InvalidCommandException("filename expected");
         }
         MapDto mapDto = new MapDto();
-        mapDto.setFileName(options[0]);
-        System.out.println("Saving a Map with FileName: " + options[0]);
-        String response = mapEditorController.saveMap(mapDto);
-        System.out.println(response);
-        return response;
+        mapDto.setFileName(p_options[0]);
+        System.out.println("Saving a Map with FileName: " + p_options[0]);
+        return d_MapEditorController.saveMap(mapDto);
     }
 }

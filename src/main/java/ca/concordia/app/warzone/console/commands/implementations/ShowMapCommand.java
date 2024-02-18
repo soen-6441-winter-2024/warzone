@@ -16,22 +16,41 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents a command to show the map.
+ */
 @Component
 public class ShowMapCommand extends Command {
 
-    private MapEditorController controller;
+    /** The controller for map editing. */
+    private MapEditorController d_Controller;
 
-    public ShowMapCommand(MapEditorController controller) {
-        this.controller = controller;
+    /**
+     * Constructs a ShowMapCommand object.
+     *
+     * @param p_controller The controller for map editing.
+     */
+    public ShowMapCommand(MapEditorController p_controller) {
+        this.d_Controller = p_controller;
         init();
     }
+
+    /**
+     * Initializes the command type.
+     */
     private void init() {
-        this.type = CommandType.SHOW_MAP;
+        this.d_Type = CommandType.SHOW_MAP;
     }
 
+    /**
+     * Runs the show map command.
+     *
+     * @param p_subCommandsAndOptions The subcommands and options for showing the map.
+     * @return The result of the command execution.
+     */
     @Override
-    public String run(String[] subCommandsAndOptions) {
-        System.out.println("Showing Map " );
+    public String run(String[] p_subCommandsAndOptions) {
+        System.out.println("Showing Map");
         return "";
     }
 }

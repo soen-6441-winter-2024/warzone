@@ -13,12 +13,12 @@ public class AddNeighborSubCommand extends SubCommand {
 
     private MapEditorController mapEditorController;
     public AddNeighborSubCommand(String[] options, MapEditorController mapEditorController) throws InvalidCommandException {
-        this.type = SubCommandType.ADD;
+        this.d_Type = SubCommandType.ADD;
         if (options.length != 2) {
             throw new InvalidCommandException("invalid options length, expected 2");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.mapEditorController = mapEditorController;
     }
 
@@ -26,12 +26,9 @@ public class AddNeighborSubCommand extends SubCommand {
     public String run() {
         // Call AddCountry from the service class
         CountryDto countryDto = new CountryDto();
-        countryDto.setId(this.options[0]);
-        countryDto.setNeighborId(this.options[1]);
+        countryDto.setId(this.d_Options[0]);
+        countryDto.setNeighborId(this.d_Options[1]);
 
-        System.out.println("Adding a neighbor with values: " + this.options[0] + " " + this.options[1]);
-        String response = mapEditorController.addNeighbor(countryDto);
-        System.out.println(response);
-        return response;
+        return mapEditorController.addNeighbor(countryDto);
     }
 }

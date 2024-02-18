@@ -1,6 +1,5 @@
 package ca.concordia.app.warzone.service;
 
-
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.DeployOrder;
@@ -9,75 +8,127 @@ import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import java.util.Optional;
 
+/**
+ * Service class for managing player-related operations.
+ */
 @Service
-
 public class PlayerService {
-    private List<List<Order>> orders;
-    private int currentRound;
 
+    /**
+     * Data member for storing orders.
+     */
+    private List<List<Order>> d_orders;
+
+    /**
+     * Data member for storing the current round number.
+     */
+    private int d_currentRound;
+
+    /**
+     * Default reinforcement number.
+     */
     private final int DEFAULT_REINFORCEMENT_NUMBER = 3;
-    private final PlayerRepository repository;
 
-    public PlayerService(PlayerRepository repository) {
-        this.repository = repository;
+    /**
+     * Repository for player operations.
+     */
+    private final PlayerRepository d_repository;
+
+    /**
+     * Constructs a PlayerService with the specified PlayerRepository.
+     *
+     * @param p_repository the PlayerRepository to be used
+     */
+    public PlayerService(PlayerRepository p_repository) {
+        this.d_repository = p_repository;
     }
 
-
-    public String add(PlayerDto playerDto) {
-        String d_playerName = playerDto.get_playerName();
-        Optional<Player> playerOptional = findByName(d_playerName);
+    /**
+     * Adds a new player.
+     *
+     * @param p_playerDto the DTO containing player information
+     * @return a message indicating success or failure
+     */
+    public String add(PlayerDto p_playerDto) {
+        String playerName = p_playerDto.getPlayerName();
+        Optional<Player> playerOptional = findByName(playerName);
         if (playerOptional.isPresent()) {
-            return "player with name " + d_playerName + " already exists";
+            return "Player with name " + playerName + " already exists";
         } else {
-        Player domain = new Player();
-            domain.set_playerName(d_playerName);
-        repository.save(domain);
-            return "player " + d_playerName + " joined the game";
+            Player player = new Player();
+            player.setPlayerName(playerName);
+            d_repository.save(player);
+            return "Player " + playerName + " joined the game";
         }
-
     }
 
-    public String remove(String d_playerName) {
-        Optional<Player> playerOptional = findByName(d_playerName);
+    /**
+     * Removes a player.
+     *
+     * @param p_playerName the name of the player to be removed
+     * @return a message indicating success or failure
+     */
+    public String remove(String p_playerName) {
+        Optional<Player> playerOptional = findByName(p_playerName);
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
-            repository.delete(player);
-            return "Player " + d_playerName + " has been removed";
+            d_repository.delete(player);
+            return "Player " + p_playerName + " has been removed";
         } else {
-            return "Player " + d_playerName + " not found";
+            return "Player " + p_playerName + " not found";
         }
     }
 
-
-    public Optional<Player> findByName(String d_playerName) {
-        return repository.findByName(d_playerName);
+    /**
+     * Finds a player by name.
+     *
+     * @param p_playerName the name of the player to find
+     * @return an Optional containing the player if found, empty otherwise
+     */
+    public Optional<Player> findByName(String p_playerName) {
+        return d_repository.findByName(p_playerName);
     }
 
+    /**
+     * Assigns reinforcements to players.
+     */
     public void assignReinforcements() {
-        List<Player> playerList = this.repository.getAllPlayers();
-
+        List<Player> playerList = this.d_repository.getAllPlayers();
         for (Player player : playerList) {
-            int reinforcementForPlayer = this.getReinformcentsForPlayer(player.get_playerName());
-            player.setNumberOfReinforcements(reinforcementForPlayer);
+            int reinforcementsForPlayer = this.getReinforcementsForPlayer(player.getPlayerName());
+            player.setNumberOfReinforcements(reinforcementsForPlayer);
         }
     }
 
-    private int getReinformcentsForPlayer(String d_playerName) {
+    /**
+     * Retrieves the number of reinforcements for a player.
+     *
+     * @param p_playerName the name of the player
+     * @return the number of reinforcements
+     */
+    private int getReinforcementsForPlayer(String p_playerName) {
         return DEFAULT_REINFORCEMENT_NUMBER;
     }
 
+    /**
+     * Executes orders for the current round.
+     */
     private void executeOrders() {
-        List<Order> roundOrders = orders.get(currentRound);
-        for(Order order : roundOrders) {
+        List<Order> roundOrders = d_orders.get(d_currentRound);
+        for (Order order : roundOrders) {
             this.executeOrder(order);
         }
     }
 
-    private void executeOrder(Order order) {
-        if(order instanceof DeployOrder){
+    /**
+     * Executes a specific order.
+     *
+     * @param p_order the order to execute
+     */
+    private void executeOrder(Order p_order) {
+        if (p_order instanceof DeployOrder) {
             // Add the reinforcements to the country
         }
     }
