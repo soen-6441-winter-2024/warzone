@@ -9,12 +9,12 @@ public class RemoveGamePlayerSubCommand extends SubCommand {
 
     private  GameEngineController gameEngineController;
     public RemoveGamePlayerSubCommand(String[] options, GameEngineController gameEngineController) throws InvalidCommandException {
-        this.type = SubCommandType.REMOVE;
+        this.d_Type = SubCommandType.REMOVE;
         if (options.length != 1) {
             throw new InvalidCommandException("invalid options length, expected 1");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.gameEngineController = gameEngineController;
     }
 
@@ -25,7 +25,7 @@ public class RemoveGamePlayerSubCommand extends SubCommand {
     @Override
     public String run() {
         // Call RemoveContinent from the service class
-        String playerName = this.options[0];
+        String playerName = this.d_Options[0];
         String response = gameEngineController.removePlayer(playerName);
         return response;
     }

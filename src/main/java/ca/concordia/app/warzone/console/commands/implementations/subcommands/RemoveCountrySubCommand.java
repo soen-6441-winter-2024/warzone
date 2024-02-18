@@ -10,12 +10,12 @@ public class RemoveCountrySubCommand extends SubCommand {
 
     private MapEditorController controller;
     public RemoveCountrySubCommand(String[] options, MapEditorController controller) throws InvalidCommandException {
-        this.type = SubCommandType.REMOVE;
+        this.d_Type = SubCommandType.REMOVE;
         if (options.length != 1) {
             throw new InvalidCommandException("invalid options length, expected 1");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.controller = controller;
     }
 
@@ -23,10 +23,8 @@ public class RemoveCountrySubCommand extends SubCommand {
     public String run() {
         // Call RemoveContinent from the service class
         CountryDto dto = new CountryDto();
-        dto.setId(this.options[0]);
+        dto.setId(this.d_Options[0]);
         System.out.println("Removing a country with Id: " + dto.getId());
-        String response = controller.deleteCountry(dto.getId());
-        System.out.println(response);
-        return response;
+        return controller.deleteCountry(dto.getId());
     }
 }

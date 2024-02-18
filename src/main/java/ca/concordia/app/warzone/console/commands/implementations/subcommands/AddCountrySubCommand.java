@@ -12,12 +12,12 @@ public class AddCountrySubCommand extends SubCommand {
     private MapEditorController mapEditorController;
 
     public AddCountrySubCommand(String[] options, MapEditorController mapEditorController) throws InvalidCommandException {
-        this.type = SubCommandType.ADD;
+        this.d_Type = SubCommandType.ADD;
         if (options.length != 2) {
             throw new InvalidCommandException("invalid options length, expected 2");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.mapEditorController = mapEditorController;
     }
 
@@ -25,15 +25,12 @@ public class AddCountrySubCommand extends SubCommand {
     public String run() {
         // Call AddCountry from the service class
         ContinentDto continentDto = new ContinentDto();
-        continentDto.setId(this.options[1]);
+        continentDto.setId(this.d_Options[1]);
 
         CountryDto countryDto = new CountryDto();
-        countryDto.setId(this.options[0]);
+        countryDto.setId(this.d_Options[0]);
         countryDto.setContinent(continentDto);
 
-        System.out.println("Adding a country with values: " + this.options[0] + " " + this.options[1]);
-        String response = mapEditorController.addCountry(countryDto);
-        System.out.println(response);
-        return response;
+        return mapEditorController.addCountry(countryDto);
     }
 }

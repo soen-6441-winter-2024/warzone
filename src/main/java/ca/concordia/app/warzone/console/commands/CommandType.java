@@ -1,5 +1,8 @@
 package ca.concordia.app.warzone.console.commands;
 
+/**
+ * Enum representing different types of commands.
+ */
 public enum CommandType {
     EDIT_CONTINENT("editcontinent"),
     EDIT_COUNTRY("editcountry"),
@@ -14,15 +17,25 @@ public enum CommandType {
     VALIDATE_MAP("validatemap")
     ;
 
-    private final String text;
+    /** The text representation of the command type. */
+    private final String d_Text;
 
+    /**
+     * Constructs a CommandType enum with the given text.
+     *
+     * @param text The text representation of the command type.
+     */
     CommandType(final String text) {
-        this.text = text;
+        this.d_Text = text;
     }
 
+    /**
+     * Returns the text representation of the command type.
+     *
+     * @return The text representation of the command type.
+     */
     @Override
     public String toString() {
-        return text;
+        return d_Text;
     }
-
-    }
+}

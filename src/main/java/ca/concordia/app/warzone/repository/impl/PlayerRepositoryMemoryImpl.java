@@ -3,26 +3,52 @@ package ca.concordia.app.warzone.repository.impl;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Repository;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
+/**
+ * Implementation of the PlayerRepository interface using an in-memory data structure.
+ */
 @Repository
 public class PlayerRepositoryMemoryImpl implements PlayerRepository {
-    private Map<String, Player> values = new HashMap<>();
+    private Map<String, Player> d_players = new HashMap<>(); // Stores players with their names as keys
 
+    /**
+     * Saves a player to the repository.
+     *
+     * @param p_player the player to be saved
+     */
     @Override
-    public void save(Player domain) {
-        values.put(domain.get_playerName(), domain);
+    public void save(Player p_player) {
+        d_players.put(p_player.getPlayerName(), p_player);
     }
 
-    public void delete(Player player){
-        values.remove(player.get_playerName(), player);
+    /**
+     * Deletes a player from the repository.
+     *
+     * @param p_player the player to be deleted
+     */
+    public void delete(Player p_player) {
+        d_players.remove(p_player.getPlayerName(), p_player);
     }
 
+    /**
+     * Finds a player by their name.
+     *
+     * @param p_name the name of the player to find
+     * @return an Optional containing the player, or empty if not found
+     */
     @Override
-    public Optional<Player> findByName(String name) {
-        return Optional.ofNullable(values.get(name));
+    public Optional<Player> findByName(String p_name) {
+        return Optional.ofNullable(d_players.get(p_name));
+    }
+
+    /**
+     * Retrieves all players stored in the repository.
+     *
+     * @return a list of all players
+     */
+    @Override
+    public List<Player> getAllPlayers() {
+        return new ArrayList<>(d_players.values());
     }
 }

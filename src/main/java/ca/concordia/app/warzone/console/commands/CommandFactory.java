@@ -4,34 +4,69 @@ import ca.concordia.app.warzone.console.commands.implementations.*;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Factory class to create command objects based on the given command name.
+ */
 @Component
 public class CommandFactory {
 
-    private EditContinentCommand editContinentCommand;
-    private EditCountryCommand editCountryCommand;
-    private EditNeighborCommand editNeighborCommand;
-    private ShowMapCommand showMapCommand;
-    private GamePlayerCommand editGamePlayerCommand;
+    /** The command for assigning countries. */
+    private final AssignCountriesCommand d_AssignCountriesCommand;
+    private EditContinentCommand d_EditContinentCommand;
+    private EditCountryCommand d_EditCountryCommand;
+    private EditNeighborCommand d_EditNeighborCommand;
+    private ShowMapCommand d_ShowMapCommand;
+    private GamePlayerCommand d_EditGamePlayerCommand;
+    private SaveMapCommand d_SaveMapCommand;
+    private EditMapCommand d_EditMapCommand;
 
-    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, EditNeighborCommand editNeighborCommand, ShowMapCommand showMapCommand, GamePlayerCommand editGamePlayerCommand) {
-        this.editContinentCommand = editContinentCommand;
-        this.editCountryCommand = editCountryCommand;
-        this.editNeighborCommand = editNeighborCommand;
-        this.showMapCommand = showMapCommand;
-        this.editGamePlayerCommand = editGamePlayerCommand;
+    /**
+     * Constructs a CommandFactory object.
+     *
+     * @param p_editContinentCommand The command for editing continents.
+     * @param p_editCountryCommand The command for editing countries.
+     * @param p_editNeighborCommand The command for editing neighbors.
+     * @param p_showMapCommand The command for showing the map.
+     * @param p_editGamePlayerCommand The command for editing game players.
+     * @param p_saveMapCommand The command for saving the map.
+     * @param p_assignCountriesCommand The command for assigning countries.
+     * @param p_editMapCommand The command for editing the map.
+     */
+    public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand, EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand, GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand, AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand) {
+        this.d_EditContinentCommand = p_editContinentCommand;
+        this.d_EditCountryCommand = p_editCountryCommand;
+        this.d_EditNeighborCommand = p_editNeighborCommand;
+        this.d_ShowMapCommand = p_showMapCommand;
+        this.d_EditGamePlayerCommand = p_editGamePlayerCommand;
+        this.d_SaveMapCommand = p_saveMapCommand;
+        this.d_EditMapCommand = p_editMapCommand;
+        this.d_AssignCountriesCommand = p_assignCountriesCommand;
     }
 
-    public Command newCommand(String commandName) throws InvalidCommandException {
-        if(commandName.equals(CommandType.EDIT_CONTINENT.toString())) {
-            return editContinentCommand;
-        } else if(commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
-            return editCountryCommand;
-        } else if(commandName.equals(CommandType.EDIT_NEIGHBOR.toString())){
-            return editNeighborCommand;
-        } else if(commandName.equals(CommandType.SHOW_MAP.toString())) {
-            return showMapCommand;
-        } else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
-            return editGamePlayerCommand;
+    /**
+     * Creates a new command based on the given command name.
+     *
+     * @param p_commandName The name of the command.
+     * @return A command object corresponding to the given command name.
+     * @throws InvalidCommandException If the command name is invalid.
+     */
+    public Command newCommand(String p_commandName) throws InvalidCommandException {
+        if(p_commandName.equals(CommandType.EDIT_CONTINENT.toString())) {
+            return d_EditContinentCommand;
+        } else if(p_commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
+            return d_EditCountryCommand;
+        } else if(p_commandName.equals(CommandType.EDIT_NEIGHBOR.toString())){
+            return d_EditNeighborCommand;
+        } else if(p_commandName.equals(CommandType.SHOW_MAP.toString())) {
+            return d_ShowMapCommand;
+        } else if(p_commandName.equals(CommandType.GAME_PLAYER.toString())) {
+            return d_EditGamePlayerCommand;
+        } else if(p_commandName.equals(CommandType.SAVE_MAP.toString())) {
+            return d_SaveMapCommand;
+        } else if (p_commandName.equals(CommandType.EDIT_MAP.toString())) {
+            return d_EditMapCommand;
+        } else if(p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())){
+            return  d_AssignCountriesCommand;
         }
 
         return null;

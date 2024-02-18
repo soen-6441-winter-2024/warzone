@@ -9,23 +9,40 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Scanner;
 
-
+/**
+ * Controller for handling commands from the console.
+ */
 @Component
 public class ConsoleController implements CommandLineRunner {
 
+    /**
+     * Initial page message displayed when the program starts.
+     */
     public static final String INITIAL_PAGE = """
-        Welcome to the warzone game \n
+        Welcome to the Warzone game \n
         
         First, let's start editing a map
         
         type 'help' to show available commands
         """;
-    private final CommandFactory commandFactory;
 
-    public ConsoleController(CommandFactory commandFactory) {
-        this.commandFactory = commandFactory;
+    private final CommandFactory d_commandFactory;
+
+    /**
+     * Constructs a ConsoleController with the specified CommandFactory.
+     *
+     * @param p_commandFactory The CommandFactory to use.
+     */
+    public ConsoleController(CommandFactory p_commandFactory) {
+        this.d_commandFactory = p_commandFactory;
     }
 
+    /**
+     * Runs the console controller.
+     *
+     * @param args The command-line arguments.
+     * @throws Exception Throws if an error occurs while running.
+     */
     @Override
     public void run(String... args) throws Exception {
         System.out.println(INITIAL_PAGE);
@@ -42,9 +59,9 @@ public class ConsoleController implements CommandLineRunner {
             }
 
             try {
-                Command command = this.getCommand(fullCommand);
-                String[] options = this.getOptions(fullCommand);
-                System.out.println(command.run(options));
+                Command command = getCommand(fullCommand);
+                String[] options = getOptions(fullCommand);
+                System.out.println(command.run(options));;
             } catch (InvalidCommandException e) {
                 System.out.println("Invalid command provided: " + e.getMessage());
             }
@@ -52,14 +69,27 @@ public class ConsoleController implements CommandLineRunner {
         } while (!"quit".equals(fullCommand));
     }
 
-    private String[] getOptions(String fullCommand) {
-        String[] splittedFullCommand = fullCommand.split(" ");
+    /**
+     * Retrieves the command options from the full command string.
+     *
+     * @param p_fullCommand The full command string.
+     * @return An array of command options.
+     */
+    private String[] getOptions(String p_fullCommand) {
+        String[] splittedFullCommand = p_fullCommand.split(" ");
         return Arrays.copyOfRange(splittedFullCommand, 1, splittedFullCommand.length);
     }
 
-    private Command getCommand(String fullCommand) throws InvalidCommandException {
-        String[] splittedFullCommand = fullCommand.split(" ");
+    /**
+     * Retrieves the command object from the full command string.
+     *
+     * @param p_fullCommand The full command string.
+     * @return The Command object corresponding to the command string.
+     * @throws InvalidCommandException Throws if the command is invalid.
+     */
+    private Command getCommand(String p_fullCommand) throws InvalidCommandException {
+        String[] splittedFullCommand = p_fullCommand.split(" ");
         String firstCommand = splittedFullCommand[0];
-        return commandFactory.newCommand(firstCommand);
+        return d_commandFactory.newCommand(firstCommand);
     }
 }

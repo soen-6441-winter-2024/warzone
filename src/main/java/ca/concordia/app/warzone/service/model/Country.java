@@ -2,51 +2,96 @@ package ca.concordia.app.warzone.service.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional; // Import Optional
+import java.util.Optional;
+
+/**
+ * Represents a country in the game.
+ */
 public class Country {
 
-    private String id;
-    private Continent continent;
-    private List<Country> neighbors;
-    private Optional<Player> player;
+    private String d_id; // Data member for country ID
+    private Continent d_continent; // Data member for continent
+    private List<Country> d_neighbors; // Data member for neighboring countries
+    private Optional<Player> d_player; // Data member for player, wrapped in Optional
 
+    /**
+     * Default constructor for Country.
+     * Initializes neighbors list as an empty ArrayList and player as an empty Optional.
+     */
     public Country() {
-        this.neighbors = new ArrayList<>();
-        this.player = Optional.empty(); // Initialize as empty
+        this.d_neighbors = new ArrayList<>();
+        this.d_player = Optional.empty();
     }
 
+    /**
+     * Retrieves the ID of the country.
+     *
+     * @return the ID of the country
+     */
     public String getId() {
-        return id;
+        return d_id;
     }
 
+    /**
+     * Sets the ID of the country.
+     *
+     * @param id the ID of the country
+     */
     public void setId(String id) {
-        this.id = id;
+        this.d_id = id;
     }
 
-    public Continent getContinent()
-    {
-        return continent;
+    /**
+     * Retrieves the continent of the country.
+     *
+     * @return the continent of the country
+     */
+    public Continent getContinent() {
+        return d_continent;
     }
 
-    public void setContinent(Continent continent)
-    {
-        this.continent = continent;
-    }
-    public List<Country> getNeighbors()
-    {
-        return neighbors;
-    }
-    public void setNeighbors(List<Country> neighbors)
-    {
-        this.neighbors = neighbors;
-    }
-    public Optional<Player> getPlayer()
-    {
-        return player;
+    /**
+     * Sets the continent of the country.
+     *
+     * @param continent the continent of the country
+     */
+    public void setContinent(Continent continent) {
+        this.d_continent = continent;
     }
 
-    public void setPlayer(Optional<Player> player)
-    {
-        this.player = player;
+    /**
+     * Retrieves the list of neighboring countries.
+     *
+     * @return the list of neighboring countries
+     */
+    public List<Country> getNeighbors() {
+        return d_neighbors;
+    }
+
+    /**
+     * Sets the list of neighboring countries.
+     *
+     * @param neighbors the list of neighboring countries
+     */
+    public void setNeighbors(List<Country> neighbors) {
+        this.d_neighbors = neighbors;
+    }
+
+    /**
+     * Retrieves the player of the country.
+     *
+     * @return the player of the country, wrapped in Optional
+     */
+    public Optional<Player> getPlayer() {
+        return d_player;
+    }
+
+    /**
+     * Sets the player of the country.
+     *
+     * @param player the player of the country, wrapped in Optional
+     */
+    public void setPlayer(Optional<Player> player) {
+        this.d_player = player;
     }
 }

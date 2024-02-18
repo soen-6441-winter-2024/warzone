@@ -11,12 +11,12 @@ public class RemoveContinentSubCommand extends SubCommand {
     private MapEditorController mapEditorController;
 
     public RemoveContinentSubCommand(String[] options, MapEditorController mapEditorController) throws InvalidCommandException {
-        this.type = SubCommandType.REMOVE;
+        this.d_Type = SubCommandType.REMOVE;
         if (options.length != 1) {
             throw new InvalidCommandException("invalid options length, expected 1");
         }
 
-        this.options = options;
+        this.d_Options = options;
         this.mapEditorController = mapEditorController;
     }
 
@@ -24,10 +24,7 @@ public class RemoveContinentSubCommand extends SubCommand {
     public String run() {
         // Call RemoveContinent from the service class
         ContinentDto dto = new ContinentDto();
-        dto.setId(this.options[0]);
-        System.out.println("Removing a continent with value: " + dto.getId());
-        String response = mapEditorController.deleteContinent(dto.getId());
-        System.out.println(response);
-        return response;
+        dto.setId(this.d_Options[0]);
+        return mapEditorController.deleteContinent(dto.getId());
     }
 }
