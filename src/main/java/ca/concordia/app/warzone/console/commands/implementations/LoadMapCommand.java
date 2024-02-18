@@ -3,10 +3,12 @@ package ca.concordia.app.warzone.console.commands.implementations;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
+import org.springframework.stereotype.Component;
 
 /**
  * Represents a command to load a map from a file.
  */
+@Component
 public class LoadMapCommand extends Command {
     private final GameEngineController d_gameEngineController;
 

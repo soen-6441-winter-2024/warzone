@@ -1,6 +1,8 @@
 package ca.concordia.app.warzone.map;
 
 import javax.swing.*;
+
+import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.map.exceptions.InvalidMapContentFormat;
 import java.util.List;
 import java.util.ArrayList;
@@ -161,7 +163,7 @@ public class GameMap {
         catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
             System.out.println("Map not found in Maps directory");
-            System.exit(0);
+            throw new InvalidCommandException("map not found");
         } finally {
             try {
                 scanner.close();
