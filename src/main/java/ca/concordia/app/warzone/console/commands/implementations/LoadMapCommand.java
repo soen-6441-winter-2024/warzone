@@ -2,13 +2,15 @@ package ca.concordia.app.warzone.console.commands.implementations;
 
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.GameEngineController;
+import org.springframework.stereotype.Component;
 
 /**
  * Represents a command to load a map from a file.
  */
+@Component
 public class LoadMapCommand extends Command {
-    /** The filename of the map. */
-    private final String d_Filename;
+    private final GameEngineController d_gameEngineController;
 
     /**
      * Constructs a LoadMapCommand object.
@@ -16,13 +18,8 @@ public class LoadMapCommand extends Command {
      * @param p_options The options for loading the map.
      * @throws InvalidCommandException Throws if the command is invalid.
      */
-    public LoadMapCommand(String[] p_options) throws InvalidCommandException {
-        if(p_options.length != 1) {
-            throw new InvalidCommandException("expected 1 filename");
-        }
-
-        this.d_Options = p_options;
-        this.d_Filename = p_options[0];
+    public LoadMapCommand(GameEngineController p_gameEngineController) {
+        this.d_gameEngineController = p_gameEngineController;
     }
 
     /**
@@ -32,8 +29,13 @@ public class LoadMapCommand extends Command {
      * @return The result of the command execution.
      */
     @Override
-    public String run(String[] p_subCommandsAndOptions) {
-        System.out.println("Loading Map file: " + this.d_Filename);
+    public String run(String[] p_subCommandsAndOptions)  throws InvalidCommandException {
+        if(p_subCommandsAndOptions.length != 1) {
+            throw new InvalidCommandException("exactly one filename required");
+        }
+
+        String fileName = p_subCommandsAndOptions[0];
+        this.d_gameEngineController.loadMap(fileName);
         return null;
     }
 }

@@ -25,5 +25,4 @@ public class DeployOrder extends Order {
 
     private String countryId;
     private int number;
-
 }

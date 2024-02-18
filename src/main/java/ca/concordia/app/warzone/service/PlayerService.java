@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.map.GameMap;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.DeployOrder;
 import ca.concordia.app.warzone.service.model.Order;
@@ -130,6 +131,7 @@ public class PlayerService {
     private void executeOrder(Order p_order) {
         if (p_order instanceof DeployOrder) {
             // Add the reinforcements to the country
+//            this.d_mapService.
         }
     }
 }
