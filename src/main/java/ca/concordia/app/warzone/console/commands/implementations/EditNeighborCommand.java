@@ -58,11 +58,6 @@ public class EditNeighborCommand extends Command {
         ArrayList<SubCommand> l_SubCommandsArr = new ArrayList<>();
 
         while (l_Matcher.find()) {
-            if (l_Matcher.group().equals(l_SubCommands)) {
-                continue;
-            }
-
-            System.out.println(l_Matcher.group());
 
             String[] l_SingleSubcommandAndOptions = l_Matcher.group().split(" ");
             String l_SingleSubCommand = l_SingleSubcommandAndOptions[0].substring(1);
