@@ -43,7 +43,7 @@ public class GameEngineController {
 
     public String addCountry(CountryDto dto) {
         countryService.add(dto);
-        return "Country " + dto.id() + " added";
+        return "Country " + dto.getId() + " added";
     }
 
     public String addPlayer(PlayerDto playerDto){

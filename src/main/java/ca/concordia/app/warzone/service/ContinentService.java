@@ -17,14 +17,35 @@ public class ContinentService {
     }
 
     public String add(ContinentDto continentDto) {
-        Continent domain = new Continent();
-        domain.setId(continentDto.getId());
-        domain.setValue(continentDto.getValue());
-        repository.save(domain);
+
+        Optional<Continent> continentOptional = repository.findById(continentDto.getId());
+        if (continentOptional.isPresent()) {
+            return "Continent already exists";
+        }
+        else {
+            Continent continent = new Continent();
+            continent.setId(continentDto.getId());
+            continent.setValue(continentDto.getValue());
+            repository.save(continent);
+        }
         return "OK";
     }
 
-    public Optional<Continent> findById(String id) {
-        return repository.findById(id);
+    public Optional<ContinentDto> findById(String id) {
+        Optional<Continent> continentOptional = repository.findById(id);
+        return continentOptional.map(this::convertToDto);
     }
+
+    private ContinentDto convertToDto(Continent continent) {
+        ContinentDto continentDto = new ContinentDto();
+        continentDto.setId(continent.getId());
+        continentDto.setValue(continent.getValue());
+        // Set other properties as needed
+        return continentDto;
+    }
+
+    public void delete(String continentId) {
+        repository.deleteById(continentId);
+    }
+
 }

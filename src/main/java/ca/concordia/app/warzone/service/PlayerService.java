@@ -29,9 +29,9 @@ public class PlayerService {
             return "player with name " + d_playerName + " already exists";
         }
         else{
-            Player domain = new Player();
+        Player domain = new Player();
             domain.set_playerName(d_playerName);
-            repository.save(domain);
+        repository.save(domain);
             return "player " + d_playerName + " joined the game";
         }
 
@@ -43,7 +43,7 @@ public class PlayerService {
             Player player = playerOptional.get();
             repository.delete(player);
             return "Player " + d_playerName + " has been removed";
-        }
+    }
         else {
             return "Player " + d_playerName + " not found";
         }

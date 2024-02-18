@@ -4,12 +4,10 @@ import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.commands.CommandType;
 import ca.concordia.app.warzone.console.commands.SubCommand;
 import ca.concordia.app.warzone.console.commands.SubCommandType;
-import ca.concordia.app.warzone.console.commands.implementations.subcommands.AddContinentSubCommand;
 import ca.concordia.app.warzone.console.commands.implementations.subcommands.AddCountrySubCommand;
-import ca.concordia.app.warzone.console.commands.implementations.subcommands.RemoveContinentSubCommand;
 import ca.concordia.app.warzone.console.commands.implementations.subcommands.RemoveCountrySubCommand;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.controller.GameEngineController;
+import ca.concordia.app.warzone.controller.MapEditorController;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +20,15 @@ import java.util.regex.Pattern;
 public class EditCountryCommand extends Command {
     final Pattern subCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
-    private GameEngineController controller;
+    private MapEditorController controller;
 
-    public EditCountryCommand(GameEngineController controller) throws InvalidCommandException {
-        this.type = CommandType.EDIT_COUNTRY;
+    public EditCountryCommand(MapEditorController controller) {
         this.controller = controller;
+        init();
+    }
+
+    private void init() {
+        this.type = CommandType.EDIT_COUNTRY;
     }
 
     @Override
@@ -51,7 +53,8 @@ public class EditCountryCommand extends Command {
 
             if (singleSubCommand.equals(SubCommandType.ADD.toString())) {
                 subCommandsArr.add(new AddCountrySubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller ));
-            } else if (singleSubCommand.equals(SubCommandType.REMOVE.toString())) {
+            }
+            else if (singleSubCommand.equals(SubCommandType.REMOVE.toString())) {
                 subCommandsArr.add(new RemoveCountrySubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
             }
         }

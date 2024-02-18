@@ -8,14 +8,16 @@ import org.springframework.stereotype.Component;
 public class CommandFactory {
 
     private EditContinentCommand editContinentCommand;
-
     private EditCountryCommand editCountryCommand;
-
+    private EditNeighborCommand editNeighborCommand;
+    private ShowMapCommand showMapCommand;
     private GamePlayerCommand editGamePlayerCommand;
 
-    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, GamePlayerCommand editGamePlayerCommand) {
+    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, EditNeighborCommand editNeighborCommand, ShowMapCommand showMapCommand, GamePlayerCommand editGamePlayerCommand) {
         this.editContinentCommand = editContinentCommand;
         this.editCountryCommand = editCountryCommand;
+        this.editNeighborCommand = editNeighborCommand;
+        this.showMapCommand = showMapCommand;
         this.editGamePlayerCommand = editGamePlayerCommand;
     }
 
@@ -24,26 +26,13 @@ public class CommandFactory {
             return editContinentCommand;
         } else if(commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
             return editCountryCommand;
-        }
-        else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
+        } else if(commandName.equals(CommandType.EDIT_NEIGHBOR.toString())){
+            return editNeighborCommand;
+        } else if(commandName.equals(CommandType.SHOW_MAP.toString())) {
+            return showMapCommand;
+        } else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
             return editGamePlayerCommand;
         }
-//        } else if(commandName.equals(CommandType.SHOW_MAP.toString())) {
-//            return new ShowMapCommand();
-//        } else if(commandName.equals(CommandType.EDIT_MAP.toString())) {
-//            return new EditMapCommand(optionsOrSubCommands);
-//        } else if(commandName.equals(CommandType.EDIT_NEIGHBOR.toString())){
-//            return new EditNeighborCommand(optionsOrSubCommands);
-//        } else if(commandName.equals(CommandType.SAVE_MAP.toString())) {
-//            return new SaveMapCommand(optionsOrSubCommands);
-//        }else if(commandName.equals(CommandType.LOAD_MAP.toString())) {
-//            return new LoadMapCommand(optionsOrSubCommands);
-//        }else if(commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
-//            return new AssignCountriesCommand(optionsOrSubCommands);
-//        }
-//        }else if(commandName.equals(CommandType.DEPLOY.toString())) {
-//            return new DeployCommand(optionsOrSubCommands);
-//        }
 
         return null;
     }

@@ -5,7 +5,9 @@ import ca.concordia.app.warzone.service.model.Continent;
 import java.util.Optional;
 
 public interface ContinentRepository {
-    void save(Continent continentDto);
+    void save(Continent continent);
 
     Optional<Continent> findById(String id);
+
+    void deleteById(String id);
 }
