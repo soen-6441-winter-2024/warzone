@@ -11,12 +11,14 @@ public class CommandFactory {
     private EditCountryCommand editCountryCommand;
     private EditNeighborCommand editNeighborCommand;
     private ShowMapCommand showMapCommand;
+    private GamePlayerCommand editGamePlayerCommand;
 
-    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, EditNeighborCommand editNeighborCommand, ShowMapCommand showMapCommand) {
+    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, EditNeighborCommand editNeighborCommand, ShowMapCommand showMapCommand, GamePlayerCommand editGamePlayerCommand) {
         this.editContinentCommand = editContinentCommand;
         this.editCountryCommand = editCountryCommand;
         this.editNeighborCommand = editNeighborCommand;
         this.showMapCommand = showMapCommand;
+        this.editGamePlayerCommand = editGamePlayerCommand;
     }
 
     public Command newCommand(String commandName) throws InvalidCommandException {
@@ -28,6 +30,8 @@ public class CommandFactory {
             return editNeighborCommand;
         } else if(commandName.equals(CommandType.SHOW_MAP.toString())) {
             return showMapCommand;
+        } else if(commandName.equals(CommandType.GAME_PLAYER.toString())) {
+            return editGamePlayerCommand;
         }
 
         return null;

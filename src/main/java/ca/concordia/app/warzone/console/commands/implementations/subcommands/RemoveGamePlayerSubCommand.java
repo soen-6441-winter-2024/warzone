@@ -25,7 +25,8 @@ public class RemoveGamePlayerSubCommand extends SubCommand {
     @Override
     public String run() {
         // Call RemoveContinent from the service class
-        System.out.println("Removing a Game Player with name: " + this.options[0]);
-        return null;
+        String playerName = this.options[0];
+        String response = gameEngineController.removePlayer(playerName);
+        return response;
     }
 }
