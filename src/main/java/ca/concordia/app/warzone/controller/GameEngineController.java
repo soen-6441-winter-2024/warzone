@@ -25,7 +25,6 @@ public class GameEngineController {
     }
 
     public String addContinent(ContinentDto continentDto) {
-
         if (Phase.MAP_EDITOR.equals(current)) {
             return continentService.add(continentDto);
         } else {
@@ -54,5 +53,15 @@ public class GameEngineController {
 
     public  String removePlayer(String playerName){
         return playerService.remove(playerName);
+    }
+
+
+    public String loadMap(String filename) {
+
+        return "";
+    }
+
+    public String editMap(String filename ) {
+        return "";
     }
 }
