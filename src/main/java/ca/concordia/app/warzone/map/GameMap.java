@@ -179,8 +179,6 @@ public class GameMap {
         try {
             scanner = new Scanner(file);
 
-            //TODO include call to validate map file
-
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
