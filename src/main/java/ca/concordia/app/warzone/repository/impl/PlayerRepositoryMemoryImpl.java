@@ -4,25 +4,28 @@ import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class PlayerRepositoryMemoryImpl implements PlayerRepository {
-    private Map<String, Player> values = new HashMap<>();
+    private Map<String, Player> players = new HashMap<>();
 
     @Override
     public void save(Player domain) {
-        values.put(domain.get_playerName(), domain);
+        players.put(domain.get_playerName(), domain);
     }
 
     public void delete(Player player){
-        values.remove(player.get_playerName(), player);
+        players.remove(player.get_playerName(), player);
     }
 
     @Override
     public Optional<Player> findByName(String name) {
-        return Optional.ofNullable(values.get(name));
+        return Optional.ofNullable(players.get(name));
+    }
+
+    @Override
+    public List<Player> getAllPlayers() {
+        return new ArrayList<>(players.values());
     }
 }

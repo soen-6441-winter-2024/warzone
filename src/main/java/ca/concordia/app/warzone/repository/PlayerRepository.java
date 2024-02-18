@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.repository;
 
 import ca.concordia.app.warzone.service.model.Player;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PlayerRepository {
@@ -11,4 +12,6 @@ public interface PlayerRepository {
 
 
     Optional<Player> findByName(String Named_playerName);
+
+    List<Player> getAllPlayers();
 }
