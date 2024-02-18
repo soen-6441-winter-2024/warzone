@@ -1,13 +1,11 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
-import ca.concordia.app.warzone.map.GameMap;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.DeployOrder;
 import ca.concordia.app.warzone.service.model.Order;
 import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

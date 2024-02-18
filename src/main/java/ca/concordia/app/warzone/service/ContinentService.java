@@ -47,7 +47,7 @@ public class ContinentService {
             Continent continent = new Continent();
             continent.setId(p_continentDto.getId());
             continent.setValue(p_continentDto.getValue());
-            continent.SetBonusArmies(p_continentDto.get_bonusArmies());
+            continent.setBonusArmies(p_continentDto.get_bonusArmies());
             d_repository.save(continent);
             result.append("\n");
             result.append("Continent id=");
