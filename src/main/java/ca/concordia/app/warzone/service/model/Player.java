@@ -9,6 +9,8 @@ public class Player {
     private String d_playerName;
     private List<Country> d_countriesAssigned;
 
+    private int numberOfReinforcementsAvailable;
+
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
@@ -37,5 +39,13 @@ public class Player {
 
     public void set_countriesAssigned(List<Country> d_countriesAssigned){
         this.d_countriesAssigned = d_countriesAssigned;
+    }
+
+    public int getNumberOfReinforcements() {
+        return numberOfReinforcementsAvailable;
+    }
+
+    public void setNumberOfReinforcements(int numberOfReinforcements) {
+        this.numberOfReinforcementsAvailable = numberOfReinforcements;
     }
 }
