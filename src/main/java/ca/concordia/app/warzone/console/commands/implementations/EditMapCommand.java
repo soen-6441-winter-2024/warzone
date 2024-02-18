@@ -2,22 +2,27 @@ package ca.concordia.app.warzone.console.commands.implementations;
 
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.GameEngineController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class EditMapCommand extends Command {
-    private final String filename;
-    public EditMapCommand(String[] options) throws InvalidCommandException {
-        if(options.length != 1) {
-            throw new InvalidCommandException("expected 1 filename");
-        }
+    private GameEngineController gameEngineController;
 
-        this.options = options;
-        this.filename = options[0];
+    public EditMapCommand(GameEngineController gameEngineController) {
+        this.gameEngineController = gameEngineController;
     }
 
     @Override
-    public String run(String[] subCommandsAndOptions) {
-//        Opens the file and loads it, entering the "map editor" phase
-        System.out.println("Opening file: " + this.filename);
-        return null;
+    public String run(String[] subCommandsAndOptions) throws InvalidCommandException {
+        System.out.println("Editing map");
+        if(subCommandsAndOptions.length != 1) {
+            throw new InvalidCommandException("filename required");
+        }
+
+        String filename = subCommandsAndOptions[0];
+        return this.gameEngineController.editMap(filename);
     }
 }

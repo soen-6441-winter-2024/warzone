@@ -7,7 +7,7 @@ public class Player {
     private static int d_lastPlayerID = 0;
     private int d_playerID;
     private String d_playerName;
-    private List<String> d_countriesAssigned;
+    private List<Country> d_countriesAssigned;
 
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
@@ -16,6 +16,10 @@ public class Player {
 
     public int get_playerID(){
         return d_playerID;
+    }
+
+    public void addCountry(Country country){
+        d_countriesAssigned.add(country);
     }
 
 
@@ -27,11 +31,11 @@ public class Player {
         this.d_playerName = d_playerName;
     }
 
-    public List<String> get_countriesAssigned(){
+    public List<Country> get_countriesAssigned(){
         return d_countriesAssigned;
     }
 
-    public void set_countriesAssigned(List<String> d_countriesAssigned){
+    public void set_countriesAssigned(List<Country> d_countriesAssigned){
         this.d_countriesAssigned = d_countriesAssigned;
     }
 }

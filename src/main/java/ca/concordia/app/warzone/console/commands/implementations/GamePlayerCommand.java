@@ -22,12 +22,12 @@ public class GamePlayerCommand extends Command {
 
     private final GameEngineController controller;
 
-    public  GamePlayerCommand(GameEngineController controller){
+    public GamePlayerCommand(GameEngineController controller) {
         this.controller = controller;
         init();
             }
 
-    private void init(){
+    private void init() {
         this.type = CommandType.GAME_PLAYER;
     }
 
@@ -66,7 +66,5 @@ public class GamePlayerCommand extends Command {
     }
 
         return result.toString();
-
-
     }
 }
