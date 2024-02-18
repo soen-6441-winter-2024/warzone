@@ -59,9 +59,9 @@ public class GamePlayerCommand extends Command {
         ArrayList<SubCommand> subCommandArr = new ArrayList<>();
 
         while (matcher.find()) {
-            if (matcher.group().equals(subCommands)) {
-                continue;
-            }
+//            if (matcher.group().equals(subCommands)) {
+//                continue;
+//            }
 
             String[] singleSubcommandAndOptions = matcher.group().split(" ");
             String singleSubCommand = singleSubcommandAndOptions[0].substring(1);

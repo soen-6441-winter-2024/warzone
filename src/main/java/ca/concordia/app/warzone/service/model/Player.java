@@ -83,4 +83,14 @@ public class Player {
     public void setNumberOfReinforcements(int p_numberOfReinforcements) {
         this.numberOfReinforcementsAvailable = p_numberOfReinforcements;
     }
+
+    public boolean ownsCountry(String p_countryId) {
+        for(Country currentCountry : this.d_countriesAssigned) {
+            if(currentCountry.getId().equals(p_countryId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

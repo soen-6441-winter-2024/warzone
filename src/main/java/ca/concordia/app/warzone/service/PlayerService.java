@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.map.GameMap;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.DeployOrder;
@@ -8,6 +9,7 @@ import ca.concordia.app.warzone.service.model.Order;
 import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,8 @@ public class PlayerService {
      * Data member for storing the current round number.
      */
     private int d_currentRound;
+
+    private int currentPlayerGivingOrder;
 
     /**
      * Default reinforcement number.
@@ -103,6 +107,10 @@ public class PlayerService {
         }
     }
 
+    public List<Player> getAllPlayers() {
+        return this.d_repository.getAllPlayers();
+    }
+
     /**
      * Retrieves the number of reinforcements for a player.
      *
@@ -133,5 +141,44 @@ public class PlayerService {
             // Add the reinforcements to the country
 //            this.d_mapService.
         }
+    }
+
+    public void addDeployOrder(String d_countryId, int d_numberOfReinforcements) {
+        Player player = this.getAllPlayers().get(this.currentPlayerGivingOrder);
+        if (!player.ownsCountry(d_countryId)) {
+            throw new InvalidCommandException("player does not own country");
+        }
+
+        if(d_numberOfReinforcements > player.getNumberOfReinforcements()) {
+            throw new InvalidCommandException("player does not have enough reinforcements");
+        }
+
+        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
+        this.d_orders.get(this.d_currentRound).add(deployOrder);
+        player.setNumberOfReinforcements(player.getNumberOfReinforcements() - d_numberOfReinforcements);
+
+        if(player.getNumberOfReinforcements() == 0) {
+            this.currentPlayerGivingOrder++;
+        }
+    }
+
+    private void askForOrder() {
+        List<Player> players = this.getAllPlayers();
+        Player player = players.get(this.currentPlayerGivingOrder);
+        System.out.println("Player " + player.getPlayerName() + " give your order: ");
+    }
+
+    public void startGameLoop() {
+        this.d_currentRound = 0;
+
+        // Assign reinforcements
+        this.assignReinforcements();
+
+        this.d_orders = new ArrayList<>();
+        this.d_orders.add(new ArrayList<>());
+
+        this.currentPlayerGivingOrder = 0;
+
+        this.askForOrder();
     }
 }

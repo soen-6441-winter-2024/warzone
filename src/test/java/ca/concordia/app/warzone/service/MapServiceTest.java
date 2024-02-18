@@ -32,11 +32,13 @@ public class MapServiceTest {
     @Mock
     private ContinentRepository continentRepository;
 
+    @Mock
+    private PlayerService playerService;
     private MapService underTest;
 
     @BeforeEach
     public void before() {
-        underTest = new MapService(countryRepository, continentRepository);
+        underTest = new MapService(countryRepository, continentRepository, playerService);
         FileUtils.deleteQuietly(new File(FILE_NAME));
     }
 

@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.console.commands.implementations;
 
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.GameEngineController;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.model.Country;
@@ -17,18 +18,15 @@ import java.util.List;
 @Component
 public class AssignCountriesCommand extends Command {
 
-    private final PlayerRepository d_PlayerRepository;
-    private final CountryRepository d_CountryRepository;
-
+    private final GameEngineController d_gameEngineController;
     /**
      * Constructor for AssignCountriesCommand.
      * @param p_playerRepository The PlayerRepository instance.
      * @param p_countryRepository The CountryRepository instance.
      * @throws InvalidCommandException Throws if the command is invalid.
      */
-    public AssignCountriesCommand(PlayerRepository p_playerRepository, CountryRepository p_countryRepository) throws InvalidCommandException {
-        this.d_PlayerRepository = p_playerRepository;
-        this.d_CountryRepository = p_countryRepository;
+    public AssignCountriesCommand(GameEngineController p_gameEngineController) throws InvalidCommandException {
+        this.d_gameEngineController = p_gameEngineController;
     }
 
     /**
@@ -38,14 +36,8 @@ public class AssignCountriesCommand extends Command {
      */
     @Override
     public String run(String[] p_subCommandsAndOptions) {
-        List<Player> players = d_PlayerRepository.getAllPlayers();
-        List<Country> countries = d_CountryRepository.findAll();
-
-        Collections.shuffle(countries);
-
-        assignCountries(players, countries);
-        System.out.println("Loading Map file: ");
-        return null;
+        d_gameEngineController.assignCountries();
+        return "Countries assigned";
     }
 
     /**

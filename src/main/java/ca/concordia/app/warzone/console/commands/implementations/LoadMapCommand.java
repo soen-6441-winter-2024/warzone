@@ -35,7 +35,6 @@ public class LoadMapCommand extends Command {
         }
 
         String fileName = p_subCommandsAndOptions[0];
-        this.d_gameEngineController.loadMap(fileName);
-        return null;
+        return this.d_gameEngineController.loadMap(fileName);
     }
 }

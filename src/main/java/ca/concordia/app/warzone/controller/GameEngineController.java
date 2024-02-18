@@ -3,11 +3,15 @@ package ca.concordia.app.warzone.controller;
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import ca.concordia.app.warzone.service.PlayerService;
+import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Controller class for managing game engine operations.
@@ -125,6 +129,27 @@ public class GameEngineController {
      */
     public String editMap(String p_filename) {
         // Implementation goes here
+        return "";
+    }
+
+    public String assignCountries() {
+        if(this.d_currentPhase != Phase.STARTUP){
+            throw new InvalidCommandException("game not in startup phase");
+        }
+
+        this.d_mapService.assignCountries();
+        this.d_currentPhase = Phase.GAME_LOOP;
+
+        this.d_playerService.startGameLoop();
+        return "";
+    }
+
+    public String deploy(String countryId, int numOfReinforcements) {
+        if(this.d_currentPhase != Phase.GAME_LOOP) {
+            throw new InvalidCommandException("game is not in game loop phase");
+        }
+
+        this.d_playerService.addDeployOrder(countryId, numOfReinforcements);
         return "";
     }
 }
