@@ -29,6 +29,7 @@ public class EditContinentCommand extends Command {
 
     /**
      * Constructor for EditContinentCommand.
+     *
      * @param p_Controller The MapEditorController instance.
      */
     public EditContinentCommand(MapEditorController p_Controller) {
@@ -45,6 +46,7 @@ public class EditContinentCommand extends Command {
 
     /**
      * Runs the EditContinentCommand.
+     *
      * @param p_SubCommandsAndOptions Subcommands and options provided.
      * @return Result of the command execution.
      */
@@ -59,10 +61,6 @@ public class EditContinentCommand extends Command {
 
 
         while (l_Matcher.find()) {
-            if (l_Matcher.group().equals(l_SubCommands)) {
-                continue;
-            }
-
             String[] l_SingleSubcommandAndOptions = l_Matcher.group().split(" ");
             String l_SingleSubCommand = l_SingleSubcommandAndOptions[0].substring(1);
 

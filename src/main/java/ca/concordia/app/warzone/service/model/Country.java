@@ -111,4 +111,13 @@ public class Country {
     public void setPlayer(Optional<Player> player) {
         this.d_player = player;
     }
+
+    /**
+     * Add a neighbor to the country
+     *
+     * @param country the neighbor to be added, must not be null
+     */
+    public void addNeighbor(Country country) {
+        this.d_neighbors.add(country);
+    }
 }

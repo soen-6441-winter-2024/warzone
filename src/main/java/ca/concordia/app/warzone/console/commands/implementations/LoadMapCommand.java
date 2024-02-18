@@ -1,7 +1,5 @@
 package ca.concordia.app.warzone.console.commands.implementations;
-
 import org.springframework.stereotype.Component;
-
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.commands.CommandType;
 import ca.concordia.app.warzone.console.dto.MapDto;

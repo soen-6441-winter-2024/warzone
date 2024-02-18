@@ -74,6 +74,6 @@ public class CommandFactory {
             return  d_AssignCountriesCommand;
         }
 
-        return null;
+        throw new InvalidCommandException("invalid command");
     }
 }
