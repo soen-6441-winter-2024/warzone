@@ -109,19 +109,6 @@ public class GameEngineController {
     }
 
     /**
-     * Loads a map into the game.
-     *
-     * @param p_filename The filename of the map to load.
-     * @return A string indicating the result of the operation.
-     */
-    public String loadMap(String p_filename) {
-        // Implementation goes here
-        d_mapService.loadMap(p_filename);
-        this.d_currentPhase = Phase.STARTUP;
-        return "Loaded map " + p_filename;
-    }
-
-    /**
      * Edits a map in the game.
      *
      * @param p_filename The filename of the map to edit.

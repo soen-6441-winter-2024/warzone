@@ -31,7 +31,7 @@ public class Continent {
      *
      * @param bonusArmies the bonus armies of the continent
      */
-    public void SetBonusArmies(int bonusArmies) {
+    public void setBonusArmies(int bonusArmies) {
         this.d_bonusArmies = bonusArmies;
     }
 
@@ -40,7 +40,7 @@ public class Continent {
      *
      * @param bonusArmies the bonus armies of the continent
      */
-    public int GetBonusArmies() {
+    public int getBonusArmies() {
         return d_bonusArmies;
     }
 
