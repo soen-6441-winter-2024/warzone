@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.MapDto;
+import ca.concordia.app.warzone.map.GameMap;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.service.model.Continent;
@@ -20,11 +21,13 @@ public class MapService {
 
     private final CountryRepository d_repoCountry; // Data member for the CountryRepository
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+    private GameMap d_gameMap;
+
 
     /**
      * Constructs a MapService with the specified CountryRepository and ContinentRepository.
      *
-     * @param p_repoCountry the CountryRepository to be used
+     * @param p_repoCountry   the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
     public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
@@ -66,7 +69,7 @@ public class MapService {
                     writer.write("\n");
                     for (Country country : allCountries) {
                         // Assuming each country can have multiple neighbors
-                        List<Country> allNeighborsByCountry =country.getNeighbors();
+                        List<Country> allNeighborsByCountry = country.getNeighbors();
                         if (!allNeighborsByCountry.isEmpty()) {
                             writer.write(country.getId() + " ");
                             for (Country neighbor : allNeighborsByCountry) {
@@ -84,5 +87,11 @@ public class MapService {
         } else {
             return "There are no map elements to save";
         }
+    }
+
+    public void loadMap(String p_filename) {
+        GameMap gameMap = new GameMap();
+        gameMap.loadMap(p_filename);
+        this.d_gameMap = gameMap;
     }
 }

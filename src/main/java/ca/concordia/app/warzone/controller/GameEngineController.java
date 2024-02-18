@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
+import ca.concordia.app.warzone.service.MapService;
 import ca.concordia.app.warzone.service.PlayerService;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ public class GameEngineController {
     private final ContinentService d_continentService;
     private final CountryService d_countryService;
     private final PlayerService d_playerService;
+    private final MapService d_mapService;
 
     private Phase d_current = Phase.MAP_EDITOR;
 
@@ -27,7 +29,7 @@ public class GameEngineController {
      * @param p_countryService   The CountryService to use.
      * @param p_playerService    The PlayerService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService mapService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
@@ -109,6 +111,7 @@ public class GameEngineController {
      */
     public String loadMap(String p_filename) {
         // Implementation goes here
+        d_mapService.loadMap(p_filename);
         return "";
     }
 
