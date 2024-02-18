@@ -1,0 +1,16 @@
+[continents]
+1 America
+2 Europe
+3 Africa
+
+[countries]
+Canada 1 America
+USA 1 America
+Nigeria 3 Africa
+France 2 Europe
+
+[borders]
+Canada  USA
+USA  Canada Nigeria
+Nigeria  USA
+France  Nigeria
