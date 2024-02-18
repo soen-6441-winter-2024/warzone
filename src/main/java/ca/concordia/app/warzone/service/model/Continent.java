@@ -6,6 +6,7 @@ public class Continent {
 
     private String d_id; // Data member for continent ID
     private String d_value; // Data member for continent value
+    private int d_bonusArmies; // Data member for bonus armies
 
     /**
      * Retrieves the ID of the continent.
@@ -23,6 +24,24 @@ public class Continent {
      */
     public void setId(String id) {
         this.d_id = id;
+    }
+
+    /**
+     * Sets the bonus armies of the continent.
+     *
+     * @param bonusArmies the bonus armies of the continent
+     */
+    public void SetBonusArmies(int bonusArmies) {
+        this.d_bonusArmies = bonusArmies;
+    }
+
+    /**
+     * Gets the bonus armies of the continent.
+     *
+     * @param bonusArmies the bonus armies of the continent
+     */
+    public int GetBonusArmies() {
+        return d_bonusArmies;
     }
 
     /**

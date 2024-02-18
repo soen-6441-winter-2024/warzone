@@ -1,0 +1,232 @@
+[continents]
+1 Skandinavien 4
+2 Westeuropa 5
+3 Mittelmeer 3
+4 Mitteleuropa 4
+5 Balkan 3
+6 Kleinasien 3
+7 Russland 7
+
+[countries]
+88 Moskau 7
+89 Petersburg 7
+110 Ankara 6
+90 Onega 7
+91 Murmansk 7
+92 Nordrussland 7
+93 Archangelsk 7
+94 Saratov 7
+95 Kasachstan 7
+96 Voronez 7
+97 Kiew 7
+10 England 2
+98 Wolgograd 7
+11 London 2
+99 Ostukraine 7
+12 Lisabon 3
+13 Porto 3
+14 Baskenland 3
+15 Barcelona 3
+16 Madrid 3
+17 Ballearen 3
+18 Suedspanien 3
+19 Sardinien 3
+1 Reykjavik 1
+2 Ostisland 1
+3 Aberdeen 2
+4 Glasgow 2
+5 Nordirland 2
+6 Dublin 2
+7 Suedirland 2
+8 Leeds 2
+9 Wales 2
+20 Korsika 2
+21 Suedfrankreich 2
+22 Marseille 2
+23 Zentral-Frankreich 2
+24 Turin 3
+25 Normandie 2
+26 Paris 2
+27 Nordfrankreich 2
+28 Elsaﬂ-Lothringen 2
+29 Belgien 2
+30 Niederlande 2
+31 Sizilien 3
+32 Sueditalien 3
+33 Rom 3
+34 Vatikan 3
+35 Venedig 3
+36 Schweiz 4
+37 Oesterreich 4
+38 Bayern 4
+39 Nordrhein-Westfalen 4
+40 Sachsen 4
+41 Niedersachsen 4
+42 Berlin 4
+43 Dnemark 1
+44 Kopenhagen 1
+45 Malmoe 1
+46 Stockholm 1
+47 Zentralschweden 1
+48 Nordschweden 1
+49 Oslo 1
+50 Trondheim 1
+51 Tromsoe 1
+52 Hammerfest 1
+53 Nordfinnland 1
+54 Zentralfinnland 1
+55 Helsinki 1
+56 Estland 7
+57 Lettland 7
+58 Littauen 7
+59 Ostpreussen 4
+60 Warschau 4
+61 Pommern 4
+62 Posen 4
+63 Schlesien 4
+64 Krakau 4
+65 Tschechien 4
+66 Slowakei 4
+67 Ungarn 4
+68 Slowenien 5
+69 Kroatien 5
+70 Bosnien 5
+71 Belgrad 5
+72 Serbien 5
+73 Montenegro 5
+74 Albanien 6
+75 Thesaloniki 6
+76 Athen 6
+77 Kreta 6
+78 Izmir 6
+79 Bosporus 6
+100 Sewastopol 7
+101 Krim 7
+102 Odessa 7
+103 Moldawien 7
+104 Kaukasus 7
+105 Georgien 7
+106 Aserbeischan 7
+80 Istanbul 6
+107 Armenien 7
+81 Bulgarien 5
+108 Kurdistan 6
+82 Bukarest 5
+109 Konya 6
+83 Bessarabien 5
+84 Siebenbuergen 5
+85 West-Ukraine 7
+86 Brest 7
+87 Minsk 7
+
+[borders]
+88 56 57 87 89 90 93 94 95 96
+89 54 55 56 88 90
+110 78 79 101 108 109
+90 53 54 88 89 91 93
+91 52 53 90
+92 93
+93 88 90 92 94
+94 88 93 95
+95 88 94 96
+96 87 88 95 97 98
+97 85 86 87 96 98 99 100 102
+10 8 9 11
+98 96 97 99 100 104
+11 9 10 27 25
+99 97 98 100
+12 13 16 18
+13 12 14 16
+14 7 25 21 15 16 13
+15 14 21 17 16
+16 12 13 14 15 18
+17 18 15 19
+18 12 16 17
+19 17 20 31
+1 2
+2 1 51 3
+3 2 4 49
+4 3 8 5
+5 4 6
+6 5 7
+7 6 14
+8 4 9 10
+9 8 10 11
+20 22 34 19
+21 14 15 22 23
+22 20 21 23 24 26 36
+23 21 22 26 25
+24 22 36 35 34
+25 11 14 23 26 27
+26 25 27 28 36 22 23
+27 25 26 28 29 11
+28 26 27 29 39 38 36
+29 27 28 30 39
+30 29 39 41
+31 19 32 77
+32 31 33 74
+33 32 34
+34 33 20 24 35
+35 24 36 37 68 34
+36 22 24 26 28 37 38 35
+37 35 36 38 65 66 67 68
+38 28 39 40 65 37 36
+39 28 29 30 41 40 38
+40 38 39 41 42 62 63 65
+41 30 39 40 42
+42 40 41 43 44 61 62
+43 49 44 42
+44 42 43 45
+45 44 46 57
+46 45 49 50 47 55
+47 46 50 48
+48 47 50 51 53
+49 3 50 46 43
+50 49 46 47 48 51
+51 50 48 52 53 2
+52 51 53 91
+53 48 51 52 91 90 54
+54 53 90 89 55
+55 54 89 56 46
+56 55 89 88 57
+57 56 88 87 58 45
+58 57 87 86 60 59
+59 58 60 61
+60 59 58 86 64 63 62 61
+61 59 60 62 42
+62 61 60 63 40 42
+63 62 60 64 66 65 40
+64 60 85 66 63
+65 63 66 37 38 40
+66 63 64 85 67 37 65
+67 66 85 84 71 69 68 37
+68 35 37 67 69
+69 68 67 71 70 72
+70 69 71 72
+71 67 84 82 81 72 70 69
+72 69 70 71 81 73 74
+73 72 81 75 74
+74 72 73 75 76 32
+75 74 73 81 80 76
+76 74 75 77
+77 31 76 78
+78 77 79 110 109
+79 80 110 78
+100 97 98 99 101 102
+101 100 102 104 110
+102 85 97 100 101 83 103
+103 83 85 102
+104 98 101 105 106
+105 104 106 107 108
+106 104 105 107 108
+80 75 81 79
+107 105 106 108
+81 82 80 75 73 72 71
+108 105 106 107 109 110
+82 81 71 84 83
+109 78 108 110
+83 82 84 85 102 103
+84 67 85 83 82 71
+85 86 97 102 103 83 84 67 66 64
+86 58 60 85 97 87
+87 57 58 86 97 96 88

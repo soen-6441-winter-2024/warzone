@@ -132,4 +132,26 @@ public class MapEditorController {
             return "Invalid Phase";
         }
     }
+
+    /**
+     * Loads the map file.
+     *
+     * @param p_mapDto The MapDto representing the map to save.
+     * @return A string indicating the result of the operation.
+     */
+    public String loadMap(MapDto p_mapDto) {
+        if (Phase.MAP_EDITOR.equals(d_current)) {
+            return d_mapService.loadMap(p_mapDto);
+        } else {
+            return "Invalid Phase";
+        }
+    }
+
+    public String showMap() {
+        if (Phase.MAP_EDITOR.equals(d_current)) {
+            return d_mapService.showMap();
+        } else {
+            return "Invalid Phase";
+        }
+    }
 }

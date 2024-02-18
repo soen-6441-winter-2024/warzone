@@ -10,6 +10,7 @@ import java.util.Optional;
 public class Country {
 
     private String d_id; // Data member for country ID
+    private String d_name; // Data member for country name
     private Continent d_continent; // Data member for continent
     private List<Country> d_neighbors; // Data member for neighboring countries
     private Optional<Player> d_player; // Data member for player, wrapped in Optional
@@ -30,6 +31,22 @@ public class Country {
      */
     public String getId() {
         return d_id;
+    }
+    
+    /**
+     * Retrieves the name of the country.
+     *
+     * @return the name of the country
+     */
+    public String getName() {
+        return d_name;
+    }
+
+    /**
+     * Sets the name of the country.
+     */
+    public void setName(String d_name) {
+        this.d_name = d_name;
     }
 
     /**
