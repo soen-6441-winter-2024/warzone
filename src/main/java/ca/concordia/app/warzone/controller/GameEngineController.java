@@ -29,10 +29,12 @@ public class GameEngineController {
      * @param p_countryService   The CountryService to use.
      * @param p_playerService    The PlayerService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService mapService) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
+                                PlayerService p_playerService, MapService p_mapService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
+        this.d_mapService = p_mapService;
     }
 
     /**
