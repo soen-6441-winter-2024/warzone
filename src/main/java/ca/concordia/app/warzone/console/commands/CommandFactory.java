@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandFactory {
 
+    private final AssignCountriesCommand assignCountriesCommand;
     private EditContinentCommand editContinentCommand;
     private EditCountryCommand editCountryCommand;
     private EditNeighborCommand editNeighborCommand;
@@ -14,13 +15,20 @@ public class CommandFactory {
     private GamePlayerCommand editGamePlayerCommand;
     private EditMapCommand editMapCommand;
 
-    public CommandFactory(EditContinentCommand editContinentCommand, EditCountryCommand editCountryCommand, EditNeighborCommand editNeighborCommand, ShowMapCommand showMapCommand, GamePlayerCommand editGamePlayerCommand, EditMapCommand editMapCommand) {
+    public CommandFactory(EditContinentCommand editContinentCommand, 
+    EditCountryCommand editCountryCommand, 
+    EditNeighborCommand editNeighborCommand, 
+    ShowMapCommand showMapCommand, 
+    GamePlayerCommand editGamePlayerCommand, 
+    AssignCountriesCommand assignCountriesCommand, 
+    EditMapCommand editMapCommand) {
         this.editContinentCommand = editContinentCommand;
         this.editCountryCommand = editCountryCommand;
         this.editNeighborCommand = editNeighborCommand;
         this.showMapCommand = showMapCommand;
         this.editGamePlayerCommand = editGamePlayerCommand;
         this.editMapCommand = editMapCommand;
+        this.assignCountriesCommand = assignCountriesCommand;
     }
 
     public Command newCommand(String commandName) throws InvalidCommandException {
@@ -36,6 +44,8 @@ public class CommandFactory {
             return editGamePlayerCommand;
         } else if (commandName.equals(CommandType.EDIT_MAP.toString())) {
             return editMapCommand;
+        } else if(commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())){
+            return  assignCountriesCommand;
         }
 
         return null;
