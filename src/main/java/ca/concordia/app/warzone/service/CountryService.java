@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
+
 @Service
 public class CountryService {
 
@@ -107,10 +108,7 @@ public class CountryService {
                 Country newNeighborCountry = newNeighborOptional.get();
                 neighbors.add(newNeighborCountry);
             }
-            //else
-            //{
-            //    return "Country Neighbor does not exists, enter a correct Country ID";
-            //}
+
             country.setNeighbors(neighbors);
             repoCountry.save(country);
             return "OK";

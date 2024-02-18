@@ -2,11 +2,10 @@ package ca.concordia.app.warzone.repository.impl;
 
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.service.model.Continent;
+import ca.concordia.app.warzone.service.model.Country;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ContinentRepositoryMemoryImpl implements ContinentRepository {
@@ -24,5 +23,9 @@ public class ContinentRepositoryMemoryImpl implements ContinentRepository {
     @Override
     public void deleteById(String id) {
         continents.remove(id);
+    }
+    @Override
+    public List<Continent> findAll() {
+        return new ArrayList<>(continents.values());
     }
 }

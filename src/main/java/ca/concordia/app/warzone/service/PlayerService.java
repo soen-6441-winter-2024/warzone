@@ -27,9 +27,9 @@ public class PlayerService {
         if (playerOptional.isPresent()) {
             return "player with name " + d_playerName + " already exists";
         } else {
-            Player domain = new Player();
+        Player domain = new Player();
             domain.set_playerName(d_playerName);
-            repository.save(domain);
+        repository.save(domain);
             return "player " + d_playerName + " joined the game";
         }
 

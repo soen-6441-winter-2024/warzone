@@ -25,7 +25,7 @@ public class AssignCountriesCommand extends Command {
         this.countryRepository = countryRepository;
 
 
-    }
+        }
 
 
 
@@ -34,7 +34,7 @@ public class AssignCountriesCommand extends Command {
 //        Saves the current map being edited
 
         List<Player> players = playerRepository.getAllPlayers();
-        List<Country> countries = countryRepository.getAllCountries();
+        List<Country> countries = countryRepository.findAll();
 
         Collections.shuffle(countries);
 

@@ -5,7 +5,11 @@ import ca.concordia.app.warzone.service.model.Continent;
 import ca.concordia.app.warzone.service.model.Country;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ArrayList;
 
 @Repository
 public class CountryRepositoryMemoryImpl implements CountryRepository {
@@ -28,9 +32,8 @@ public class CountryRepositoryMemoryImpl implements CountryRepository {
     public void deleteNeighborById(Country country) {
         countries.put(country.getId(), country);
     }
-
     @Override
-    public List<Country> getAllCountries() {
+    public List<Country> findAll() {
         return new ArrayList<>(countries.values());
     }
 }
