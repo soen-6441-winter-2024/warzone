@@ -19,7 +19,8 @@ public class CommandFactory {
     private GamePlayerCommand d_EditGamePlayerCommand;
     private SaveMapCommand d_SaveMapCommand;
     private EditMapCommand d_EditMapCommand;
-    private LoadMapCommand d_loadMapCommand;
+    private LoadMapCommand d_LoadMapCommand;
+
     /**
      * Constructs a CommandFactory object.
      *
@@ -31,8 +32,9 @@ public class CommandFactory {
      * @param p_saveMapCommand The command for saving the map.
      * @param p_assignCountriesCommand The command for assigning countries.
      * @param p_editMapCommand The command for editing the map.
+     * @param p_loadMapCommand The command for loading the map.
      */
-    public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand, EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand, GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand, AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand, LoadMapCommand p_loadMap) {
+    public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand, EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand, GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand, AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand, LoadMapCommand d_LoadMapCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -41,7 +43,7 @@ public class CommandFactory {
         this.d_SaveMapCommand = p_saveMapCommand;
         this.d_EditMapCommand = p_editMapCommand;
         this.d_AssignCountriesCommand = p_assignCountriesCommand;
-        this.d_loadMapCommand = p_loadMap;
+        this.d_LoadMapCommand = d_LoadMapCommand;
     }
 
     /**
@@ -64,15 +66,14 @@ public class CommandFactory {
             return d_EditGamePlayerCommand;
         } else if(p_commandName.equals(CommandType.SAVE_MAP.toString())) {
             return d_SaveMapCommand;
+        } else if(p_commandName.equals(CommandType.LOAD_MAP.toString())) {
+            return d_LoadMapCommand;
         } else if (p_commandName.equals(CommandType.EDIT_MAP.toString())) {
             return d_EditMapCommand;
         } else if(p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())){
             return  d_AssignCountriesCommand;
-        } else if(p_commandName.equals(CommandType.LOAD_MAP.toString())) {
-            return d_loadMapCommand;
         }
 
         throw new InvalidCommandException("invalid command");
-//        return null;
     }
 }

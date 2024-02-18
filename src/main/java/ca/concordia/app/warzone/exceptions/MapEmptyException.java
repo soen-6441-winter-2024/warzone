@@ -1,4 +1,4 @@
-package ca.concordia.app.warzone.map.exceptions;
+package ca.concordia.app.warzone.exceptions;
 
 /**
  * Exception thrown when the map is empty.

@@ -23,15 +23,15 @@ import java.util.regex.Pattern;
 public class ShowMapCommand extends Command {
 
     /** The controller for map editing. */
-    private MapEditorController d_Controller;
+    private MapEditorController d_MapEditorController;
 
     /**
      * Constructs a ShowMapCommand object.
      *
      * @param p_controller The controller for map editing.
      */
-    public ShowMapCommand(MapEditorController p_controller) {
-        this.d_Controller = p_controller;
+    public ShowMapCommand(MapEditorController p_MapEditorController) {
+        this.d_MapEditorController = p_MapEditorController;
         init();
     }
 
@@ -45,12 +45,12 @@ public class ShowMapCommand extends Command {
     /**
      * Runs the show map command.
      *
-     * @param p_subCommandsAndOptions The subcommands and options for showing the map.
+     * @param p_options The options for showing the map.
      * @return The result of the command execution.
      */
     @Override
-    public String run(String[] p_subCommandsAndOptions) {
+    public String run(String[] p_options) {
         System.out.println("Showing Map");
-        return "";
+        return d_MapEditorController.showMap();
     }
 }
