@@ -68,6 +68,10 @@ public class PlayerService {
         }
     }
 
+    public void updatePlayer(Player p_player) {
+        this.d_repository.save(p_player);
+    }
+
     /**
      * Removes a player.
      *
