@@ -1,5 +1,4 @@
 package ca.concordia.app.warzone.console.commands.implementations;
-
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.controller.GameEngineController;
 import org.springframework.stereotype.Component;
