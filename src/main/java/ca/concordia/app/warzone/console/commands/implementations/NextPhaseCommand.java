@@ -7,17 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class NextPhaseCommand extends Command {
 
-    private final GameEngineController controller;
-
 
     public NextPhaseCommand(GameEngineController controller) {
-        this.controller = controller;
     }
 
     @Override
     public String run(String[] subCommandsAndOptions) {
-
-//        return controller.nextPhase();
         return null;
     }
 }

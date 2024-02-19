@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class ShowMapCommand extends Command {
 
     /** The controller for map editing. */
-    private MapEditorController d_MapEditorController;
+    private final MapEditorController d_MapEditorController;
 
     /**
      * Constructs a ShowMapCommand object.

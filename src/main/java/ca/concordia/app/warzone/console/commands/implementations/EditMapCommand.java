@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class EditMapCommand extends Command {
 
     /** The controller for the game engine. */
-    private GameEngineController d_GameEngineController;
+    private final GameEngineController d_GameEngineController;
 
     /**
      * Constructs an EditMapCommand object.
