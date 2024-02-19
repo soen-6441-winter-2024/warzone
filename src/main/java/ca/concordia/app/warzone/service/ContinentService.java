@@ -74,6 +74,7 @@ public class ContinentService {
      * Deletes a continent by its ID.
      *
      * @param p_continentId the ID of the continent to delete
+     * @return the result of the delete operation
      */
     public String delete(String p_continentId) {
         StringBuilder result = new StringBuilder();

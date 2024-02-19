@@ -5,6 +5,11 @@ package ca.concordia.app.warzone.console.commands;
  */
 public abstract class SubCommand {
 
+    /**
+     * Default subcommand
+     */
+    public SubCommand() {}
+
     /** The type of the subcommand. */
     protected SubCommandType d_Type;
 

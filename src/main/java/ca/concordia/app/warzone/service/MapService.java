@@ -28,7 +28,14 @@ import java.util.Scanner;
  */
 @Service
 public class MapService {
+    /**
+     * Data member for storing the CountryRepository, for fetching and storing countries.
+     */
     private final CountryRepository d_repoCountry; // Data member for the CountryRepository
+
+    /**
+     * Data member for storing the ContinentRepository, for fetching and storing continents.
+     */
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
 
@@ -52,7 +59,8 @@ public class MapService {
      * The methods reads the domination game fall, validates and loads it's content
      * into the Game Map.
      *
-     * @param p_mapDto
+     * @param p_mapDto the DTO of the map, containing the information about the map to load.
+     * @return the result of the operation
      */
     public String loadMap(MapDto p_mapDto) {
         String p_fileName = p_mapDto.getFileName();
@@ -172,6 +180,11 @@ public class MapService {
         }
     }
 
+    /**
+     * Reads the .map file, retrieves the borders, and adds neighbors to countries.
+     *
+     * @param p_file the map file to read
+     */
     private void readAndLoadBorders(File p_file) {
         try (Scanner scanner = new Scanner(p_file)) {
             ContinentService l_continentService = new ContinentService(d_repoContinent);
@@ -218,6 +231,11 @@ public class MapService {
         }
     }
 
+    /**
+     * Displays the current state of the map, including continents, countries, owners, and neighbors.
+     *
+     * @return a message indicating success or failure
+     */
     public String showMap() {
         System.out.println();
         // retrieve lists of all continents and countries in memory
@@ -249,7 +267,7 @@ public class MapService {
     }
 
     /**
-     * Saves the map to a file.
+     * Saves the current state of the map to a file.
      *
      * @param p_dto the DTO containing map information
      * @return a message indicating success or failure

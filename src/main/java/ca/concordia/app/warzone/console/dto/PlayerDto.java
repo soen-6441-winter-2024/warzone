@@ -7,6 +7,10 @@ import java.util.List;
  */
 public class PlayerDto {
 
+    /**
+     * Default constructor
+     */
+    public PlayerDto() {}
     /** The name of the player. */
     private String d_PlayerName;
 

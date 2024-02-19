@@ -14,6 +14,11 @@ public class ContinentRepositoryMemoryImpl implements ContinentRepository {
     private Map<String, Continent> d_continents = new HashMap<>(); // Stores continents with their IDs as keys
 
     /**
+     * Default constructor
+     */
+    public ContinentRepositoryMemoryImpl() {}
+
+    /**
      * Saves a continent to the repository.
      *
      * @param p_continent the continent to be saved

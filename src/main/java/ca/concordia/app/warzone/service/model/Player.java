@@ -76,14 +76,27 @@ public class Player {
         this.d_countriesAssigned = p_countriesAssigned;
     }
 
+    /**
+     * Returns the number of reinforcement this player has available
+     * @return the number of reinforcement armies available
+     */
     public int getNumberOfReinforcements() {
         return numberOfReinforcementsAvailable;
     }
 
+    /**
+     * Sets the number of reinforcement available
+     * @param p_numberOfReinforcements the new number of reinforcements available
+     */
     public void setNumberOfReinforcements(int p_numberOfReinforcements) {
         this.numberOfReinforcementsAvailable = p_numberOfReinforcements;
     }
 
+    /**
+     * Returns whether a player owns a given country
+     * @param p_countryId The countryId
+     * @return true if the player owns the given country, false otherwise
+     */
     public boolean ownsCountry(String p_countryId) {
         for(Country currentCountry : this.d_countriesAssigned) {
             if(currentCountry.getId().equals(p_countryId)) {

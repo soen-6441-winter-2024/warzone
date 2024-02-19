@@ -107,13 +107,22 @@ public class Country {
         this.d_neighbors.add(country);
     }
 
+    /**
+     * Returns the number of armies deployed on this country
+     * @return the armies count
+     */
     public int getArmiesCount() {
         return d_armiesCount;
     }
 
+    /**
+     * Sets the armies count
+     * @param p_armiesCount the number of armies deployed on this country
+     */
     public void setArmiesCount(int p_armiesCount) {
         this.d_armiesCount = p_armiesCount;
     }
+
 
     @Override
     public String toString() {

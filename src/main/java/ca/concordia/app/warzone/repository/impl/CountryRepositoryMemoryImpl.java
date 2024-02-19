@@ -10,6 +10,10 @@ import java.util.*;
 @Repository
 public class CountryRepositoryMemoryImpl implements CountryRepository {
 
+    /**
+     * Default constructor
+     */
+    public CountryRepositoryMemoryImpl() {}
     private Map<String, Country> d_countries = new HashMap<>(); // Stores countries with their IDs as keys
 
     /**

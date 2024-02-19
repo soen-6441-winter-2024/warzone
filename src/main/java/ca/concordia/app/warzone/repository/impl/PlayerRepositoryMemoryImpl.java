@@ -13,6 +13,10 @@ public class PlayerRepositoryMemoryImpl implements PlayerRepository {
     private Map<String, Player> d_players = new HashMap<>(); // Stores players with their names as keys
 
     /**
+     * Default constructor
+     */
+    public PlayerRepositoryMemoryImpl() {}
+    /**
      * Saves a player to the repository.
      *
      * @param p_player the player to be saved

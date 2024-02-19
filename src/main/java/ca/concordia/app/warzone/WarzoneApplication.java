@@ -12,6 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WarzoneApplication {
 
 	/**
+	 * Default constructor
+	 */
+	public WarzoneApplication() {}
+	/**
 	 * The main method of the application. It starts the Spring application context and launches the application.
 	 *
 	 * @param args The command-line arguments passed to the application.

@@ -20,10 +20,25 @@ import java.util.List;
 @Component
 public class GameEngineController {
 
+    /**
+     * ContinentService for continent-related operations
+     */
     private final ContinentService d_continentService;
+    /**
+     * Country service for country-related operations
+     */
     private final CountryService d_countryService;
+    /**
+     * PlayerService for player-related operations
+     */
     private final PlayerService d_playerService;
+    /**
+     * MapService for map-related operations
+     */
     private final MapService d_mapService;
+    /**
+     * PhaseRepository for fetching and setting the current game phase
+     */
     private final PhaseRepository d_phaseRepository;
 
     /**
@@ -32,6 +47,8 @@ public class GameEngineController {
      * @param p_continentService The ContinentService to use.
      * @param p_countryService   The CountryService to use.
      * @param p_playerService    The PlayerService to use.
+     * @param p_mapService       The MapService to use.
+     * @param p_phaseRepository  The PhaseRepository to use.
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, PhaseRepository p_phaseRepository) {
         this.d_continentService = p_continentService;
@@ -120,8 +137,12 @@ public class GameEngineController {
         return "";
     }
 
+    /**
+     * Randomly assigns the countries to the players
+     * @return the result of the operation
+     */
     public String assignCountries() {
-        if(this.d_phaseRepository.getPhase() != Phase.STARTUP){
+        if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
             throw new InvalidCommandException("game not in startup phase");
         }
 
@@ -132,8 +153,14 @@ public class GameEngineController {
         return "";
     }
 
+    /**
+     * Deoplys a given number of armies into a specified country
+     * @param countryId the id of the country
+     * @param numOfReinforcements the number of reinforcement armies to deploy
+     * @return the result of the operation
+     */
     public String deploy(String countryId, int numOfReinforcements) {
-        if(this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
             throw new InvalidCommandException("game is not in game loop phase");
         }
 
@@ -144,7 +171,7 @@ public class GameEngineController {
     /**
      * Method to go to the next phase, depending on current phase
      *
-     * @return
+     * @return the phase after the change of phase
      */
     public String nextPhase() {
 

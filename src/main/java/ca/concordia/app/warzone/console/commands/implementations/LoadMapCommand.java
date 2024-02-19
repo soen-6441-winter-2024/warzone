@@ -6,10 +6,10 @@ import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.MapEditorController;
 
-@Component
 /**
  * Represents a command to load a map from a file.
  */
+@Component
 public class LoadMapCommand extends Command {
     /** The controller for map editing. */
     private final MapEditorController d_MapEditorController;

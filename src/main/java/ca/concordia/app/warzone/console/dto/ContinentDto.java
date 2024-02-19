@@ -5,6 +5,11 @@ package ca.concordia.app.warzone.console.dto;
  */
 public class ContinentDto {
 
+    /**
+     * Default constructor
+     */
+    public ContinentDto() {}
+
     /** The ID of the continent. */
     private String d_Id;
 
@@ -31,7 +36,7 @@ public class ContinentDto {
     }
     /**
      * Set the number bonus armies
-     * @param d_bonusArmies
+     * @param d_bonusArmies the number of bonus armies for this continent
      */
     public void set_bonusArmies(int d_bonusArmies) {
         this.d_bonusArmies = d_bonusArmies;

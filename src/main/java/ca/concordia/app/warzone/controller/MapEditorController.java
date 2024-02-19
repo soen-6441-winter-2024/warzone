@@ -28,6 +28,7 @@ public class MapEditorController {
      * @param p_continentService The ContinentService to use.
      * @param p_countryService   The CountryService to use.
      * @param p_mapService       The MapService to use.
+     * @param p_phaseRepository  The PhaseRepository to use.
      */
     public MapEditorController(ContinentService p_continentService, CountryService p_countryService, MapService p_mapService, PhaseRepository p_phaseRepository) {
         this.d_continentService = p_continentService;
@@ -142,14 +143,19 @@ public class MapEditorController {
      */
     public String loadMap(MapDto p_mapDto) {
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-             String result = d_mapService.loadMap(p_mapDto);
-             this.d_phaseRepository.setPhase(Phase.STARTUP);
-             return result;
+            String result = d_mapService.loadMap(p_mapDto);
+            this.d_phaseRepository.setPhase(Phase.STARTUP);
+            return result;
         } else {
             return "Invalid Phase";
         }
     }
 
+    /**
+     * shows the map to the output
+     *
+     * @return the result of the operation
+     */
     public String showMap() {
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
             return d_mapService.showMap();

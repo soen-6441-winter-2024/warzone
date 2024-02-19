@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandFactory {
 
-    /** The command for assigning countries. */
+    /**
+     * The command for assigning countries.
+     */
     private final AssignCountriesCommand d_AssignCountriesCommand;
     private EditContinentCommand d_EditContinentCommand;
     private EditCountryCommand d_EditCountryCommand;
@@ -22,19 +24,21 @@ public class CommandFactory {
     private LoadMapCommand d_loadMapCommand;
     private DeployCommand d_deployCommand;
     private NextPhaseCommand d_nextPhaseCommand;
+
     /**
      * Constructs a CommandFactory object.
      *
-     * @param p_editContinentCommand The command for editing continents.
-     * @param p_editCountryCommand The command for editing countries.
-     * @param p_editNeighborCommand The command for editing neighbors.
-     * @param p_showMapCommand The command for showing the map.
-     * @param p_editGamePlayerCommand The command for editing game players.
-     * @param p_saveMapCommand The command for saving the map.
+     * @param p_editContinentCommand   The command for editing continents.
+     * @param p_editCountryCommand     The command for editing countries.
+     * @param p_editNeighborCommand    The command for editing neighbors.
+     * @param p_showMapCommand         The command for showing the map.
+     * @param p_editGamePlayerCommand  The command for editing game players.
+     * @param p_saveMapCommand         The command for saving the map.
      * @param p_assignCountriesCommand The command for assigning countries.
-     * @param p_editMapCommand The command for editing the map.
-     * @param p_loadMap The command for loading the map.
-     * @param p_deployCommand The command to deploy
+     * @param p_editMapCommand         The command for editing the map.
+     * @param p_loadMap                The command for loading the map.
+     * @param p_deployCommand          The command to deploy
+     * @param d_nextPhaseCommand       The command for going to the next phase
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
                           EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
@@ -62,27 +66,27 @@ public class CommandFactory {
      * @throws InvalidCommandException If the command name is invalid.
      */
     public Command newCommand(String p_commandName) throws InvalidCommandException {
-        if(p_commandName.equals(CommandType.EDIT_CONTINENT.toString())) {
+        if (p_commandName.equals(CommandType.EDIT_CONTINENT.toString())) {
             return d_EditContinentCommand;
-        } else if(p_commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
+        } else if (p_commandName.equals(CommandType.EDIT_COUNTRY.toString())) {
             return d_EditCountryCommand;
-        } else if(p_commandName.equals(CommandType.EDIT_NEIGHBOR.toString())){
+        } else if (p_commandName.equals(CommandType.EDIT_NEIGHBOR.toString())) {
             return d_EditNeighborCommand;
-        } else if(p_commandName.equals(CommandType.SHOW_MAP.toString())) {
+        } else if (p_commandName.equals(CommandType.SHOW_MAP.toString())) {
             return d_ShowMapCommand;
-        } else if(p_commandName.equals(CommandType.GAME_PLAYER.toString())) {
+        } else if (p_commandName.equals(CommandType.GAME_PLAYER.toString())) {
             return d_EditGamePlayerCommand;
-        } else if(p_commandName.equals(CommandType.SAVE_MAP.toString())) {
+        } else if (p_commandName.equals(CommandType.SAVE_MAP.toString())) {
             return d_SaveMapCommand;
         } else if (p_commandName.equals(CommandType.EDIT_MAP.toString())) {
             return d_EditMapCommand;
-        } else if(p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())){
-            return  d_AssignCountriesCommand;
-        } else if(p_commandName.equals(CommandType.LOAD_MAP.toString())) {
+        } else if (p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
+            return d_AssignCountriesCommand;
+        } else if (p_commandName.equals(CommandType.LOAD_MAP.toString())) {
             return d_loadMapCommand;
-        } else if(p_commandName.equals(CommandType.DEPLOY.toString())) {
+        } else if (p_commandName.equals(CommandType.DEPLOY.toString())) {
             return d_deployCommand;
-        } else if (p_commandName.equals(CommandType.NEXT_PHASE.toString())){
+        } else if (p_commandName.equals(CommandType.NEXT_PHASE.toString())) {
             return d_nextPhaseCommand;
         }
 

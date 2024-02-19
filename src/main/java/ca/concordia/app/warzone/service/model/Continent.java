@@ -9,6 +9,12 @@ public class Continent {
     private int d_bonusArmies; // Data member for bonus armies
 
     /**
+     * Default constructor
+     */
+    public Continent() {
+
+    }
+    /**
      * Retrieves the ID of the continent.
      *
      * @return the ID of the continent
@@ -37,6 +43,7 @@ public class Continent {
 
     /**
      * Gets the bonus armies of the continent.
+     * @return the number bonus armies for the continent
      */
     public int getBonusArmies() {
         return d_bonusArmies;

@@ -7,13 +7,26 @@ import ca.concordia.app.warzone.console.commands.SubCommand;
  */
 public abstract class Command {
 
-    // Type of the command
+    /**
+     * Default constructor
+     */
+    public Command() {
+
+   }
+
+    /**
+     * Type of the command
+     */
     protected CommandType d_Type;
 
-    // Options associated with the command
+    /**
+     * Options associated with the command
+     */
     protected String[] d_Options;
 
-    // Subcommands associated with the command
+    /**
+     * Subcommands associated with the command
+     */
     protected SubCommand[] d_SubCommands;
 
     /**

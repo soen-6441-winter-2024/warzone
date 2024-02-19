@@ -7,6 +7,10 @@ import java.util.List;
  * Represents a DTO (Data Transfer Object) for a map.
  */
 public class MapDto {
+    /**
+     * Default constructor
+     */
+    public MapDto(){}
 
     /** The file name of the map. */
     private String d_FileName;

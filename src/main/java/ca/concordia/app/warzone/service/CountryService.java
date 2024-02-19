@@ -93,6 +93,10 @@ public class CountryService {
         return countryOptional.map(this::convertToDto);
     }
 
+    /**
+     * Returns all the countries
+     * @return all the countries
+     */
     public List<Country> findAll() {
         return this.d_repoCountry.findAll();
     }
@@ -131,6 +135,7 @@ public class CountryService {
      * Deletes a country by its ID.
      *
      * @param p_countryId the ID of the country to delete
+     * @return the result of the operation
      */
     public String delete(String p_countryId) {
         StringBuilder result = new StringBuilder();
@@ -206,6 +211,7 @@ public class CountryService {
      * Deletes a neighbor country from the specified country.
      *
      * @param p_dto the DTO containing country and neighbor information
+     * @return the result of the operation
      */
     public String deleteNeighbor(CountryDto p_dto) {
         StringBuilder result = new StringBuilder();
@@ -247,6 +253,11 @@ public class CountryService {
         return result.toString();
     }
 
+    /**
+     * Deploys armies to a country
+     * @param p_countryId the id of the country
+     * @param p_count the number of armies
+     */
     public void addArmiesToCountry(String p_countryId, int p_count) {
         this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
             int armiesCount = country.getArmiesCount();
