@@ -14,7 +14,8 @@ public enum CommandType {
     ASSIGN_COUNTRIES("assigncountries"),
     GAME_PLAYER("gameplayer"),
     DEPLOY("deploy"),
-    VALIDATE_MAP("validatemap")
+    VALIDATE_MAP("validatemap"),
+    NEXT_PHASE("nextphase")
     ;
 
     /** The text representation of the command type. */

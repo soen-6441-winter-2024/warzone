@@ -21,6 +21,7 @@ public class CommandFactory {
     private EditMapCommand d_EditMapCommand;
     private LoadMapCommand d_loadMapCommand;
     private DeployCommand d_deployCommand;
+    private NextPhaseCommand d_nextPhaseCommand;
     /**
      * Constructs a CommandFactory object.
      *
@@ -39,7 +40,7 @@ public class CommandFactory {
                           EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
                           GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
                           AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
-                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand) {
+                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand d_nextPhaseCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -50,6 +51,7 @@ public class CommandFactory {
         this.d_AssignCountriesCommand = p_assignCountriesCommand;
         this.d_loadMapCommand = p_loadMap;
         this.d_deployCommand = p_deployCommand;
+        this.d_nextPhaseCommand = d_nextPhaseCommand;
     }
 
     /**
@@ -80,6 +82,8 @@ public class CommandFactory {
             return d_loadMapCommand;
         } else if(p_commandName.equals(CommandType.DEPLOY.toString())) {
             return d_deployCommand;
+        } else if (p_commandName.equals(CommandType.NEXT_PHASE.toString())){
+            return d_nextPhaseCommand;
         }
 
         throw new InvalidCommandException("invalid command");
