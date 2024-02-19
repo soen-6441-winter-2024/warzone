@@ -40,13 +40,10 @@ public class MapService {
      */
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
-
-
     /**
-     * Constructs a MapService with the specified CountryRepository and
-     * ContinentRepository.
+     * Constructs a MapService with the specified CountryRepository and ContinentRepository.
      *
-     * @param p_repoCountry the CountryRepository to be used
+     * @param p_repoCountry   the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
     public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
@@ -55,25 +52,27 @@ public class MapService {
     }
 
     /**
-     * The load map method takes in a file and looks for the corresponding file in
-     * the map_files directory, which can be found at the root of the project.
-     * <br>
-     * The methods reads the domination game fall, validates and loads it's content
-     * into the Game Map.
+     * Loads a map from the specified file path.
      *
-     * @param p_mapDto
+     * @param p_mapDto the DTO containing map file information
+     * @return a message indicating success or failure
      */
     public String loadMap(MapDto p_mapDto) {
         String filePath = p_mapDto.getFileName();
         if (validateMapStructure(filePath)) {
             this.readAndLoadMap(filePath);
             return p_mapDto.getFileName() + " Map file loaded";
-        }
-        else {
+        } else {
             return "Map file didn't pass format validation";
         }
-
     }
+
+    /**
+     * Validates the structure of the map file.
+     *
+     * @param p_file the path of the map file
+     * @return true if the map file structure is valid, false otherwise
+     */
     public boolean validateMapStructure(String p_file) {
         boolean resultValidation = true;
         boolean continentsFound = false;
@@ -129,7 +128,6 @@ public class MapService {
                 }
             }
             return resultValidation;
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(0);
@@ -138,9 +136,9 @@ public class MapService {
     }
 
     /**
-     * Reads the .map file, retrieves the continents and creates them respectively
+     * Reads and loads the map from the specified file.
      *
-     * @param p_file
+     * @param p_file the path of the map file
      */
     private void readAndLoadMap(String p_file) {
         boolean continentsFound = false;
@@ -187,7 +185,7 @@ public class MapService {
                             Optional<ContinentDto> continentDtoOptional = l_continentService.findById(l_continentId);
 
                             if (continentDtoOptional.isEmpty())
-                                throw new InvalidMapContentFormat("Invalid Map: Continent Id=" + l_continentId +  " not found.");
+                                throw new InvalidMapContentFormat("Invalid Map: Continent Id=" + l_continentId + " not found.");
 
                             CountryDto l_countryDto = new CountryDto();
                             l_countryDto.setId(l_countryId);
@@ -202,7 +200,7 @@ public class MapService {
                         String l_countryId = l_splitNeighbor[0];
                         Optional<CountryDto> countryDto = l_countryService.findById(l_countryId);
                         if (countryDto.isEmpty())
-                            throw new InvalidMapContentFormat("Invalid Map: Country Id=" + l_countryId +  " not found.");
+                            throw new InvalidMapContentFormat("Invalid Map: Country Id=" + l_countryId + " not found.");
 
                         // add neighboring countries to the country
                         for (int i = 1; i < l_splitNeighbor.length; i++) {
@@ -211,7 +209,6 @@ public class MapService {
                         }
                     }
                 }
-
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -222,6 +219,11 @@ public class MapService {
         }
     }
 
+    /**
+     * Shows the current state of the map.
+     *
+     * @return a message indicating success or failure
+     */
     public String showMap() {
         System.out.println();
         // retrieve lists of all continents and countries in memory
@@ -238,7 +240,7 @@ public class MapService {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
                     System.out.print(" - Country: " + country.getId() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
-                                    : country.getPlayer().get().getPlayerName())
+                            : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");
 
                     for (Country neighborCountry : country.getNeighbors()) {
@@ -317,6 +319,4 @@ public class MapService {
             return "There are no continents to save";
         }
     }
-
-
 }
