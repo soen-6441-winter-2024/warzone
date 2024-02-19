@@ -40,32 +40,6 @@ public class AssignCountriesCommand extends Command {
         return "Countries assigned";
     }
 
-    /**
-     * Assigns countries to players.
-     * @param p_players The list of players.
-     * @param p_countries The list of countries.
-     */
-    public void assignCountries(List<Player> p_players, List<Country> p_countries) {
-        int totalPlayers = p_players.size();
-        int minCountriesPerPlayer = p_countries.size() / totalPlayers;
-        int remainingCountries = p_countries.size() % totalPlayers;
-        int i = 0;
 
-        // Distribute the countries evenly among players
-        for (Player player : p_players) {
-            for (int j = 0; j < remainingCountries; j++) {
-                player.addCountry(p_countries.get(i));
-                System.out.println(player.getPlayerName() + " was assigned " + p_countries.get(i));
-                i++;
-            }
-        }
 
-        // Distribute remaining countries
-        for (int j = 0; j < remainingCountries; j++) {
-            Player player = p_players.get(j);
-            player.addCountry(p_countries.get(i));
-            System.out.println(player.getPlayerName() + " was assigned " + p_countries.get(i));
-            i++;
-        }
-    }
 }

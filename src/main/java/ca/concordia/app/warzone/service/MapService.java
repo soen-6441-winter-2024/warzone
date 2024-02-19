@@ -327,7 +327,7 @@ public class MapService {
 
         // Distribute the countries evenly among players
         for (Player player : players) {
-            for (int j = 0; j < remainingCountries; j++) {
+            for (int j = 0; j < minCountriesPerPlayer; j++) {
                 player.addCountry(countries.get(i));
                 System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
                 i++;
