@@ -34,4 +34,4 @@ build/
 .vscode/
 
 ## Ignore some resources
-/src/test/resources/map.txt
+src/test/resources/map.txt
