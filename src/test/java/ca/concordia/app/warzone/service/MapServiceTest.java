@@ -38,7 +38,7 @@ public class MapServiceTest {
 
     @BeforeEach
     public void before() {
-        underTest = new MapService(countryRepository, continentRepository, playerService);
+        underTest = new MapService(countryRepository, continentRepository);
         FileUtils.deleteQuietly(new File(FILE_NAME));
     }
 

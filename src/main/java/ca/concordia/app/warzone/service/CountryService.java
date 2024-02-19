@@ -40,7 +40,7 @@ public class CountryService {
     public String add(CountryDto p_dto) {
         StringBuilder result = new StringBuilder();
         result.append("\n");
-        result.append("Adding Country Country id=");
+        result.append("Adding Country id=");
         result.append(p_dto.getId());
         result.append(" Continent id=");
         result.append(p_dto.getContinent().getId());
@@ -49,7 +49,7 @@ public class CountryService {
             Optional<Country> countryOptional = d_repoCountry.findById(p_dto.getId());
             if (countryOptional.isPresent()) {
                 result.append("\n");
-                result.append("Country Country id=");
+                result.append("Country id=");
                 result.append(p_dto.getId());
                 result.append(" Continent id=");
                 result.append(p_dto.getContinent().getId());
@@ -67,7 +67,7 @@ public class CountryService {
 
                 d_repoCountry.save(country);
                 result.append("\n");
-                result.append("Country Country id=");
+                result.append("Country id=");
                 result.append(p_dto.getId());
                 result.append(" Continent id=");
                 result.append(p_dto.getContinent().getId());
