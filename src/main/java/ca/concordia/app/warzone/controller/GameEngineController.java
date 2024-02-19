@@ -156,6 +156,6 @@ public class GameEngineController {
 
         d_phaseRepository.setPhase(nextPhase);
 
-        return "Current phase is" + nextPhase;
+        return "Current phase is " + nextPhase;
     }
 }

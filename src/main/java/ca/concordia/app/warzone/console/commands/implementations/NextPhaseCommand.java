@@ -17,7 +17,7 @@ public class NextPhaseCommand extends Command {
      * Runs the next phase command
      *
      * @param subCommandsAndOptions The subcommands and options provided.
-     * @return
+     * @returnn
      */
     @Override
     public String run(String[] subCommandsAndOptions) {
