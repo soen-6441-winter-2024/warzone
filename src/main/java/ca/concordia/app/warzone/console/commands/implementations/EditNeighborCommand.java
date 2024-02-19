@@ -16,56 +16,70 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Command for editing neighbors of countries in the map.
+ */
 @Component
 public class EditNeighborCommand extends Command {
-    final Pattern subCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
-    private MapEditorController controller;
 
-    public EditNeighborCommand(MapEditorController controller) {
-        this.controller = controller;
+    // Pattern for parsing subcommands
+    final Pattern d_SubCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
+
+    // Controller for map editing operations
+    private final MapEditorController d_Controller;
+
+    /**
+     * Constructor for EditNeighborCommand.
+     * @param p_controller The MapEditorController instance.
+     */
+    public EditNeighborCommand(MapEditorController p_controller) {
+        this.d_Controller = p_controller;
         init();
     }
+
+    /**
+     * Initializes the command.
+     */
     private void init() {
-        this.type = CommandType.EDIT_NEIGHBOR;
+        this.d_Type = CommandType.EDIT_NEIGHBOR;
     }
 
+    /**
+     * Executes the edit neighbor command.
+     * @param p_SubCommandsAndOptions Array of subcommands and options.
+     * @return Result of the command execution.
+     */
     @Override
-    public String run(String[] subCommandsAndOptions) {
-        String subCommands = Strings.join(Arrays.asList(subCommandsAndOptions), ' ');
+    public String run(String[] p_SubCommandsAndOptions) {
+        String l_SubCommands = Strings.join(Arrays.asList(p_SubCommandsAndOptions), ' ');
 
-        Matcher matcher = subCommandsPattern.matcher(subCommands);
+        Matcher l_Matcher = d_SubCommandsPattern.matcher(l_SubCommands);
 
-        ArrayList<SubCommand> subCommandsArr = new ArrayList<>();
+        ArrayList<SubCommand> l_SubCommandsArr = new ArrayList<>();
 
+        while (l_Matcher.find()) {
 
-        while (matcher.find()) {
-            if (matcher.group().equals(subCommands)) {
-                continue;
+            String[] l_SingleSubcommandAndOptions = l_Matcher.group().split(" ");
+            String l_SingleSubCommand = l_SingleSubcommandAndOptions[0].substring(1);
+
+            if (l_SingleSubCommand.equals(SubCommandType.ADD.toString())) {
+                l_SubCommandsArr.add(new AddNeighborSubCommand(Arrays.copyOfRange(l_SingleSubcommandAndOptions, 1, l_SingleSubcommandAndOptions.length), d_Controller ));
             }
-
-            System.out.println(matcher.group());
-
-            String[] singleSubcommandAndOptions = matcher.group().split(" ");
-            String singleSubCommand = singleSubcommandAndOptions[0].substring(1);
-
-            if (singleSubCommand.equals(SubCommandType.ADD.toString())) {
-                subCommandsArr.add(new AddNeighborSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller ));
-            }
-            else if (singleSubCommand.equals(SubCommandType.REMOVE.toString())) {
-                subCommandsArr.add(new RemoveNeighborSubCommand(Arrays.copyOfRange(singleSubcommandAndOptions, 1, singleSubcommandAndOptions.length), controller));
+            else if (l_SingleSubCommand.equals(SubCommandType.REMOVE.toString())) {
+                l_SubCommandsArr.add(new RemoveNeighborSubCommand(Arrays.copyOfRange(l_SingleSubcommandAndOptions, 1, l_SingleSubcommandAndOptions.length), d_Controller));
             }
         }
 
-        if (subCommandsArr.isEmpty()) {
+        if (l_SubCommandsArr.isEmpty()) {
             throw new InvalidCommandException("at least once subcommand is required");
         }
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder l_Result = new StringBuilder();
 
-        for (SubCommand subCommand : subCommandsArr) {
-            result.append(subCommand.run()).append("\n");
+        for (SubCommand subCommand : l_SubCommandsArr) {
+            l_Result.append(subCommand.run()).append("\n");
         }
 
-        return result.toString();
+        return l_Result.toString();
     }
 }

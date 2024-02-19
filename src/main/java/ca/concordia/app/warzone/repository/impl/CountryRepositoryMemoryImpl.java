@@ -1,39 +1,69 @@
 package ca.concordia.app.warzone.repository.impl;
-
 import ca.concordia.app.warzone.repository.CountryRepository;
-import ca.concordia.app.warzone.service.model.Continent;
 import ca.concordia.app.warzone.service.model.Country;
 import org.springframework.stereotype.Repository;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ArrayList;
-
+/**
+ * Implementation of the CountryRepository interface using an in-memory data structure.
+ */
 @Repository
 public class CountryRepositoryMemoryImpl implements CountryRepository {
 
-    private Map<String, Country> countries = new HashMap<>();
+    /**
+     * Default constructor
+     */
+    public CountryRepositoryMemoryImpl() {}
+    private Map<String, Country> d_countries = new HashMap<>(); // Stores countries with their IDs as keys
 
+    /**
+     * Saves a country to the repository.
+     *
+     * @param p_country the country to be saved
+     */
     @Override
-    public void save(Country country) {
-        countries.put(country.getId(), country);
+    public void save(Country p_country) {
+        d_countries.put(p_country.getId(), p_country);
     }
+
+    /**
+     * Retrieves a country by its ID.
+     *
+     * @param p_id the ID of the country to retrieve
+     * @return an Optional containing the country, or empty if not found
+     */
     @Override
-    public Optional<Country> findById(String id) {
-        return Optional.ofNullable(countries.get(id));
+    public Optional<Country> findById(String p_id) {
+        return Optional.ofNullable(d_countries.get(p_id));
     }
+
+    /**
+     * Deletes a country by its ID.
+     *
+     * @param p_id the ID of the country to delete
+     */
     @Override
-    public void deleteById(String id) {
-        countries.remove(id);
+    public void deleteById(String p_id) {
+        d_countries.remove(p_id);
     }
+
+    /**
+     * Deletes a neighboring country by its ID.
+     *
+     * @param p_country the country whose neighbor to delete
+     */
     @Override
-    public void deleteNeighborById(Country country) {
-        countries.put(country.getId(), country);
+    public void deleteNeighborById(Country p_country) {
+        d_countries.put(p_country.getId(), p_country);
     }
+
+    /**
+     * Retrieves all countries stored in the repository.
+     *
+     * @return a list of all countries
+     */
     @Override
     public List<Country> findAll() {
-        return new ArrayList<>(countries.values());
+        return new ArrayList<>(d_countries.values());
     }
 }
