@@ -32,9 +32,14 @@ public class CommandFactory {
      * @param p_saveMapCommand The command for saving the map.
      * @param p_assignCountriesCommand The command for assigning countries.
      * @param p_editMapCommand The command for editing the map.
-     * @param p_loadMapCommand The command for loading the map.
+     * @param p_loadMap The command for loading the map.
+     * @param p_deployCommand The command to deploy
      */
-    public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand, EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand, GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand, AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand, LoadMapCommand p_loadMap, DeployCommand p_deployCommand) {
+    public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
+                          EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
+                          GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
+                          AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
+                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;

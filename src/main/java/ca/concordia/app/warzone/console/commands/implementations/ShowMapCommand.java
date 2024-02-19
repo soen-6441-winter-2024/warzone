@@ -28,7 +28,7 @@ public class ShowMapCommand extends Command {
     /**
      * Constructs a ShowMapCommand object.
      *
-     * @param p_controller The controller for map editing.
+     * @param p_MapEditorController The controller for map editing.
      */
     public ShowMapCommand(MapEditorController p_MapEditorController) {
         this.d_MapEditorController = p_MapEditorController;
