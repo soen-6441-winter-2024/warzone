@@ -16,9 +16,6 @@ public class ContinentDto {
     /** The value/name of the continent. */
     private String d_Value;
 
-    /** The number of bonus armies a player gets if he/she controls the whole continent */
-    private int d_bonusArmies;
-
     /**
      * Gets the ID of the continent.
      *
@@ -26,20 +23,6 @@ public class ContinentDto {
      */
     public String getId() {
         return d_Id;
-    }
-    /**
-     * Get the number bonus armies
-     * @return The number of bonus armies a player gets if he/she controls the whole continent
-     */
-    public int get_bonusArmies() {
-        return d_bonusArmies;
-    }
-    /**
-     * Set the number bonus armies
-     * @param d_bonusArmies the number of bonus armies for this continent
-     */
-    public void set_bonusArmies(int d_bonusArmies) {
-        this.d_bonusArmies = d_bonusArmies;
     }
 
     /**

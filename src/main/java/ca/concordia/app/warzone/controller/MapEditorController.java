@@ -143,8 +143,8 @@ public class MapEditorController {
      */
     public String loadMap(MapDto p_mapDto) {
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            String result = d_mapService.loadMap(p_mapDto);
-            this.d_phaseRepository.setPhase(Phase.STARTUP);
+             String result = d_mapService.loadMap(p_mapDto);
+             this.d_phaseRepository.setPhase(Phase.STARTUP);
             return result;
         } else {
             return "Invalid Phase";
@@ -157,10 +157,6 @@ public class MapEditorController {
      * @return the result of the operation
      */
     public String showMap() {
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_mapService.showMap();
-        } else {
-            return "Invalid Phase";
-        }
+        return d_mapService.showMap();
     }
 }
