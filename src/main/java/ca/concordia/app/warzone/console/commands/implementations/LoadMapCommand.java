@@ -40,9 +40,12 @@ public class LoadMapCommand extends Command {
         if(p_options.length != 1) {
             throw new InvalidCommandException("expected 1 filename");
         }
+
         MapDto mapDto = new MapDto();
         mapDto.setFileName(p_options[0]);
+
         System.out.println("Loading Map file: " + p_options[0]);
+
         return d_MapEditorController.loadMap(mapDto);
     }
 }
