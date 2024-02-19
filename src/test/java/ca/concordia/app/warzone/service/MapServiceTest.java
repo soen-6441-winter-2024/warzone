@@ -46,7 +46,6 @@ public class MapServiceTest {
     public void testSaveMap() throws IOException {
 
         //Arrange
-
         Continent l_america = newContinent("1", "America");
         Continent l_europe = newContinent("2", "Europe");
         Continent l_africa = newContinent("3", "Africa");
