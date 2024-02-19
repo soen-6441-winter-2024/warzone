@@ -40,7 +40,7 @@ public class CountryService {
     public String add(CountryDto p_dto) {
         StringBuilder result = new StringBuilder();
         result.append("\n");
-        result.append("Adding Country Country id=");
+        result.append("Adding Country id=");
         result.append(p_dto.getId());
         result.append(" Continent id=");
         result.append(p_dto.getContinent().getId());
@@ -49,7 +49,7 @@ public class CountryService {
             Optional<Country> countryOptional = d_repoCountry.findById(p_dto.getId());
             if (countryOptional.isPresent()) {
                 result.append("\n");
-                result.append("Country Country id=");
+                result.append("Country id=");
                 result.append(p_dto.getId());
                 result.append(" Continent id=");
                 result.append(p_dto.getContinent().getId());
@@ -67,7 +67,7 @@ public class CountryService {
 
                 d_repoCountry.save(country);
                 result.append("\n");
-                result.append("Country Country id=");
+                result.append("Country id=");
                 result.append(p_dto.getId());
                 result.append(" Continent id=");
                 result.append(p_dto.getContinent().getId());
@@ -91,6 +91,10 @@ public class CountryService {
     public Optional<CountryDto> findById(String p_id) {
         Optional<Country> countryOptional = d_repoCountry.findById(p_id);
         return countryOptional.map(this::convertToDto);
+    }
+
+    public List<Country> findAll() {
+        return this.d_repoCountry.findAll();
     }
 
     /**
@@ -241,5 +245,13 @@ public class CountryService {
             result.append(" doesn't exist");
         }
         return result.toString();
+    }
+
+    public void addArmiesToCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            int armiesCount = country.getArmiesCount();
+            country.setArmiesCount(armiesCount + p_count);
+            d_repoCountry.save(country);
+        });
     }
 }

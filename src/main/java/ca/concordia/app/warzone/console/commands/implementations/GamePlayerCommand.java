@@ -21,10 +21,14 @@ import java.util.regex.Pattern;
 @Component
 public class GamePlayerCommand extends Command {
 
-    /** The pattern for subcommands. */
+    /**
+     * The pattern for subcommands.
+     */
     final Pattern d_SubCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
-    /** The controller for the game engine. */
+    /**
+     * The controller for the game engine.
+     */
     private final GameEngineController d_Controller;
 
     /**
@@ -59,10 +63,6 @@ public class GamePlayerCommand extends Command {
         ArrayList<SubCommand> subCommandArr = new ArrayList<>();
 
         while (matcher.find()) {
-//            if (matcher.group().equals(subCommands)) {
-//                continue;
-//            }
-
             String[] singleSubcommandAndOptions = matcher.group().split(" ");
             String singleSubCommand = singleSubcommandAndOptions[0].substring(1);
 

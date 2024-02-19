@@ -37,8 +37,6 @@ public class Continent {
 
     /**
      * Gets the bonus armies of the continent.
-     *
-     * @param bonusArmies the bonus armies of the continent
      */
     public int getBonusArmies() {
         return d_bonusArmies;

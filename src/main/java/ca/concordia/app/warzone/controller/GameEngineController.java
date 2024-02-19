@@ -125,7 +125,7 @@ public class GameEngineController {
             throw new InvalidCommandException("game not in startup phase");
         }
 
-        this.d_mapService.assignCountries();
+        this.d_playerService.assignCountries();
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
         this.d_playerService.startGameLoop();
@@ -141,5 +141,21 @@ public class GameEngineController {
         return "";
     }
 
-//    public void loadMap(String /**/)
+    /**
+     * Method to go to the next phase, depending on current phase
+     *
+     * @return
+     */
+    public String nextPhase() {
+
+        Phase nextPhase = switch (d_phaseRepository.getPhase()) {
+            case MAP_EDITOR -> Phase.STARTUP;
+            case STARTUP -> Phase.GAME_PLAY;
+            default -> Phase.GAME_LOOP;
+        };
+
+        d_phaseRepository.setPhase(nextPhase);
+
+        return "Current phase is " + nextPhase;
+    }
 }

@@ -62,9 +62,9 @@ public class CountryDto {
     }
 
     /**
-     * Sets the ID of the country.
+     * Sets the name of the country.
      *
-     * @param id The ID of the country.
+     * @param name The name of the country.
      */
     public void setName(String name) {
         this.d_name = name;

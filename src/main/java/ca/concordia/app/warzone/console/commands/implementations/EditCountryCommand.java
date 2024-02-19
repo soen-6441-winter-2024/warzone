@@ -26,7 +26,7 @@ public class EditCountryCommand extends Command {
     private final Pattern d_SubCommandsPattern = Pattern.compile("-(add|remove)\\s(\\w+)\\s*(\\w*)", Pattern.CASE_INSENSITIVE);
 
     // Controller for map editing operations
-    private MapEditorController d_Controller;
+    private final MapEditorController d_Controller;
 
     /**
      * Constructor for EditCountryCommand.

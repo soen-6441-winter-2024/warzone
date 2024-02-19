@@ -3,7 +3,14 @@ package ca.concordia.app.warzone.console.commands.implementations;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
+import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.repository.PlayerRepository;
+import ca.concordia.app.warzone.service.model.Country;
+import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Command to assign countries to players in the game.
@@ -12,12 +19,12 @@ import org.springframework.stereotype.Component;
 public class AssignCountriesCommand extends Command {
 
     private final GameEngineController d_gameEngineController;
+
     /**
      * Constructor for AssignCountriesCommand.
-     * @param p_gameEngineController game engine controller instance
+     * @param p_gameEngineController the controller to call on each execution
      * @throws InvalidCommandException Throws if the command is invalid.
      */
-
     public AssignCountriesCommand(GameEngineController p_gameEngineController) throws InvalidCommandException {
         this.d_gameEngineController = p_gameEngineController;
     }
