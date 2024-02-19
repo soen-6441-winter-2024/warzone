@@ -21,10 +21,10 @@ public class AssignCountriesCommand extends Command {
     private final GameEngineController d_gameEngineController;
     /**
      * Constructor for AssignCountriesCommand.
-     * @param p_playerRepository The PlayerRepository instance.
-     * @param p_countryRepository The CountryRepository instance.
+     * @param p_gameEngineController game engine controller instance
      * @throws InvalidCommandException Throws if the command is invalid.
      */
+
     public AssignCountriesCommand(GameEngineController p_gameEngineController) throws InvalidCommandException {
         this.d_gameEngineController = p_gameEngineController;
     }
