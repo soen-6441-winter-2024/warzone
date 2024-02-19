@@ -4,13 +4,13 @@
 3 Africa
 
 [countries]
-Canada 1 America
-USA 1 America
-Nigeria 3 Africa
-France 2 Europe
+Canada 1
+USA 1
+Nigeria 3
+France 2
 
 [borders]
-Canada  USA
-USA  Canada Nigeria
-Nigeria  USA
-France  Nigeria
+Canada USA
+USA Canada Nigeria
+Nigeria USA
+France Nigeria

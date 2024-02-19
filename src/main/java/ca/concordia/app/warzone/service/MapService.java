@@ -52,7 +52,7 @@ public class MapService {
      * <br>
      * The methods reads the domination game fall, validates and loads it's content
      * into the Game Map.
-     * 
+     *
      * @param p_mapDto
      */
     public String loadMap(MapDto p_mapDto) {
@@ -70,7 +70,7 @@ public class MapService {
 
     /**
      * Reads the .map file, retrieves the continents and creates them respectively
-     * 
+     *
      * @param p_file
      */
     private void readAndLoadContinents(File p_file) {
@@ -125,7 +125,7 @@ public class MapService {
 
     /**
      * Reads the .map file, retrieves the countries and creates them respectively
-     * 
+     *
      * @param p_file
      */
     private void readAndLoadCountries(File p_file) {
@@ -235,7 +235,7 @@ public class MapService {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
                     System.out.print(" - Country: " + country.getId() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
-                                    : country.getPlayer().get().getPlayerName())
+                            : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");
 
                     for (Country neighborCountry : country.getNeighbors()) {
@@ -329,6 +329,7 @@ public class MapService {
         for (Player player : players) {
             for (int j = 0; j < minCountriesPerPlayer; j++) {
                 player.addCountry(countries.get(i));
+                this.d_playerService.updatePlayer(player);
                 System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
                 i++;
             }
@@ -338,6 +339,7 @@ public class MapService {
         for (int j = 0; j < remainingCountries; j++) {
             Player player = players.get(j);
             player.addCountry(countries.get(i));
+            this.d_playerService.updatePlayer(player);
             System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
             i++;
         }
