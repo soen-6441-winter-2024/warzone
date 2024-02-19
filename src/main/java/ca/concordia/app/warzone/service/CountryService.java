@@ -93,6 +93,10 @@ public class CountryService {
         return countryOptional.map(this::convertToDto);
     }
 
+    public List<Country> findAll() {
+        return this.d_repoCountry.findAll();
+    }
+
     /**
      * Converts a Country object to a CountryDto object.
      *
@@ -241,5 +245,13 @@ public class CountryService {
             result.append(" doesn't exist");
         }
         return result.toString();
+    }
+
+    public void addArmiesToCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            int armiesCount = country.getArmiesCount();
+            country.setArmiesCount(armiesCount + p_count);
+            d_repoCountry.save(country);
+        });
     }
 }

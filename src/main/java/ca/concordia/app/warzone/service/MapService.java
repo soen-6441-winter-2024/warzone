@@ -30,7 +30,7 @@ import java.util.Scanner;
 public class MapService {
     private final CountryRepository d_repoCountry; // Data member for the CountryRepository
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
-    private final PlayerService d_playerService;
+
 
 
     /**
@@ -40,10 +40,9 @@ public class MapService {
      * @param p_repoCountry the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
-    public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent, PlayerService p_playerService) {
+    public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
         this.d_repoCountry = p_repoCountry;
         this.d_repoContinent = p_repoContinent;
-        this.d_playerService = p_playerService;
     }
 
     /**
@@ -314,34 +313,4 @@ public class MapService {
     }
 
 
-    public void assignCountries() {
-        List<Player> players = d_playerService.getAllPlayers();
-        List<Country> countries = d_repoCountry.findAll();
-
-        Collections.shuffle(countries);
-
-        int totalPlayers = players.size();
-        int minCountriesPerPlayer = countries.size() / totalPlayers;
-        int remainingCountries = countries.size() % totalPlayers;
-        int i = 0;
-
-        // Distribute the countries evenly among players
-        for (Player player : players) {
-            for (int j = 0; j < minCountriesPerPlayer; j++) {
-                player.addCountry(countries.get(i));
-                this.d_playerService.updatePlayer(player);
-                System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
-                i++;
-            }
-        }
-
-        // Distribute remaining countries
-        for (int j = 0; j < remainingCountries; j++) {
-            Player player = players.get(j);
-            player.addCountry(countries.get(i));
-            this.d_playerService.updatePlayer(player);
-            System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
-            i++;
-        }
-    }
 }

@@ -14,6 +14,8 @@ public class Country {
     private List<Country> d_neighbors; // Data member for neighboring countries
     private Optional<Player> d_player; // Data member for player, wrapped in Optional
 
+    private int d_armiesCount;
+
     /**
      * Default constructor for Country.
      * Initializes neighbors list as an empty ArrayList and player as an empty Optional.
@@ -21,6 +23,7 @@ public class Country {
     public Country() {
         this.d_neighbors = new ArrayList<>();
         this.d_player = Optional.empty();
+        this.d_armiesCount = 0;
     }
 
     /**
@@ -102,5 +105,18 @@ public class Country {
      */
     public void addNeighbor(Country country) {
         this.d_neighbors.add(country);
+    }
+
+    public int getArmiesCount() {
+        return d_armiesCount;
+    }
+
+    public void setArmiesCount(int p_armiesCount) {
+        this.d_armiesCount = p_armiesCount;
+    }
+
+    @Override
+    public String toString() {
+        return this.getId();
     }
 }

@@ -125,7 +125,7 @@ public class GameEngineController {
             throw new InvalidCommandException("game not in startup phase");
         }
 
-        this.d_mapService.assignCountries();
+        this.d_playerService.assignCountries();
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
         this.d_playerService.startGameLoop();
@@ -140,6 +140,4 @@ public class GameEngineController {
         this.d_playerService.addDeployOrder(countryId, numOfReinforcements);
         return "";
     }
-
-//    public void loadMap(String /**/)
 }

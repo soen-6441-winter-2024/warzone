@@ -3,12 +3,14 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
+import ca.concordia.app.warzone.service.model.Country;
 import ca.concordia.app.warzone.service.model.DeployOrder;
 import ca.concordia.app.warzone.service.model.Order;
 import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +42,19 @@ public class PlayerService {
      */
     private final PlayerRepository d_repository;
 
+    private final CountryService d_countryService;
+
+    private final MapService d_mapService;
+
     /**
      * Constructs a PlayerService with the specified PlayerRepository.
      *
      * @param p_repository the PlayerRepository to be used
      */
-    public PlayerService(PlayerRepository p_repository) {
+    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService) {
         this.d_repository = p_repository;
+        this.d_mapService = p_mapService;
+        this.d_countryService = p_countryService;
     }
 
     /**
@@ -141,8 +149,11 @@ public class PlayerService {
      */
     private void executeOrder(Order p_order) {
         if (p_order instanceof DeployOrder) {
+            String countryId = ((DeployOrder) p_order).getCountryId();
+            int number = ((DeployOrder) p_order).getNumber();
             // Add the reinforcements to the country
-//            this.d_mapService.
+            System.out.println("Adding " + number +  " armies to country " + countryId);
+            this.d_countryService.addArmiesToCountry(countryId, number);
         }
     }
 
@@ -162,13 +173,19 @@ public class PlayerService {
 
         if(player.getNumberOfReinforcements() == 0) {
             this.currentPlayerGivingOrder++;
+            if(this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
+                this.executeOrders();
+                return;
+            }
         }
+
+        this.askForDeployOrder();
     }
 
-    private void askForOrder() {
+    private void askForDeployOrder() {
         List<Player> players = this.getAllPlayers();
         Player player = players.get(this.currentPlayerGivingOrder);
-        System.out.println("Player " + player.getPlayerName() + " give your order: ");
+        System.out.println("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
     }
 
     public void startGameLoop() {
@@ -182,6 +199,38 @@ public class PlayerService {
 
         this.currentPlayerGivingOrder = 0;
 
-        this.askForOrder();
+        System.out.println("Time to give deploy orders");
+        this.askForDeployOrder();
+    }
+
+    public void assignCountries() {
+        List<Player> players = this.getAllPlayers();
+        List<Country> countries = this.d_countryService.findAll();
+
+        Collections.shuffle(countries);
+
+        int totalPlayers = players.size();
+        int minCountriesPerPlayer = countries.size() / totalPlayers;
+        int remainingCountries = countries.size() % totalPlayers;
+        int i = 0;
+
+        // Distribute the countries evenly among players
+        for (Player player : players) {
+            for (int j = 0; j < minCountriesPerPlayer; j++) {
+                player.addCountry(countries.get(i));
+                this.updatePlayer(player);
+                System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
+                i++;
+            }
+        }
+
+        // Distribute remaining countries
+        for (int j = 0; j < remainingCountries; j++) {
+            Player player = players.get(j);
+            player.addCountry(countries.get(i));
+            this.updatePlayer(player);
+            System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
+            i++;
+        }
     }
 }
