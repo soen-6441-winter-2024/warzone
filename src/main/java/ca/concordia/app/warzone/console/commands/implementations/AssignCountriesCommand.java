@@ -3,14 +3,7 @@ package ca.concordia.app.warzone.console.commands.implementations;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
-import ca.concordia.app.warzone.repository.CountryRepository;
-import ca.concordia.app.warzone.repository.PlayerRepository;
-import ca.concordia.app.warzone.service.model.Country;
-import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Command to assign countries to players in the game.
