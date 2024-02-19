@@ -140,4 +140,22 @@ public class GameEngineController {
         this.d_playerService.addDeployOrder(countryId, numOfReinforcements);
         return "";
     }
+
+    /**
+     * Method to go to the next phase, depending on current phase
+     *
+     * @return
+     */
+    public String nextPhase() {
+
+        Phase nextPhase = switch (d_phaseRepository.getPhase()) {
+            case MAP_EDITOR -> Phase.STARTUP;
+            case STARTUP -> Phase.GAME_PLAY;
+            default -> Phase.GAME_LOOP;
+        };
+
+        d_phaseRepository.setPhase(nextPhase);
+
+        return "Current phase is" + nextPhase;
+    }
 }
