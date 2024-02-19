@@ -23,7 +23,7 @@ public class LoadMapCommand extends Command {
     public LoadMapCommand(MapEditorController p_mapEditorController) throws InvalidCommandException {
         this.d_MapEditorController = p_mapEditorController;
         init();
-    }
+        }
 
     private void init() {
         this.d_Type = CommandType.LOAD_MAP;

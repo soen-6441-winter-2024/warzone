@@ -63,7 +63,6 @@ public class CountryService {
 
                 Country country = new Country();
                 country.setId(p_dto.getId());
-                country.setName(p_dto.getName());
                 country.setContinent(continent);
 
                 d_repoCountry.save(country);

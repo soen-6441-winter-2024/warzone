@@ -37,7 +37,7 @@ public class MapService {
      * Constructs a MapService with the specified CountryRepository and
      * ContinentRepository.
      *
-     * @param p_repoCountry   the CountryRepository to be used
+     * @param p_repoCountry the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
     public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent, PlayerService p_playerService) {
@@ -53,7 +53,7 @@ public class MapService {
      * The methods reads the domination game fall, validates and loads it's content
      * into the Game Map.
      *
-     * @param p_fileName
+     * @param p_mapDto
      */
     public String loadMap(MapDto p_mapDto) {
         String p_fileName = p_mapDto.getFileName();
@@ -61,11 +61,11 @@ public class MapService {
         String filePath = "map_files" + File.separator + p_fileName;
         File file = new File(filePath);
 
-        this.readAndLoadContinents(file);
-        this.readAndLoadCountries(file);
-        this.readAndLoadBorders(file);
+            this.readAndLoadContinents(file);
+            this.readAndLoadCountries(file);
+            this.readAndLoadBorders(file);
 
-        return p_mapDto.getFileName() + " Map file loaded";
+            return p_mapDto.getFileName() + " Map file loaded";
     }
 
     /**
@@ -233,13 +233,13 @@ public class MapService {
 
             for (Country country : l_allCountries) {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
-                    System.out.print(" - Country: " + country.getName() + ", ID: " + country.getId() + ", Owner: "
+                    System.out.print(" - Country: " + country.getId() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
                             : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");
 
                     for (Country neighborCountry : country.getNeighbors()) {
-                        System.out.print(neighborCountry.getName() + ", ");
+                        System.out.print(neighborCountry.getId() + ", ");
                     }
                     System.out.println();
                 }
@@ -256,17 +256,26 @@ public class MapService {
      * @return a message indicating success or failure
      */
     public String saveMap(MapDto p_dto) {
-        String fileName = p_dto.getFileName();
+        String filePath = p_dto.getFileName();
+        String directoryPath = filePath.substring(0, filePath.lastIndexOf(File.separator));
+
+        // Create the directory if it doesn't exist
+        File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                return "Failed to create directory for map files";
+            }
+        }
+
         List<Continent> allContinents = d_repoContinent.findAll();
         List<Country> allCountries = d_repoCountry.findAll();
         if (!allContinents.isEmpty()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
                 writer.write("[continents]");
                 writer.write("\n");
                 for (Continent continent : allContinents) {
                     writer.write(continent.getId() + " ");
-                    writer.write(continent.getValue() + " ");
-                    writer.write(continent.getBonusArmies() + "\n");
+                    writer.write(continent.getValue() + "\n");
                 }
                 writer.write("\n");
                 if (!allCountries.isEmpty()) {
@@ -274,7 +283,6 @@ public class MapService {
                     writer.write("\n");
                     for (Country country : allCountries) {
                         writer.write(country.getId() + " ");
-                        writer.write(country.getName() + " ");
                         writer.write(country.getContinent().getId() + "\n");
                     }
                 }
@@ -297,8 +305,9 @@ public class MapService {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return "Failed to save map";
             }
-            return "Map was saved in the following filepath " + fileName;
+            return "Map was saved in the following filepath " + filePath;
         } else {
             return "There are no map elements to save";
         }
