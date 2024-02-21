@@ -3,8 +3,8 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.repository.CountryRepository;
-import ca.concordia.app.warzone.service.model.Continent;
-import ca.concordia.app.warzone.service.model.Country;
+import ca.concordia.app.warzone.model.Continent;
+import ca.concordia.app.warzone.model.Country;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

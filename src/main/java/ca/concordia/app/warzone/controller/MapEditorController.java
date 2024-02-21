@@ -9,8 +9,6 @@ import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
  * Controller class for managing map editing operations.
  */
@@ -142,10 +140,24 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String loadMap(MapDto p_mapDto) {
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
+        if (!Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
              String result = d_mapService.loadMap(p_mapDto);
              this.d_phaseRepository.setPhase(Phase.STARTUP);
-            return result;
+             return result;
+        } else {
+            return "Invalid Phase";
+        }
+    }
+
+    /**
+     * Edits the map file.
+     *
+     * @param p_mapDto The MapDto representing the map to save.
+     * @return A string indicating the result of the operation.
+     */
+    public String editMap(MapDto p_mapDto) {
+        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
+            return d_mapService.editMap(p_mapDto);
         } else {
             return "Invalid Phase";
         }

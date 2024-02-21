@@ -1,7 +1,7 @@
 package ca.concordia.app.warzone.repository.impl;
 
 import ca.concordia.app.warzone.repository.ContinentRepository;
-import ca.concordia.app.warzone.service.model.Continent;
+import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 

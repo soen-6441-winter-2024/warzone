@@ -9,10 +9,7 @@ import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import ca.concordia.app.warzone.service.PlayerService;
-import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Controller class for managing game engine operations.
@@ -127,17 +124,6 @@ public class GameEngineController {
     }
 
     /**
-     * Edits a map in the game.
-     *
-     * @param p_filename The filename of the map to edit.
-     * @return A string indicating the result of the operation.
-     */
-    public String editMap(String p_filename) {
-        // Implementation goes here
-        return "";
-    }
-
-    /**
      * Randomly assigns the countries to the players
      * @return the result of the operation
      */
@@ -181,7 +167,7 @@ public class GameEngineController {
             default -> Phase.GAME_LOOP;
         };
 
-        d_phaseRepository.setPhase(nextPhase);
+        this.d_phaseRepository.setPhase(nextPhase);
 
         return "Current phase is " + nextPhase;
     }

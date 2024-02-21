@@ -5,7 +5,6 @@ import ca.concordia.app.warzone.console.commands.CommandType;
 import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.MapEditorController;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
 /**

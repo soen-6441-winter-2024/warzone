@@ -3,10 +3,10 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
-import ca.concordia.app.warzone.service.model.Country;
-import ca.concordia.app.warzone.service.model.DeployOrder;
-import ca.concordia.app.warzone.service.model.Order;
-import ca.concordia.app.warzone.service.model.Player;
+import ca.concordia.app.warzone.model.Country;
+import ca.concordia.app.warzone.model.DeployOrder;
+import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

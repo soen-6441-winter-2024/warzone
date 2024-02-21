@@ -28,16 +28,16 @@ public class CommandFactory {
     /**
      * Constructs a CommandFactory object.
      *
-     * @param p_editContinentCommand   The command for editing continents.
-     * @param p_editCountryCommand     The command for editing countries.
-     * @param p_editNeighborCommand    The command for editing neighbors.
-     * @param p_showMapCommand         The command for showing the map.
-     * @param p_editGamePlayerCommand  The command for editing game players.
-     * @param p_saveMapCommand         The command for saving the map.
+     * @param p_editContinentCommand The command for editing continents.
+     * @param p_editCountryCommand The command for editing countries.
+     * @param p_editNeighborCommand The command for editing neighbors.
+     * @param p_showMapCommand The command for showing the map.
+     * @param p_editGamePlayerCommand The command for editing game players.
+     * @param p_saveMapCommand The command for saving the map.
      * @param p_assignCountriesCommand The command for assigning countries.
-     * @param p_editMapCommand         The command for editing the map.
-     * @param p_loadMap                The command for loading the map.
-     * @param p_deployCommand          The command to deploy
+     * @param p_editMapCommand The command for editing the map.
+     * @param p_loadMap The command for loading the map.
+     * @param p_deployCommand The command to deploy
      * @param d_nextPhaseCommand       The command for going to the next phase
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
@@ -81,7 +81,7 @@ public class CommandFactory {
         } else if (p_commandName.equals(CommandType.EDIT_MAP.toString())) {
             return d_EditMapCommand;
         } else if (p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
-            return d_AssignCountriesCommand;
+            return  d_AssignCountriesCommand;
         } else if (p_commandName.equals(CommandType.LOAD_MAP.toString())) {
             return d_loadMapCommand;
         } else if (p_commandName.equals(CommandType.DEPLOY.toString())) {
