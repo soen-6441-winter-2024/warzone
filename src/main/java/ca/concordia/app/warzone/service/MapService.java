@@ -4,26 +4,15 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
-import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.model.Continent;
+import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.repository.ContinentRepository;
-import ca.concordia.app.warzone.service.model.Continent;
-import ca.concordia.app.warzone.service.model.Country;
-import ca.concordia.app.warzone.service.model.Player;
+import ca.concordia.app.warzone.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
+import java.io.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 /**
  * Service class for managing map-related operations.
@@ -174,8 +163,6 @@ public class MapService {
                             continentDto.setId(l_continentId);
                             continentDto.setValue(l_continentValue);
                             l_continentService.add(continentDto);
-                        } else {
-                            continue;
                         }
                     } else if (countriesFound && !line.isEmpty()) {
                         String[] l_splitCountry = line.split("\\s+");
@@ -191,9 +178,6 @@ public class MapService {
                             l_countryDto.setId(l_countryId);
                             l_countryDto.setContinent(continentDtoOptional.get());
                             l_countryService.add(l_countryDto);
-                        } else {
-                            continue;
-                            //throw new InvalidMapContentFormat("Invalid Map Format, it does not contain two values delimited by a blank space");
                         }
                     } else if (bordersFound && !line.isEmpty()) {
                         String[] l_splitNeighbor = line.split("\\s+");

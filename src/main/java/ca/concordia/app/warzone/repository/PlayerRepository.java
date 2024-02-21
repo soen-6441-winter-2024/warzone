@@ -1,6 +1,6 @@
 package ca.concordia.app.warzone.repository;
 
-import ca.concordia.app.warzone.service.model.Player;
+import ca.concordia.app.warzone.model.Player;
 
 import java.util.List;
 import java.util.Optional;

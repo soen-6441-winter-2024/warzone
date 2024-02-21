@@ -1,4 +1,4 @@
-package ca.concordia.app.warzone.service.model;
+package ca.concordia.app.warzone.model;
 
 /**
  * Represents a deploy order in the game, where a player deploys a certain number of armies to a country.

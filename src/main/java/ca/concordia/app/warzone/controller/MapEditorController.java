@@ -9,8 +9,6 @@ import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
  * Controller class for managing map editing operations.
  */

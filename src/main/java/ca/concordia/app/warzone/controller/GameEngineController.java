@@ -9,10 +9,7 @@ import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import ca.concordia.app.warzone.service.PlayerService;
-import ca.concordia.app.warzone.service.model.Player;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Controller class for managing game engine operations.

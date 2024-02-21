@@ -1,4 +1,4 @@
-package ca.concordia.app.warzone.service.model;
+package ca.concordia.app.warzone.model;
 /**
  * Represents a continent in the game.
  */
