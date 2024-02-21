@@ -124,17 +124,6 @@ public class GameEngineController {
     }
 
     /**
-     * Edits a map in the game.
-     *
-     * @param p_filename The filename of the map to edit.
-     * @return A string indicating the result of the operation.
-     */
-    public String editMap(String p_filename) {
-        // Implementation goes here
-        return "";
-    }
-
-    /**
      * Randomly assigns the countries to the players
      * @return the result of the operation
      */
@@ -178,7 +167,7 @@ public class GameEngineController {
             default -> Phase.GAME_LOOP;
         };
 
-        d_phaseRepository.setPhase(nextPhase);
+        this.d_phaseRepository.setPhase(nextPhase);
 
         return "Current phase is " + nextPhase;
     }
