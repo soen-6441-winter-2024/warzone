@@ -65,6 +65,27 @@ public class MapService {
     }
 
     /**
+     * Edits a map from the specified file path.
+     *
+     * @param p_mapDto the DTO containing map file information
+     * @return a message indicating success or failure
+     */
+    public String editMap(MapDto p_mapDto) {
+        String filePath = p_mapDto.getFileName();
+        if (validateEditMapStructure(filePath)) {
+            if (this.readAndLoadMap(filePath)) {
+                return p_mapDto.getFileName() + " Map file loaded";
+            }
+            else
+            {
+                return "Map file wasn't loaded, Creating a new empty Map, Now you can enter EditContinent, EditCountry and Edit Neighbor Commands to create your map from teh Scratch";
+            }
+        } else {
+            return "Map file didn't pass format validation";
+        }
+    }
+
+    /**
      * Validates the structure of the map file.
      *
      * @param p_file the path of the map file
@@ -136,11 +157,86 @@ public class MapService {
     }
 
     /**
+     * Validates the structure of the map file for the Edit Map Functionality.
+     *
+     * @param p_file the path of the map file
+     * @return true if the map file structure is valid, false otherwise
+     */
+    public boolean validateEditMapStructure(String p_file) {
+        File file = new File(p_file);
+        if (!file.exists()) {
+            System.out.println("File not found: " + p_file);
+            return true;
+        }
+
+        boolean resultValidation = true;
+        boolean continentsFound = false;
+        boolean countriesFound = false;
+        boolean bordersFound = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(p_file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim(); // Remove leading and trailing whitespace
+
+                if (line.equals("[continents]")) {
+                    continentsFound = true;
+                    countriesFound = false;
+                    bordersFound = false;
+                } else if (line.equals("[countries]")) {
+                    if (!continentsFound) {
+                        resultValidation = false;
+                        return resultValidation; // Invalid structure: [countries] section before [continents]
+                    }
+                    countriesFound = true;
+                    continentsFound = false;
+                    bordersFound = false;
+                } else if (line.equals("[borders]")) {
+                    if (!countriesFound) {
+                        resultValidation = false;
+                        return resultValidation; // Invalid structure: [borders] section before [countries]
+                    }
+                    bordersFound = true;
+                    countriesFound = false;
+                    continentsFound = false;
+                } else {
+                    // Validate content format
+                    if (continentsFound && !line.isEmpty()) {
+                        String[] parts = line.split("\\s+");
+                        if (parts.length != 2) {
+                            resultValidation = false;
+                            return resultValidation; // Invalid format: Each line after [continents] should contain two elements separated by one blank space
+                        }
+                    } else if (countriesFound && !line.isEmpty()) {
+                        String[] parts = line.split("\\s+");
+                        if (parts.length != 2) {
+                            resultValidation = false;
+                            return resultValidation; // Invalid format: Each line after [countries] should contain two elements separated by one blank space
+                        }
+                    } else if (bordersFound && !line.isEmpty()) {
+                        String[] parts = line.split("\\s+");
+                        if (parts.length <= 1) {
+                            resultValidation = false;
+                            return resultValidation; // Invalid format: Each line after [borders] should contain at least two elements or more separated by one blank space
+                        }
+                    }
+                }
+            }
+            return resultValidation;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return false; // Error reading file
+        }
+    }
+
+    /**
      * Reads and loads the map from the specified file.
      *
      * @param p_file the path of the map file
+     * @return true if there is at least one continent loaded, false otherwise
      */
-    private void readAndLoadMap(String p_file) {
+    private boolean readAndLoadMap(String p_file) {
+        boolean loadResult = true;
         boolean continentsFound = false;
         boolean countriesFound = false;
         boolean bordersFound = false;
@@ -208,11 +304,16 @@ public class MapService {
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            System.exit(0);
+            //System.exit(0);
         } catch (InvalidMapContentFormat e) {
             System.out.println(e.getMessage());
-            System.exit(0);
+            //System.exit(0);
         }
+        if (l_continentService.findAll().isEmpty())
+        {
+            loadResult =false;
+        }
+        return loadResult;
     }
 
     /**

@@ -3,8 +3,10 @@ package ca.concordia.app.warzone.console;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.commands.CommandFactory;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.Phase;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -14,6 +16,11 @@ import java.util.Scanner;
  */
 @Component
 public class ConsoleController implements CommandLineRunner {
+
+    /**
+     * PhaseRepository for fetching and setting the current game phase
+     */
+    private final PhaseRepository d_phaseRepository;
 
     /**
      * Initial page message displayed when the program starts.
@@ -33,8 +40,9 @@ public class ConsoleController implements CommandLineRunner {
      *
      * @param p_commandFactory The CommandFactory to use.
      */
-    public ConsoleController(CommandFactory p_commandFactory) {
+    public ConsoleController(CommandFactory p_commandFactory, PhaseRepository p_phaseRepository) {
         this.d_commandFactory = p_commandFactory;
+        this.d_phaseRepository = p_phaseRepository;
     }
 
     /**
@@ -46,7 +54,7 @@ public class ConsoleController implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println(INITIAL_PAGE);
-
+        this.d_phaseRepository.setPhase(Phase.MAP_EDITOR);
         Scanner scanner = new Scanner(System.in);
         String fullCommand;
 

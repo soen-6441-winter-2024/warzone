@@ -1,10 +1,12 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
+import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -109,5 +111,13 @@ public class ContinentService {
         continentDto.setValue(p_continent.getValue());
         // Set other properties as needed
         return continentDto;
+    }
+
+    /**
+     * Returns all the continents
+     * @return all the continents
+     */
+    public List<Continent> findAll() {
+        return this.d_repository.findAll();
     }
 }
