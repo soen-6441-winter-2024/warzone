@@ -23,6 +23,7 @@ public class CommandFactory {
     private EditMapCommand d_EditMapCommand;
     private LoadMapCommand d_loadMapCommand;
     private DeployCommand d_deployCommand;
+    private ValidateMapCommand d_validateMapCommand;
     private NextPhaseCommand d_nextPhaseCommand;
 
     /**
@@ -38,13 +39,15 @@ public class CommandFactory {
      * @param p_editMapCommand         The command for editing the map.
      * @param p_loadMap                The command for loading the map.
      * @param p_deployCommand          The command to deploy
+     * @param p_validateMapCommand     The command to validate a created or load map in memory
      * @param d_nextPhaseCommand       The command for going to the next phase
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
                           EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
                           GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
                           AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
-                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand d_nextPhaseCommand) {
+                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand d_nextPhaseCommand, 
+                          ValidateMapCommand d_validateMapCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -56,6 +59,7 @@ public class CommandFactory {
         this.d_loadMapCommand = p_loadMap;
         this.d_deployCommand = p_deployCommand;
         this.d_nextPhaseCommand = d_nextPhaseCommand;
+        this.d_validateMapCommand = d_validateMapCommand;
     }
 
     /**
@@ -88,6 +92,8 @@ public class CommandFactory {
             return d_deployCommand;
         } else if (p_commandName.equals(CommandType.NEXT_PHASE.toString())) {
             return d_nextPhaseCommand;
+        } else if (p_commandName.equals(CommandType.VALIDATE_MAP.toString())) {
+            return d_validateMapCommand;
         }
 
         throw new InvalidCommandException("invalid command");
