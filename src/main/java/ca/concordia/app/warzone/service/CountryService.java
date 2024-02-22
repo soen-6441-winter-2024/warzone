@@ -103,7 +103,7 @@ public class CountryService {
 
     /**
      * Returns all the countries that belong to the specified continent
-     * @param p_continentId
+     * @param p_continentId continent id to look for
      * @return The list of countries that belong to the specified continent
      */
     public List<Country> findByContinentId(String p_continentId) {

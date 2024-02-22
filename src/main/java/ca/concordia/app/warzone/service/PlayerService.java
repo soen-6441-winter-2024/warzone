@@ -68,6 +68,7 @@ public class PlayerService {
      * @param p_repository     the PlayerRepository to be used
      * @param p_mapService     the MapService to be used
      * @param p_countryService the CountryService to be used
+     * @param p_continentService  the ContinentService to be used
      */
     public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, ContinentService p_continentService) {
         this.d_repository = p_repository;
@@ -133,6 +134,8 @@ public class PlayerService {
 
     /**
      * Assigns reinforcements to players.
+     *
+     * @throws NotFoundException when players aren't found
      */
     public void assignReinforcements() throws NotFoundException {
         List<Player> playerList = this.d_repository.getAllPlayers();
@@ -147,6 +150,7 @@ public class PlayerService {
      *
      * @param p_playerName the name of the player
      * @return the number of reinforcements
+     * @throws NotFoundException when players aren't found
      */
     private int getReinforcementsForPlayer(String p_playerName) throws NotFoundException {
         Optional<Player> playerOpt = this.findByName(p_playerName);
@@ -244,6 +248,8 @@ public class PlayerService {
 
     /**
      * Starts the game loop.
+     *
+     * @throws NotFoundException when players aren't found
      */
     public void startGameLoop() throws NotFoundException {
         this.d_currentRound = 0;

@@ -39,15 +39,15 @@ public class CommandFactory {
      * @param p_editMapCommand         The command for editing the map.
      * @param p_loadMap                The command for loading the map.
      * @param p_deployCommand          The command to deploy
+     * @param p_nextPhaseCommand       The command for going to the next phase
      * @param p_validateMapCommand     The command to validate a created or load map in memory
-     * @param d_nextPhaseCommand       The command for going to the next phase
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
                           EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
                           GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
                           AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
-                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand d_nextPhaseCommand, 
-                          ValidateMapCommand d_validateMapCommand) {
+                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
+                          ValidateMapCommand p_validateMapCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -58,8 +58,8 @@ public class CommandFactory {
         this.d_AssignCountriesCommand = p_assignCountriesCommand;
         this.d_loadMapCommand = p_loadMap;
         this.d_deployCommand = p_deployCommand;
-        this.d_nextPhaseCommand = d_nextPhaseCommand;
-        this.d_validateMapCommand = d_validateMapCommand;
+        this.d_nextPhaseCommand = p_nextPhaseCommand;
+        this.d_validateMapCommand = p_validateMapCommand;
     }
 
     /**

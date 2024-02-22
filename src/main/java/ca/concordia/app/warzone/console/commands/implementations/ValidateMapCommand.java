@@ -5,18 +5,22 @@ import ca.concordia.app.warzone.console.commands.CommandType;
 import ca.concordia.app.warzone.controller.MapValidatorController;
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents a command to validate the map.
+ */
 @Component
 public class ValidateMapCommand extends Command {
+
         /** The controller for map editing. */
         private final MapValidatorController d_MapValidatorController;
 
         /**
          * Constructs a ValidateMapObject object.
          *
-         * @param p_MapEditorController The controller for map editing.
+         * @param p_mapValidatorController The controller for map editing.
          */
-        public ValidateMapCommand(MapValidatorController MapValidatorController) {
-            this.d_MapValidatorController = MapValidatorController;
+        public ValidateMapCommand(MapValidatorController p_mapValidatorController) {
+            this.d_MapValidatorController = p_mapValidatorController;
             init();
         }
     

@@ -127,6 +127,7 @@ public class GameEngineController {
     /**
      * Randomly assigns the countries to the players
      * @return the result of the operation
+     * @throws NotFoundException when countries aren't found
      */
     public String assignCountries() throws NotFoundException {
         if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
