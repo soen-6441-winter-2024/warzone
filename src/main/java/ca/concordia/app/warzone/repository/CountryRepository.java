@@ -44,4 +44,11 @@ public interface CountryRepository {
      * @return a list of all countries
      */
     List<Country> findAll();
+
+    /**
+     * Returns all countries that match the continent id
+     * @param p_continentId continentId
+     * @return a list of countries
+     */
+    List<Country> findByContinentId(String p_continentId);
 }

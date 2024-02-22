@@ -3,6 +3,7 @@ import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.service.model.Country;
 import org.springframework.stereotype.Repository;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the CountryRepository interface using an in-memory data structure.
@@ -35,6 +36,15 @@ public class CountryRepositoryMemoryImpl implements CountryRepository {
     @Override
     public Optional<Country> findById(String p_id) {
         return Optional.ofNullable(d_countries.get(p_id));
+    }
+
+    /**
+     * Returns all countries that match the continent id
+     * @param p_continentId continentId
+     * @return a list of countries
+     */
+    public List<Country> findByContinentId(String p_continentId) {
+            return this.d_countries.values().stream().filter(c -> c.getContinent().getId().equals(p_continentId)).collect(Collectors.toList());
     }
 
     /**

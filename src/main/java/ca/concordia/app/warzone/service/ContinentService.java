@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.service.model.Continent;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -68,6 +69,14 @@ public class ContinentService {
     public Optional<ContinentDto> findById(String p_id) {
         Optional<Continent> continentOptional = d_repository.findById(p_id);
         return continentOptional.map(this::convertToDto);
+    }
+
+    /**
+     * Returns all continents
+     * @return list of all continents
+     */
+    public List<Continent> findAll() {
+        return this.d_repository.findAll();
     }
 
     /**

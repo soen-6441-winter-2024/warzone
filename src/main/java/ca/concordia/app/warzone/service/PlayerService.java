@@ -3,10 +3,8 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
-import ca.concordia.app.warzone.service.model.Country;
-import ca.concordia.app.warzone.service.model.DeployOrder;
-import ca.concordia.app.warzone.service.model.Order;
-import ca.concordia.app.warzone.service.model.Player;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
+import ca.concordia.app.warzone.service.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -55,16 +53,23 @@ public class PlayerService {
     private final MapService d_mapService;
 
     /**
+     * Service for continent-related operations
+     */
+    private final ContinentService d_continentService;
+
+
+    /**
      * Constructs a PlayerService with the specified PlayerRepository.
      *
      * @param p_repository     the PlayerRepository to be used
      * @param p_mapService     the MapService to be used
      * @param p_countryService the CountryService to be used
      */
-    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService) {
+    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, ContinentService p_continentService) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
+        this.d_continentService = p_continentService;
     }
 
     /**
@@ -125,7 +130,7 @@ public class PlayerService {
     /**
      * Assigns reinforcements to players.
      */
-    public void assignReinforcements() {
+    public void assignReinforcements() throws NotFoundException {
         List<Player> playerList = this.d_repository.getAllPlayers();
         for (Player player : playerList) {
             int reinforcementsForPlayer = this.getReinforcementsForPlayer(player.getPlayerName());
@@ -139,8 +144,32 @@ public class PlayerService {
      * @param p_playerName the name of the player
      * @return the number of reinforcements
      */
-    private int getReinforcementsForPlayer(String p_playerName) {
-        return DEFAULT_REINFORCEMENT_NUMBER;
+    private int getReinforcementsForPlayer(String p_playerName) throws NotFoundException {
+        Optional<Player> playerOpt = this.findByName(p_playerName);
+        if(playerOpt.isEmpty()) {
+            throw new NotFoundException("player not found");
+        }
+
+        Player player = playerOpt.get();
+        List<Continent> continents = this.d_continentService.findAll();
+
+        int bonus = 0;
+
+        for(Continent continent : continents) {
+            List<Country> allCountriesForContinent = this.d_countryService.findByContinentId(continent.getId());
+            int ownedByPlayer = 0;
+
+            for(Country country : allCountriesForContinent)
+                if(player.ownsCountry(country.getId()))
+                    ownedByPlayer++;
+
+            if(ownedByPlayer == allCountriesForContinent.size())
+                bonus += continent.getBonusArmies();
+        }
+
+
+
+        return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
     /**
@@ -212,7 +241,7 @@ public class PlayerService {
     /**
      * Starts the game loop.
      */
-    public void startGameLoop() {
+    public void startGameLoop() throws NotFoundException {
         this.d_currentRound = 0;
 
         // Assign reinforcements

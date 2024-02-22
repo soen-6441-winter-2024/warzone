@@ -102,6 +102,14 @@ public class CountryService {
     }
 
     /**
+     * Returns all the countries that belong to the specified continent
+     * @param p_continentId
+     * @return The list of countries that belong to the specified continent
+     */
+    public List<Country> findByContinentId(String p_continentId) {
+        return this.d_repoCountry.findByContinentId(p_continentId);
+    }
+    /**
      * Converts a Country object to a CountryDto object.
      *
      * @param p_country the country object to convert
