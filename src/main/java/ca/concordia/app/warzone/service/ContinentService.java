@@ -120,12 +120,4 @@ public class ContinentService {
         // Set other properties as needed
         return continentDto;
     }
-
-    /**
-     * Returns all the continents
-     * @return all the continents
-     */
-    public List<Continent> findAll() {
-        return this.d_repository.findAll();
-    }
 }

@@ -8,6 +8,7 @@ import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -167,7 +168,7 @@ public class PlayerService {
                     ownedByPlayer++;
 
             if(ownedByPlayer == allCountriesForContinent.size())
-                bonus += continent.getBonusArmies();
+                bonus += Integer.parseInt(continent.getValue());
         }
 
 
