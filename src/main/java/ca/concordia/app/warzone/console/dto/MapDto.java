@@ -1,8 +1,5 @@
 package ca.concordia.app.warzone.console.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Represents a DTO (Data Transfer Object) for a map.
  */

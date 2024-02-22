@@ -20,9 +20,6 @@ public class CountryDto {
     /** The list of neighboring countries. */
     private List<CountryDto> d_Neighbors;
 
-    /** The name of country. */
-    private String d_name;
-
     /** The player associated with the country. */
     private PlayerDto d_Player;
 
@@ -50,24 +47,6 @@ public class CountryDto {
      */
     public void setId(String id) {
         this.d_Id = id;
-    }
-
-    /**
-     * Gets the name of the country.
-     *
-     * @return The ID of the country.
-     */
-    public String getName() {
-        return d_name;
-    }
-
-    /**
-     * Sets the name of the country.
-     *
-     * @param name The name of the country.
-     */
-    public void setName(String name) {
-        this.d_name = name;
     }
 
     /**

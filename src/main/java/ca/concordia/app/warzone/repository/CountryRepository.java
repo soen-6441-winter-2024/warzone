@@ -1,5 +1,5 @@
 package ca.concordia.app.warzone.repository;
-import ca.concordia.app.warzone.service.model.Country;
+import ca.concordia.app.warzone.model.Country;
 
 import java.util.Optional;
 import java.util.List;

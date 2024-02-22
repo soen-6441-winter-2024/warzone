@@ -47,7 +47,7 @@
 				<version>3.6.3</version>
 				<configuration>
 					<nohelp>true</nohelp>
-					<failOnWarnings>false</failOnWarnings>
+					<failOnWarnings>true</failOnWarnings>
 				</configuration>
 			</plugin>
 		</plugins>

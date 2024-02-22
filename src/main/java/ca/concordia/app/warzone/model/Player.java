@@ -1,4 +1,4 @@
-package ca.concordia.app.warzone.service.model;
+package ca.concordia.app.warzone.model;
 
 import java.util.ArrayList;
 import java.util.List;

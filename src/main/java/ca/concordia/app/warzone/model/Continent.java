@@ -1,4 +1,4 @@
-package ca.concordia.app.warzone.service.model;
+package ca.concordia.app.warzone.model;
 /**
  * Represents a continent in the game.
  */
@@ -6,7 +6,6 @@ public class Continent {
 
     private String d_id; // Data member for continent ID
     private String d_value; // Data member for continent value
-    private int d_bonusArmies; // Data member for bonus armies
 
     /**
      * Default constructor
@@ -30,23 +29,6 @@ public class Continent {
      */
     public void setId(String id) {
         this.d_id = id;
-    }
-
-    /**
-     * Sets the bonus armies of the continent.
-     *
-     * @param bonusArmies the bonus armies of the continent
-     */
-    public void setBonusArmies(int bonusArmies) {
-        this.d_bonusArmies = bonusArmies;
-    }
-
-    /**
-     * Gets the bonus armies of the continent.
-     * @return the number bonus armies for the continent
-     */
-    public int getBonusArmies() {
-        return d_bonusArmies;
     }
 
     /**

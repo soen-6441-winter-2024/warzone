@@ -1,7 +1,7 @@
 package ca.concordia.app.warzone.repository.impl;
 
 import ca.concordia.app.warzone.repository.PlayerRepository;
-import ca.concordia.app.warzone.service.model.Player;
+import ca.concordia.app.warzone.model.Player;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
