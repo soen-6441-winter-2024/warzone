@@ -18,13 +18,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MapServiceTest {
 
     public static final String FILE_NAME = "src/test/resources/map.txt";
+    public static final String VALID_FILE_NAME = "src/test/resources/valid_map.txt";
+    public static final String INVALID_FILE_NAME = "src/test/resources/invalid_map.txt";
     public static final String EXPECTED_FILE_NAME = "src/test/resources/expected_map.txt";
     @Mock
     private CountryRepository countryRepository;
@@ -85,6 +87,22 @@ public class MapServiceTest {
         assertEquals("Map was saved in the following filepath " + FILE_NAME,result);
         assertEquals(readFileToString(new File(EXPECTED_FILE_NAME), StandardCharsets.UTF_8),
                 readFileToString(new File(FILE_NAME), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void testValidateMapStructure() {
+
+        boolean result = underTest.validateMapStructure(VALID_FILE_NAME);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testValidateMapStructure_Invalid() {
+
+        boolean result = underTest.validateMapStructure(INVALID_FILE_NAME);
+
+        assertFalse(result);
     }
 
     private Country newCountry(String id, Continent continent) {
