@@ -11,8 +11,13 @@ import ca.concordia.app.warzone.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service class for managing map-related operations.
@@ -20,17 +25,20 @@ import java.util.Optional;
 @Service
 public class MapService {
     /**
-     * Data member for storing the CountryRepository, for fetching and storing countries.
+     * Data member for storing the CountryRepository, for fetching and storing
+     * countries.
      */
     private final CountryRepository d_repoCountry; // Data member for the CountryRepository
 
     /**
-     * Data member for storing the ContinentRepository, for fetching and storing continents.
+     * Data member for storing the ContinentRepository, for fetching and storing
+     * continents.
      */
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
     /**
-     * Constructs a MapService with the specified CountryRepository and ContinentRepository.
+     * Constructs a MapService with the specified CountryRepository and
+     * ContinentRepository.
      *
      * @param p_repoCountry   the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
@@ -120,19 +128,22 @@ public class MapService {
                         String[] parts = line.split("\\s+");
                         if (parts.length != 2) {
                             resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [continents] should contain two elements separated by one blank space
+                            return resultValidation; // Invalid format: Each line after [continents] should contain two
+                                                     // elements separated by one blank space
                         }
                     } else if (countriesFound && !line.isEmpty()) {
                         String[] parts = line.split("\\s+");
                         if (parts.length != 2) {
                             resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [countries] should contain two elements separated by one blank space
+                            return resultValidation; // Invalid format: Each line after [countries] should contain two
+                                                     // elements separated by one blank space
                         }
                     } else if (bordersFound && !line.isEmpty()) {
                         String[] parts = line.split("\\s+");
                         if (parts.length <= 1) {
                             resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [borders] should contain at least two elements or more separated by one blank space
+                            return resultValidation; // Invalid format: Each line after [borders] should contain at
+                                                     // least two elements or more separated by one blank space
                         }
                     }
                 }
@@ -268,7 +279,8 @@ public class MapService {
                             Optional<ContinentDto> continentDtoOptional = l_continentService.findById(l_continentId);
 
                             if (continentDtoOptional.isEmpty())
-                                throw new InvalidMapContentFormat("Invalid Map: Continent Id=" + l_continentId + " not found.");
+                                throw new InvalidMapContentFormat(
+                                        "Invalid Map: Continent Id=" + l_continentId + " not found.");
 
                             CountryDto l_countryDto = new CountryDto();
                             l_countryDto.setId(l_countryId);
@@ -325,7 +337,7 @@ public class MapService {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
                     System.out.print(" - Country: " + country.getId() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
-                            : country.getPlayer().get().getPlayerName())
+                                    : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");
 
                     for (Country neighborCountry : country.getNeighbors()) {
@@ -403,5 +415,152 @@ public class MapService {
         } else {
             return "There are no continents to save";
         }
+    }
+
+    /**
+     * Validates if the whole map and the individual continents of a load or created 
+     * map in memory are connected graphs
+     * @return The state of the validated map
+     */
+    public String validate() {
+        Map<Integer, Map<Integer, List<Integer>>> l_map = new HashMap<Integer, Map<Integer, List<Integer>>>();
+
+        List<Continent> allContinents = d_repoContinent.findAll();
+        List<Country> allCountries = d_repoCountry.findAll();
+
+        if(allContinents.isEmpty() && allCountries.isEmpty()) return "No map found. Create or load a map to validate.";
+
+        for(Continent continent : allContinents) {
+            Integer l_continentId = Integer.parseInt(continent.getId());
+            l_map.put(l_continentId, new HashMap<>());
+
+            for (Country country : allCountries) {
+                Integer countryId = Integer.parseInt(country.getId());
+
+                if(country.getContinent().getId().equals(continent.getId())) {
+                    List<Integer> neighborsId = new ArrayList<>();
+
+                    for (Country neighbor : country.getNeighbors()) {
+                        Integer neighborId = Integer.parseInt(neighbor.getId());
+        
+                        neighborsId.add(neighborId);
+                    }
+
+                    l_map.get(l_continentId).put(countryId, neighborsId);
+                }
+            }
+        }
+
+        boolean isConnectedMap = isConnectedMap(l_map);
+        String l_result = "";
+
+        if(isConnectedMap) l_result += "\nAll continents are connected.";
+        else l_result += "\nNot all continents are connected.";
+
+
+        for (int continentID : l_map.keySet()) {
+            boolean isConnectedContinent = isConnectedContinent(l_map, continentID);
+            if(isConnectedContinent) {
+                l_result += "\nContinent ID: " + continentID + " is a connected subgraph";
+            } else l_result += "\nContinent ID: " + continentID + " is NOT a connected subgraph";
+        }
+
+        return l_result;
+    }
+    /**
+     * Validates is there's a valid path between continents (sub-graphs) of the map (graph)
+     * @param p_map
+     * @return returns true if there exists a path connecting all continents
+     */
+    private static boolean isConnectedMap(Map<Integer, Map<Integer, List<Integer>>> p_map) {
+        Set<Integer> visited = new HashSet<>();
+        dfsTraversal(p_map, p_map.keySet().iterator().next(), visited);
+        return visited.size() == getTotalCountries(p_map);
+    }
+    /**
+     * 
+     * @param p_map
+     * @param p_currentCountry
+     * @param visited
+     */
+    private static void dfsTraversal(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_currentCountry,
+            Set<Integer> visited) {
+        if (visited.contains(p_currentCountry)) {
+            return;
+        }
+        visited.add(p_currentCountry);
+        Map<Integer, List<Integer>> continent = getContinentContainingCountry(p_map, p_currentCountry);
+        if (continent != null) {
+            for (int neighbor : continent.get(p_currentCountry)) {
+                dfsTraversal(p_map, neighbor, visited);
+            }
+        }
+    }
+    /**
+     * Validates if continents are connected.
+     * @param p_map
+     * @param p_continentID
+     * @return true if there exists an edge connecting continents
+     */
+    private static boolean isConnectedContinent(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_continentID) {
+        Set<Integer> visited = new HashSet<>();
+        Map<Integer, List<Integer>> continent = p_map.get(p_continentID);
+
+        if (continent == null || continent.isEmpty()) {
+            return false; // Continent does not exist or is empty
+        }
+        int startCountry = continent.keySet().iterator().next();
+        dfsTraversalContinent(p_map, startCountry, visited, p_continentID);
+
+        if (visited.size() == continent.size()) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Traverses the map graph using a depth first search approach to validate valid edges between continents
+     * @param p_map
+     * @param p_currentCountry
+     * @param p_visited
+     * @param p_continentID
+     */
+    private static void dfsTraversalContinent(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_currentCountry,
+            Set<Integer> p_visited, int p_continentID) {
+        if (p_visited.contains(p_currentCountry)) {
+            return;
+        }
+        p_visited.add(p_currentCountry);
+        Map<Integer, List<Integer>> continent = p_map.get(p_continentID);
+        if (continent != null && continent.containsKey(p_currentCountry)) {
+            for (int neighbor : continent.get(p_currentCountry)) {
+                dfsTraversalContinent(p_map, neighbor, p_visited, p_continentID);
+            }
+        }
+    }
+    /**
+     * @param p_map
+     * @param p_country
+     * @return Returns continent ID of country passed
+     */
+    private static Map<Integer, List<Integer>> getContinentContainingCountry(
+            Map<Integer, Map<Integer, List<Integer>>> p_map, int p_country) {
+        for (Map<Integer, List<Integer>> l_continent : p_map.values()) {
+            if (l_continent.containsKey(p_country)) {
+                return l_continent;
+            }
+        }
+        return null;
+    }
+    /**
+     * Returns the total number of countries in the map
+     * @param p_map
+     * @return the total number of countries
+     */
+    private static int getTotalCountries(Map<Integer, Map<Integer, List<Integer>>> p_map) {
+        int l_total = 0;
+        for (Map<Integer, List<Integer>> continent : p_map.values()) {
+            l_total += continent.size();
+        }
+        return l_total;
     }
 }
