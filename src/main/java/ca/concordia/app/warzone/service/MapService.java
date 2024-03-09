@@ -423,7 +423,7 @@ public class MapService {
      * @return The state of the validated map
      */
     public String validate() {
-        Map<Integer, Map<Integer, List<Integer>>> l_map = new HashMap<Integer, Map<Integer, List<Integer>>>();
+        Map<String, Map<String, List<String>>> l_map = new HashMap<String, Map<String, List<String>>>();
 
         List<Continent> allContinents = d_repoContinent.findAll();
         List<Country> allCountries = d_repoCountry.findAll();
@@ -431,17 +431,17 @@ public class MapService {
         if(allContinents.isEmpty() && allCountries.isEmpty()) return "No map found. Create or load a map to validate.";
 
         for(Continent continent : allContinents) {
-            Integer l_continentId = Integer.parseInt(continent.getId());
+            String l_continentId = continent.getId();
             l_map.put(l_continentId, new HashMap<>());
 
             for (Country country : allCountries) {
-                Integer countryId = Integer.parseInt(country.getId());
+                String countryId = country.getId();
 
                 if(country.getContinent().getId().equals(continent.getId())) {
-                    List<Integer> neighborsId = new ArrayList<>();
+                    List<String> neighborsId = new ArrayList<>();
 
                     for (Country neighbor : country.getNeighbors()) {
-                        Integer neighborId = Integer.parseInt(neighbor.getId());
+                        String neighborId = neighbor.getId();
         
                         neighborsId.add(neighborId);
                     }
@@ -458,7 +458,7 @@ public class MapService {
         else l_result += "\nNot all continents are connected.";
 
 
-        for (int continentID : l_map.keySet()) {
+        for (String continentID : l_map.keySet()) {
             boolean isConnectedContinent = isConnectedContinent(l_map, continentID);
             if(isConnectedContinent) {
                 l_result += "\nContinent ID: " + continentID + " is a connected subgraph";
@@ -472,8 +472,8 @@ public class MapService {
      * @param p_map
      * @return returns true if there exists a path connecting all continents
      */
-    private static boolean isConnectedMap(Map<Integer, Map<Integer, List<Integer>>> p_map) {
-        Set<Integer> visited = new HashSet<>();
+    private static boolean isConnectedMap(Map<String, Map<String, List<String>>> p_map) {
+        Set<String> visited = new HashSet<>();
         dfsTraversal(p_map, p_map.keySet().iterator().next(), visited);
         return visited.size() == getTotalCountries(p_map);
     }
@@ -483,15 +483,15 @@ public class MapService {
      * @param p_currentCountry
      * @param visited
      */
-    private static void dfsTraversal(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_currentCountry,
-            Set<Integer> visited) {
+    private static void dfsTraversal(Map<String, Map<String, List<String>>> p_map, String p_currentCountry,
+            Set<String> visited) {
         if (visited.contains(p_currentCountry)) {
             return;
         }
         visited.add(p_currentCountry);
-        Map<Integer, List<Integer>> continent = getContinentContainingCountry(p_map, p_currentCountry);
+        Map<String, List<String>> continent = getContinentContainingCountry(p_map, p_currentCountry);
         if (continent != null) {
-            for (int neighbor : continent.get(p_currentCountry)) {
+            for (String neighbor : continent.get(p_currentCountry)) {
                 dfsTraversal(p_map, neighbor, visited);
             }
         }
@@ -502,14 +502,14 @@ public class MapService {
      * @param p_continentID
      * @return true if there exists an edge connecting continents
      */
-    private static boolean isConnectedContinent(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_continentID) {
-        Set<Integer> visited = new HashSet<>();
-        Map<Integer, List<Integer>> continent = p_map.get(p_continentID);
+    private static boolean isConnectedContinent(Map<String, Map<String, List<String>>> p_map, String p_continentID) {
+        Set<String> visited = new HashSet<>();
+        Map<String, List<String>> continent = p_map.get(p_continentID);
 
         if (continent == null || continent.isEmpty()) {
             return false; // Continent does not exist or is empty
         }
-        int startCountry = continent.keySet().iterator().next();
+        String startCountry = continent.keySet().iterator().next();
         dfsTraversalContinent(p_map, startCountry, visited, p_continentID);
 
         if (visited.size() == continent.size()) {
@@ -524,15 +524,15 @@ public class MapService {
      * @param p_visited
      * @param p_continentID
      */
-    private static void dfsTraversalContinent(Map<Integer, Map<Integer, List<Integer>>> p_map, int p_currentCountry,
-            Set<Integer> p_visited, int p_continentID) {
+    private static void dfsTraversalContinent(Map<String, Map<String, List<String>>> p_map, String p_currentCountry,
+            Set<String> p_visited, String p_continentID) {
         if (p_visited.contains(p_currentCountry)) {
             return;
         }
         p_visited.add(p_currentCountry);
-        Map<Integer, List<Integer>> continent = p_map.get(p_continentID);
+        Map<String, List<String>> continent = p_map.get(p_continentID);
         if (continent != null && continent.containsKey(p_currentCountry)) {
-            for (int neighbor : continent.get(p_currentCountry)) {
+            for (String neighbor : continent.get(p_currentCountry)) {
                 dfsTraversalContinent(p_map, neighbor, p_visited, p_continentID);
             }
         }
@@ -542,9 +542,9 @@ public class MapService {
      * @param p_country
      * @return Returns continent ID of country passed
      */
-    private static Map<Integer, List<Integer>> getContinentContainingCountry(
-            Map<Integer, Map<Integer, List<Integer>>> p_map, int p_country) {
-        for (Map<Integer, List<Integer>> l_continent : p_map.values()) {
+    private static Map<String, List<String>> getContinentContainingCountry(
+            Map<String, Map<String, List<String>>> p_map, String p_country) {
+        for (Map<String, List<String>> l_continent : p_map.values()) {
             if (l_continent.containsKey(p_country)) {
                 return l_continent;
             }
@@ -556,9 +556,9 @@ public class MapService {
      * @param p_map
      * @return the total number of countries
      */
-    private static int getTotalCountries(Map<Integer, Map<Integer, List<Integer>>> p_map) {
+    private static int getTotalCountries(Map<String, Map<String, List<String>>> p_map) {
         int l_total = 0;
-        for (Map<Integer, List<Integer>> continent : p_map.values()) {
+        for (Map<String, List<String>> continent : p_map.values()) {
             l_total += continent.size();
         }
         return l_total;
