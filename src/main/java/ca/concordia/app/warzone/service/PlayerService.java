@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * A service class that manages players in a Warzone game.
- * This class provides methods for adding and removing players, assigning reinforcements, and executing orders.
+ * This class provides methods for adding and removing players, assigning reinforcements, and adding orders.
  */
 @Service
 public class PlayerService {

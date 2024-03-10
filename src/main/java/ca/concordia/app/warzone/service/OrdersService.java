@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * A service class that manages orders in a Warzone game.
+ * This class provides methods for executing orders.
+ */
 @Service
 public class OrdersService {
     List<List<Order>> d_orders;
@@ -14,15 +18,26 @@ public class OrdersService {
     private final CountryService d_countryService;
 
 
-
+    /**
+     * Constructor for OrdersService class
+     * @param countryService the CountryService to be used
+     */
     public OrdersService(CountryService countryService) {
         this.d_countryService = countryService;
     }
 
+    /**
+     * sets orders
+     * @param orders
+     */
     public void setOrders(List<List<Order>> orders){
         this.d_orders = orders;
     }
 
+    /**
+     * Sets the current round
+     * @param currentRound, the current round
+     */
     public void setCurrentRound(int currentRound){
         this.d_currentRound = currentRound;
     }
