@@ -69,6 +69,7 @@ public class PlayerService {
      * @param p_repository     the PlayerRepository to be used
      * @param p_mapService     the MapService to be used
      * @param p_countryService the CountryService to be used
+     * @param p_ordersService the CountryService to be used
      * @param p_continentService  the ContinentService to be used
      */
     public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, OrdersService p_ordersService, ContinentService p_continentService) {
