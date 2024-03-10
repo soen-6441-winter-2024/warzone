@@ -1,6 +1,10 @@
 package ca.concordia.app.warzone.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import ca.concordia.app.warzone.model.DeployOrder;
+import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +21,7 @@ import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.MapService;
+import org.mockito.Spy;
 
 public class PlayerServiceTest {
 
@@ -31,6 +36,14 @@ public class PlayerServiceTest {
 
     @Mock
     private MapService mapService;
+
+
+
+    private List<List<Order>> d_orders;
+
+    private int d_currentRound;
+
+
 
     @InjectMocks
     private PlayerService playerService;
@@ -90,5 +103,26 @@ public class PlayerServiceTest {
 
         // Assert
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testExecuteOrders() throws NotFoundException {
+
+
+        List<Order> roundOrders = new ArrayList<>();
+        DeployOrder order1 = new DeployOrder("Player 1", "country1", 5);
+        DeployOrder order2 = new DeployOrder("Player 2", "country2", 2);
+        roundOrders.add(order2);
+        roundOrders.add(order1);
+
+        List<List<Order>> ordersList = new ArrayList<>();
+        ordersList.add(roundOrders);
+
+        playerService.d_orders = ordersList;
+
+        playerService.executeOrders();
+
+        verify(countryService, times(1)).addArmiesToCountry(order1.getCountryId(), order1.getNumber());
+        verify(countryService, times(1)).addArmiesToCountry(order2.getCountryId(), order2.getNumber());
     }
 }

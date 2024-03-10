@@ -27,7 +27,7 @@ public class PlayerService {
     /**
      * Data member for storing orders.
      */
-    private List<List<Order>> d_orders;
+    List<List<Order>> d_orders;
 
     /**
      * Data member for storing the current round number.
@@ -183,7 +183,7 @@ public class PlayerService {
     /**
      * Executes orders for the current round.
      */
-    private void executeOrders() {
+     void executeOrders() {
         List<Order> roundOrders = d_orders.get(d_currentRound);
         for (Order order : roundOrders) {
             this.executeOrder(order);
