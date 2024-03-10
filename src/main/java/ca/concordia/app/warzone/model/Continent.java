@@ -2,7 +2,7 @@ package ca.concordia.app.warzone.model;
 /**
  * Represents a continent in the game.
  */
-public class Continent {
+public class Continent implements Entity{
 
     private String d_id; // Data member for continent ID
     private String d_value; // Data member for continent value

@@ -39,7 +39,6 @@ public class ShowMapCommand extends Command {
      */
     @Override
     public String run(String[] p_options) {
-        System.out.println("Showing Map");
         return d_MapEditorController.showMap();
     }
 }

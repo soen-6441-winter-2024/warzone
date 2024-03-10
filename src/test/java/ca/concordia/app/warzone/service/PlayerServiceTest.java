@@ -65,7 +65,7 @@ public class PlayerServiceTest {
         player1.setPlayerName("Player 2");
         players.add(player2);
 
-        when(playerRepository.getAllPlayers()).thenReturn(players);
+        when(playerRepository.findAll()).thenReturn(players);
 
         // Act
         List<Player> result = playerService.getAllPlayers();
@@ -82,7 +82,7 @@ public class PlayerServiceTest {
         String playerName = "Player1";
         Player player = new Player();
         player.setPlayerName(playerName);
-        when(playerRepository.findByName(playerName)).thenReturn(Optional.of(player));
+        when(playerRepository.findById(playerName)).thenReturn(Optional.of(player));
 
         // Act
         Optional<Player> result = playerService.findByName(playerName);
@@ -96,7 +96,7 @@ public class PlayerServiceTest {
     public void testFindByName_PlayerDoesNotExist() {
         // Arrange
         String playerName = "NonExistingPlayer";
-        when(playerRepository.findByName(playerName)).thenReturn(Optional.empty());
+        when(playerRepository.findById(playerName)).thenReturn(Optional.empty());
 
         // Act
         Optional<Player> result = playerService.findByName(playerName);
