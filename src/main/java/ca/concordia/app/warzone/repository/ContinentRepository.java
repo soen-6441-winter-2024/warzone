@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * Interface for accessing and managing continents.
  */
-public interface ContinentRepository {
+public interface ContinentRepository extends AbstractRepository<Continent> {
 
     /**
      * Saves a continent.
