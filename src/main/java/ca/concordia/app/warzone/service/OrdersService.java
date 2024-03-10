@@ -28,7 +28,7 @@ public class OrdersService {
 
     /**
      * sets orders
-     * @param orders
+     * @param orders, orders
      */
     public void setOrders(List<List<Order>> orders){
         this.d_orders = orders;
