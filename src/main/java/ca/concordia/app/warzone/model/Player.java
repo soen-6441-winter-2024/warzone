@@ -103,6 +103,11 @@ public class Player implements Entity {
         return this.d_playerName;
     }
 
+    /**
+     * Set id of the player, which is also the name
+     *
+     * @param p_id player name
+     */
     public void setId(String p_id) {
         this.d_playerName = p_id;
     }
