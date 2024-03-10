@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * A service class that manages players in a Warzone game.
  * This class provides methods for adding and removing players, assigning reinforcements, and executing orders.
@@ -115,7 +114,7 @@ public class PlayerService {
         Optional<Player> playerOptional = findByName(p_playerName);
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
-            d_repository.delete(player);
+            d_repository.deleteById(player.getId());
             return "Player " + p_playerName + " has been removed";
         } else {
             return "Player " + p_playerName + " not found";
@@ -129,7 +128,7 @@ public class PlayerService {
      * @return an Optional containing the player if found, empty otherwise
      */
     public Optional<Player> findByName(String p_playerName) {
-        return d_repository.findByName(p_playerName);
+        return d_repository.findById(p_playerName);
     }
 
     /**
@@ -138,7 +137,7 @@ public class PlayerService {
      * @throws NotFoundException when players aren't found
      */
     public void assignReinforcements() throws NotFoundException {
-        List<Player> playerList = this.d_repository.getAllPlayers();
+        List<Player> playerList = this.d_repository.findAll();
         for (Player player : playerList) {
             int reinforcementsForPlayer = this.getReinforcementsForPlayer(player.getPlayerName());
             player.setNumberOfReinforcements(reinforcementsForPlayer);
@@ -306,6 +305,6 @@ public class PlayerService {
      * @return a list of all players
      */
     public List<Player> getAllPlayers() {
-        return this.d_repository.getAllPlayers();
+        return this.d_repository.findAll();
     }
 }

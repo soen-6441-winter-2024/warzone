@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Represents a player in the game.
  */
-public class Player {
+public class Player implements Entity {
     private static int d_lastPlayerID = 0; // Static member for the last player ID
     private int d_playerID; // Data member for player ID
     private String d_playerName; // Data member for player name
@@ -20,15 +20,6 @@ public class Player {
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
-    }
-
-    /**
-     * Retrieves the player ID.
-     *
-     * @return the player ID
-     */
-    public int getPlayerID(){
-        return d_playerID;
     }
 
     /**
@@ -105,5 +96,14 @@ public class Player {
         }
 
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return this.d_playerName;
+    }
+
+    public void setId(String p_id) {
+        this.d_playerName = p_id;
     }
 }

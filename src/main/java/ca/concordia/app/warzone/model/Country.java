@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * Represents a country in the game.
  */
-public class Country {
+public class Country implements Entity{
 
     private String d_id; // Data member for country ID
     private Continent d_continent; // Data member for continent
