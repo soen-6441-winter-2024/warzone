@@ -328,27 +328,29 @@ public class MapService {
         List<Country> l_allCountries = d_repoCountry.findAll();
 
         if (l_allContinents.isEmpty() && l_allCountries.isEmpty())
-            return "No map found: Map has not been created or loaded";
+            return "No map found: Map has not been created or loaded.";
+
+        StringBuilder result = new StringBuilder("");
 
         for (Continent l_continent : l_allContinents) {
-            System.out.println("Continent ID: " + l_continent.getId() + ", Continent Value: " + l_continent.getValue());
+            result.append("Continent ID: " + l_continent.getId() + ", Continent Value: " + l_continent.getValue() +  "\n");
 
             for (Country country : l_allCountries) {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
-                    System.out.print(" - Country: " + country.getId() + ", Owner: "
+                    result.append(" - Country: " + country.getId() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
                                     : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");
 
                     for (Country neighborCountry : country.getNeighbors()) {
-                        System.out.print(neighborCountry.getId() + ", ");
+                        result.append(neighborCountry.getId() + ", ");
                     }
-                    System.out.println();
+                    result.append("\n");
                 }
             }
         }
 
-        return "Map Printed";
+        return result.toString();
     }
 
     /**
