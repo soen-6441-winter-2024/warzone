@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Generic Interface that defines common methods to interact with a repository
  *
- * @param <T>
+ * @param <T> Entity that will be stored in the repository
  */
 public interface AbstractRepository<T extends Entity> {
 
