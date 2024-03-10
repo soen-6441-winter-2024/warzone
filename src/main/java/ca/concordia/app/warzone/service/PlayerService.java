@@ -55,6 +55,8 @@ public class PlayerService {
      */
     private final MapService d_mapService;
 
+    private final OrdersService d_ordersService;
+
     /**
      * Service for continent-related operations
      */
@@ -69,10 +71,11 @@ public class PlayerService {
      * @param p_countryService the CountryService to be used
      * @param p_continentService  the ContinentService to be used
      */
-    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, ContinentService p_continentService) {
+    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, OrdersService p_ordersService, ContinentService p_continentService) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
+        this.d_ordersService = p_ordersService;
         this.d_continentService = p_continentService;
     }
 
@@ -179,30 +182,7 @@ public class PlayerService {
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
-    /**
-     * Executes orders for the current round.
-     */
-     void executeOrders() {
-        List<Order> roundOrders = d_orders.get(d_currentRound);
-        for (Order order : roundOrders) {
-            this.executeOrder(order);
-        }
-    }
 
-    /**
-     * Executes a specific order.
-     *
-     * @param p_order the order to execute
-     */
-    private void executeOrder(Order p_order) {
-        if (p_order instanceof DeployOrder) {
-            String countryId = ((DeployOrder) p_order).getCountryId();
-            int number = ((DeployOrder) p_order).getNumber();
-            // Add the reinforcements to the country
-            System.out.println("Adding " + number + " armies to country " + countryId);
-            this.d_countryService.addArmiesToCountry(countryId, number);
-        }
-    }
 
     /**
      * Adds a deploy order for a player.
@@ -228,7 +208,9 @@ public class PlayerService {
         if (player.getNumberOfReinforcements() == 0) {
             this.currentPlayerGivingOrder++;
             if (this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
-                this.executeOrders();
+                OrdersService ordersService = new OrdersService(d_countryService);
+                ordersService.setOrders(this.d_orders);
+                ordersService.executeOrders();
                 return;
             }
         }

@@ -105,24 +105,5 @@ public class PlayerServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    @Test
-    public void testExecuteOrders() throws NotFoundException {
 
-
-        List<Order> roundOrders = new ArrayList<>();
-        DeployOrder order1 = new DeployOrder("Player 1", "country1", 5);
-        DeployOrder order2 = new DeployOrder("Player 2", "country2", 2);
-        roundOrders.add(order2);
-        roundOrders.add(order1);
-
-        List<List<Order>> ordersList = new ArrayList<>();
-        ordersList.add(roundOrders);
-
-        playerService.d_orders = ordersList;
-
-        playerService.executeOrders();
-
-        verify(countryService, times(1)).addArmiesToCountry(order1.getCountryId(), order1.getNumber());
-        verify(countryService, times(1)).addArmiesToCountry(order2.getCountryId(), order2.getNumber());
-    }
 }
