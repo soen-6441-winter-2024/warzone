@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -13,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +39,9 @@ public class PlayerServiceTest {
     @Mock
     private MapService mapService;
 
+    @Mock
+    private OrdersService ordersService;
+
 
 
     private List<List<Order>> d_orders;
@@ -51,6 +56,7 @@ public class PlayerServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        playerService = new PlayerService(playerRepository, mapService, countryService, ordersService, continentService);
     }
 
     @Test
@@ -104,6 +110,9 @@ public class PlayerServiceTest {
         // Assert
         assertTrue(result.isEmpty());
     }
+
+
+
 
 
 }

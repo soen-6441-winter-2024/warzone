@@ -222,31 +222,13 @@ public class PlayerService {
     /**
      * Asks the current player to give a deploy order.
      */
-    private void askForDeployOrder() {
+    public void askForDeployOrder() {
         List<Player> players = this.getAllPlayers();
         Player player = players.get(this.currentPlayerGivingOrder);
         System.out.println("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
     }
 
-    /**
-     * Starts the game loop.
-     *
-     * @throws NotFoundException when players aren't found
-     */
-    public void startGameLoop() throws NotFoundException {
-        this.d_currentRound = 0;
 
-        // Assign reinforcements
-        this.assignReinforcements();
-
-        this.d_orders = new ArrayList<>();
-        this.d_orders.add(new ArrayList<>());
-
-        this.currentPlayerGivingOrder = 0;
-
-        System.out.println("Time to give deploy orders");
-        this.askForDeployOrder();
-    }
 
     /**
      * Assigns countries to players at the start of the game.
