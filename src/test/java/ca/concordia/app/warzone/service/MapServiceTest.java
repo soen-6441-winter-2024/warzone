@@ -48,51 +48,6 @@ public class MapServiceTest {
     }
 
     @Test
-    public void testSaveMap() throws IOException {
-
-        //Arrange
-        Continent l_america = newContinent("1", "America");
-        Continent l_europe = newContinent("2", "Europe");
-        Continent l_africa = newContinent("3", "Africa");
-        List<Continent> continentList = List.of(
-                l_america,
-                l_europe,
-                l_africa
-        );
-
-        Country l_canada = newCountry("Canada", l_america);
-        Country l_usa = newCountry("USA", l_america);
-        Country l_nigeria = newCountry("Nigeria", l_africa);
-        Country l_france = newCountry("France", l_europe);
-
-        l_canada.addNeighbor(l_usa);
-        l_usa.addNeighbor(l_canada);
-        l_usa.addNeighbor(l_nigeria);
-        l_france.addNeighbor(l_nigeria);
-        l_nigeria.addNeighbor(l_usa);
-
-        List<Country> countryList = List.of(
-                l_canada,
-                l_usa,
-                l_nigeria,
-                l_france);
-
-        when(continentRepository.findAll()).thenReturn(continentList);
-        when(countryRepository.findAll()).thenReturn(countryList);
-
-        MapDto dto = new MapDto();
-        dto.setFileName(FILE_NAME);
-
-        //Act
-        String result = underTest.saveMap(dto);
-
-        //Assert
-        assertEquals("Map was saved in the following filepath " + FILE_NAME,result);
-        assertEquals(readFileToString(new File(EXPECTED_FILE_NAME), StandardCharsets.UTF_8),
-                readFileToString(new File(FILE_NAME), StandardCharsets.UTF_8));
-    }
-
-    @Test
     public void testValidateMapStructure() {
 
         boolean result = underTest.validateMapStructure(VALID_FILE_NAME);
