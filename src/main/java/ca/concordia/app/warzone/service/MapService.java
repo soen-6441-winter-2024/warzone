@@ -6,8 +6,10 @@ import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
+import ca.concordia.app.warzone.model.MapFile;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.repository.MapRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -25,6 +27,11 @@ import java.util.Set;
 @Service
 public class MapService {
     /**
+     * Data member for storing the MapRepository, for fetching and storing
+     * countries.
+     */
+    private final MapRepository d_repoMap; // Data member for the MapRepository
+    /**
      * Data member for storing the CountryRepository, for fetching and storing
      * countries.
      */
@@ -37,13 +44,14 @@ public class MapService {
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
     /**
-     * Constructs a MapService with the specified CountryRepository and
-     * ContinentRepository.
+     * Constructs a MapService with the specified MapRepository, CountryRepository, and ContinentRepository.
      *
+     * @param p_repoMap   the MapRepository to be used
      * @param p_repoCountry   the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
-    public MapService(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
+    public MapService(MapRepository p_repoMap, CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
+        this.d_repoMap = p_repoMap;
         this.d_repoCountry = p_repoCountry;
         this.d_repoContinent = p_repoContinent;
     }
@@ -357,66 +365,13 @@ public class MapService {
      * Saves the map to a file.
      *
      * @param p_dto the DTO containing map information
-     * @return a message indicating success or failure
+     * @return a message indicating success or failure if the map file was saved
      */
     public String saveMap(MapDto p_dto) {
-        String filePath = p_dto.getFileName();
-        String directoryPath = filePath.substring(0, filePath.lastIndexOf(File.separator));
+        MapFile mapFile = new MapFile();
+        mapFile.setFileName(p_dto.getFileName());
 
-        // Create the directory if it doesn't exist
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                return "Failed to create directory for map files";
-            }
-        }
-
-        List<Continent> allContinents = d_repoContinent.findAll();
-        List<Country> allCountries = d_repoCountry.findAll();
-        if (!allContinents.isEmpty()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-                writer.write("[continents]");
-                writer.write("\n");
-                for (Continent continent : allContinents) {
-                    writer.write(continent.getId() + " ");
-                    writer.write(continent.getValue() + "\n");
-                }
-                writer.write("\n");
-                if (!allCountries.isEmpty()) {
-                    writer.write("[countries]");
-                    writer.write("\n");
-                    for (Country country : allCountries) {
-                        writer.write(country.getId() + " ");
-                        writer.write(country.getContinent().getId() + "\n");
-                    }
-                } else {
-                    return "There are no countries to save";
-                }
-                writer.write("\n");
-                if (!allCountries.isEmpty()) {
-                    writer.write("[borders]");
-                    writer.write("\n");
-                    for (Country country : allCountries) {
-                        // Assuming each country can have multiple neighbors
-                        List<Country> allNeighborsByCountry = country.getNeighbors();
-                        if (!allNeighborsByCountry.isEmpty()) {
-                            writer.write(country.getId());
-                            for (Country neighbor : allNeighborsByCountry) {
-                                writer.write(" ");
-                                writer.write(neighbor.getId());
-                            }
-                            writer.write("\n");
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "Failed to save map";
-            }
-            return "Map was saved in the following filepath " + filePath;
-        } else {
-            return "There are no continents to save";
-        }
+        return d_repoMap.saveMap(mapFile);
     }
 
     /**
