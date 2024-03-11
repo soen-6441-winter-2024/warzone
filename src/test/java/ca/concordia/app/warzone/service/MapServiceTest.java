@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.repository.MapRepository;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import org.apache.commons.io.FileUtils;
@@ -29,6 +30,8 @@ public class MapServiceTest {
     public static final String INVALID_FILE_NAME = "src/test/resources/invalid_map.txt";
     public static final String EXPECTED_FILE_NAME = "src/test/resources/expected_map.txt";
     @Mock
+    private MapRepository mapRepository;
+    @Mock
     private CountryRepository countryRepository;
 
     @Mock
@@ -40,7 +43,7 @@ public class MapServiceTest {
 
     @BeforeEach
     public void before() {
-        underTest = new MapService(countryRepository, continentRepository);
+        underTest = new MapService(mapRepository, countryRepository, continentRepository);
         FileUtils.deleteQuietly(new File(FILE_NAME));
     }
 
