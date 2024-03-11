@@ -72,6 +72,14 @@ public class ContinentService {
     }
 
     /**
+     * Returns all continents
+     * @return list of all continents
+     */
+    public List<Continent> findAll() {
+        return this.d_repository.findAll();
+    }
+
+    /**
      * Deletes a continent by its ID.
      *
      * @param p_continentId the ID of the continent to delete
@@ -111,13 +119,5 @@ public class ContinentService {
         continentDto.setValue(p_continent.getValue());
         // Set other properties as needed
         return continentDto;
-    }
-
-    /**
-     * Returns all the continents
-     * @return all the continents
-     */
-    public List<Continent> findAll() {
-        return this.d_repository.findAll();
     }
 }

@@ -39,6 +39,7 @@ public class ConsoleController implements CommandLineRunner {
      * Constructs a ConsoleController with the specified CommandFactory.
      *
      * @param p_commandFactory The CommandFactory to use.
+     * @param p_phaseRepository The repository to use
      */
     public ConsoleController(CommandFactory p_commandFactory, PhaseRepository p_phaseRepository) {
         this.d_commandFactory = p_commandFactory;

@@ -3,10 +3,12 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,10 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * A service class that manages players in a Warzone game.
- * This class provides methods for adding and removing players, assigning reinforcements, and executing orders.
+ * This class provides methods for adding and removing players, assigning reinforcements, and adding orders.
  */
 @Service
 public class PlayerService {
@@ -25,7 +26,7 @@ public class PlayerService {
     /**
      * Data member for storing orders.
      */
-    private List<List<Order>> d_orders;
+    List<List<Order>> d_orders;
 
     /**
      * Data member for storing the current round number.
@@ -54,17 +55,29 @@ public class PlayerService {
      */
     private final MapService d_mapService;
 
+    private final OrdersService d_ordersService;
+
+    /**
+     * Service for continent-related operations
+     */
+    private final ContinentService d_continentService;
+
+
     /**
      * Constructs a PlayerService with the specified PlayerRepository.
      *
      * @param p_repository     the PlayerRepository to be used
      * @param p_mapService     the MapService to be used
      * @param p_countryService the CountryService to be used
+     * @param p_ordersService the CountryService to be used
+     * @param p_continentService  the ContinentService to be used
      */
-    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService) {
+    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, OrdersService p_ordersService, ContinentService p_continentService) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
+        this.d_ordersService = p_ordersService;
+        this.d_continentService = p_continentService;
     }
 
     /**
@@ -105,7 +118,7 @@ public class PlayerService {
         Optional<Player> playerOptional = findByName(p_playerName);
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
-            d_repository.delete(player);
+            d_repository.deleteById(player.getId());
             return "Player " + p_playerName + " has been removed";
         } else {
             return "Player " + p_playerName + " not found";
@@ -119,14 +132,16 @@ public class PlayerService {
      * @return an Optional containing the player if found, empty otherwise
      */
     public Optional<Player> findByName(String p_playerName) {
-        return d_repository.findByName(p_playerName);
+        return d_repository.findById(p_playerName);
     }
 
     /**
      * Assigns reinforcements to players.
+     *
+     * @throws NotFoundException when players aren't found
      */
-    public void assignReinforcements() {
-        List<Player> playerList = this.d_repository.getAllPlayers();
+    public void assignReinforcements() throws NotFoundException {
+        List<Player> playerList = this.d_repository.findAll();
         for (Player player : playerList) {
             int reinforcementsForPlayer = this.getReinforcementsForPlayer(player.getPlayerName());
             player.setNumberOfReinforcements(reinforcementsForPlayer);
@@ -138,35 +153,37 @@ public class PlayerService {
      *
      * @param p_playerName the name of the player
      * @return the number of reinforcements
+     * @throws NotFoundException when players aren't found
      */
-    private int getReinforcementsForPlayer(String p_playerName) {
-        return DEFAULT_REINFORCEMENT_NUMBER;
+    private int getReinforcementsForPlayer(String p_playerName) throws NotFoundException {
+        Optional<Player> playerOpt = this.findByName(p_playerName);
+        if(playerOpt.isEmpty()) {
+            throw new NotFoundException("player not found");
+        }
+
+        Player player = playerOpt.get();
+        List<Continent> continents = this.d_continentService.findAll();
+
+        int bonus = 0;
+
+        for(Continent continent : continents) {
+            List<Country> allCountriesForContinent = this.d_countryService.findByContinentId(continent.getId());
+            int ownedByPlayer = 0;
+
+            for(Country country : allCountriesForContinent)
+                if(player.ownsCountry(country.getId()))
+                    ownedByPlayer++;
+
+            if(ownedByPlayer == allCountriesForContinent.size())
+                bonus += Integer.parseInt(continent.getValue());
+        }
+
+
+
+        return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
-    /**
-     * Executes orders for the current round.
-     */
-    private void executeOrders() {
-        List<Order> roundOrders = d_orders.get(d_currentRound);
-        for (Order order : roundOrders) {
-            this.executeOrder(order);
-        }
-    }
 
-    /**
-     * Executes a specific order.
-     *
-     * @param p_order the order to execute
-     */
-    private void executeOrder(Order p_order) {
-        if (p_order instanceof DeployOrder) {
-            String countryId = ((DeployOrder) p_order).getCountryId();
-            int number = ((DeployOrder) p_order).getNumber();
-            // Add the reinforcements to the country
-            System.out.println("Adding " + number + " armies to country " + countryId);
-            this.d_countryService.addArmiesToCountry(countryId, number);
-        }
-    }
 
     /**
      * Adds a deploy order for a player.
@@ -192,7 +209,9 @@ public class PlayerService {
         if (player.getNumberOfReinforcements() == 0) {
             this.currentPlayerGivingOrder++;
             if (this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
-                this.executeOrders();
+                OrdersService ordersService = new OrdersService(d_countryService);
+                ordersService.setOrders(this.d_orders);
+                ordersService.executeOrders();
                 return;
             }
         }
@@ -211,8 +230,10 @@ public class PlayerService {
 
     /**
      * Starts the game loop.
+     *
+     * @throws NotFoundException when players aren't found
      */
-    public void startGameLoop() {
+    public void startGameLoop() throws NotFoundException {
         this.d_currentRound = 0;
 
         // Assign reinforcements
@@ -267,6 +288,6 @@ public class PlayerService {
      * @return a list of all players
      */
     public List<Player> getAllPlayers() {
-        return this.d_repository.getAllPlayers();
+        return this.d_repository.findAll();
     }
 }

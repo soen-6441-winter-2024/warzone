@@ -9,6 +9,7 @@ import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import ca.concordia.app.warzone.service.PlayerService;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -126,8 +127,9 @@ public class GameEngineController {
     /**
      * Randomly assigns the countries to the players
      * @return the result of the operation
+     * @throws NotFoundException when countries aren't found
      */
-    public String assignCountries() {
+    public String assignCountries() throws NotFoundException {
         if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
             throw new InvalidCommandException("game not in startup phase");
         }

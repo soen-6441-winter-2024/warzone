@@ -2,7 +2,7 @@ package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.repository.ContinentRepository;
-import ca.concordia.app.warzone.service.model.Continent;
+import ca.concordia.app.warzone.model.Continent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
