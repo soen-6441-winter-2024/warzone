@@ -4,19 +4,32 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
-import ca.concordia.app.warzone.service.ContinentService;
-import ca.concordia.app.warzone.service.CountryService;
-import ca.concordia.app.warzone.service.MapService;
-import ca.concordia.app.warzone.service.PlayerService;
+import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller class for managing game engine operations.
  */
 @Component
 public class GameEngineController {
+
+    /**
+     * Data member for storing orders.
+     */
+    List<List<Order>> d_orders;
+
+    /**
+     * Data member for storing the current round number.
+     */
+    private int d_currentRound;
+
+    private int currentPlayerGivingOrder;
 
     /**
      * ContinentService for continent-related operations
@@ -34,6 +47,8 @@ public class GameEngineController {
      * MapService for map-related operations
      */
     private final MapService d_mapService;
+
+    private final OrdersService d_ordersService;
     /**
      * PhaseRepository for fetching and setting the current game phase
      */
@@ -46,13 +61,15 @@ public class GameEngineController {
      * @param p_countryService   The CountryService to use.
      * @param p_playerService    The PlayerService to use.
      * @param p_mapService       The MapService to use.
+     * @param p_ordersService    The CountryService to be used
      * @param p_phaseRepository  The PhaseRepository to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, PhaseRepository p_phaseRepository) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
         this.d_mapService = p_mapService;
+        this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
     }
 
@@ -137,7 +154,7 @@ public class GameEngineController {
         this.d_playerService.assignCountries();
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
-        this.d_playerService.startGameLoop();
+        this.startGameLoop();
         return "";
     }
 
@@ -172,5 +189,34 @@ public class GameEngineController {
         this.d_phaseRepository.setPhase(nextPhase);
 
         return "Current phase is " + nextPhase;
+    }
+
+    /**
+     * assigns reinforcement to player
+     * @throws NotFoundException when players arent found
+     */
+
+    public void assignReinforcements() throws NotFoundException{
+        d_playerService.assignReinforcements();
+    }
+
+    /**
+     * Starts the game loop.
+     *
+     * @throws NotFoundException when players aren't found
+     */
+    public void startGameLoop() throws NotFoundException {
+        this.d_currentRound = 0;
+
+        // Assign reinforcements
+        this.assignReinforcements();
+
+        this.d_orders = new ArrayList<>();
+        this.d_orders.add(new ArrayList<>());
+
+        this.currentPlayerGivingOrder = 0;
+
+        System.out.println("Time to give deploy orders");
+        d_playerService.askForDeployOrder();
     }
 }
