@@ -11,6 +11,11 @@ public class Player implements Entity {
     private int d_playerID; // Data member for player ID
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
+
+    /**
+     *  Data member for cards received by player
+     */
+    public List<String> d_cardsReceived;
     private int numberOfReinforcementsAvailable;
 
     /**
@@ -29,6 +34,23 @@ public class Player implements Entity {
      */
     public void addCountry(Country p_country){
         d_countriesAssigned.add(p_country);
+    }
+
+    /**
+     *method that adds card to list of cards
+     * @param card the card to be added
+     */
+    public void addCard(String card){
+        d_cardsReceived.add(card);
+    }
+
+    /**
+     * Checks if a player has a card
+     * @param card the card to be checked
+     * @return returns boolean whether player has card or not
+     */
+    public boolean hasCard(String card){
+        return d_cardsReceived.contains(card);
     }
 
     /**
