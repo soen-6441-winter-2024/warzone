@@ -54,6 +54,8 @@ public class GameEngineController {
      */
     private final PhaseRepository d_phaseRepository;
 
+    private final PlayerCardService d_playerCardService;
+
     /**
      * Constructs a GameEngineController with the specified services.
      *
@@ -64,13 +66,14 @@ public class GameEngineController {
      * @param p_ordersService    The CountryService to be used
      * @param p_phaseRepository  The PhaseRepository to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
         this.d_mapService = p_mapService;
         this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
+        this.d_playerCardService = p_PlayerCardService;
     }
 
     /**
