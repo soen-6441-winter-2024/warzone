@@ -34,7 +34,7 @@ public class Player implements Entity {
     }
 
     /**
-     *
+     *method that adds card to list of cards
      * @param card the card to be added
      */
     public void addCard(String card){

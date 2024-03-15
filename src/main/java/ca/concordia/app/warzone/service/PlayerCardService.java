@@ -8,7 +8,7 @@ import java.util.Collections;
 
 /**
  * A service class that manages player cards in a Warzone game.
- * This class provides method for assigning player cards
+ * This class provides method for assigning player cards.
  */
 @Service
 public class PlayerCardService {
@@ -22,7 +22,7 @@ public class PlayerCardService {
     private final ArrayList<String> playerCards;
 
     /**
-     * Constructor for PlayerCardsService
+     * Constructor for PlayerCardsService.
      */
     public PlayerCardService() {
         playerCards = new ArrayList<>();
@@ -33,8 +33,8 @@ public class PlayerCardService {
     }
 
     /**
-     * Assigns a card to player
-     * @param player the player getting a card
+     * Assigns a card to player.
+     * @param player the player getting a card.
      */
     public void assignPlayerCards(Player player){
         Collections.shuffle(playerCards);
