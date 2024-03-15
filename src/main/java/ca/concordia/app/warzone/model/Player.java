@@ -12,7 +12,10 @@ public class Player implements Entity {
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
 
-    public List<String> d_cardsReceived; // Data member for cards received by player
+    /**
+     *  Data member for cards received by player
+     */
+    public List<String> d_cardsReceived;
     private int numberOfReinforcementsAvailable;
 
     /**
