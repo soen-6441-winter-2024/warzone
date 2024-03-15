@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.repository.impl;
 import ca.concordia.app.warzone.model.Entity;
 import ca.concordia.app.warzone.repository.AbstractRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public abstract class AbstractRepositoryMemoryImpl<T extends Entity> implements 
 
     @Override
     public List<T> findAll() {
-        return getMap().values().stream().toList();
+        return new ArrayList<>(getMap().values());
     }
 
     /**
