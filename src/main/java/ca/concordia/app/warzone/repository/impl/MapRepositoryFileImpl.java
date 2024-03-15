@@ -18,7 +18,7 @@ import java.util.List;
  * Implementation of the MapRepository interface
  */
 @Repository
-public class MapRepositoryMemoryImpl implements MapRepository {
+public class MapRepositoryFileImpl implements MapRepository {
 
     /**
      * Data member for storing the CountryRepository, for fetching and storing
@@ -38,7 +38,7 @@ public class MapRepositoryMemoryImpl implements MapRepository {
      * @param p_repoCountry   the CountryRepository to be used
      * @param p_repoContinent the ContinentRepository to be used
      */
-    public MapRepositoryMemoryImpl(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
+    public MapRepositoryFileImpl(CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
         this.d_repoCountry = p_repoCountry;
         this.d_repoContinent = p_repoContinent;
     }
