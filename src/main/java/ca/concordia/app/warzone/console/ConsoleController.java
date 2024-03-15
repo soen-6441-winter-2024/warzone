@@ -55,7 +55,6 @@ public class ConsoleController implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println(INITIAL_PAGE);
-        this.d_phaseRepository.setPhase(Phase.MAP_EDITOR);
         Scanner scanner = new Scanner(System.in);
         String fullCommand;
 
