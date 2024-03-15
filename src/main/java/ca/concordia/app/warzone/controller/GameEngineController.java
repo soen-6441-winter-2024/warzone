@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -157,6 +158,17 @@ public class GameEngineController {
         this.startGameLoop();
         return "";
     }
+
+    // public void executeOrders() {
+    //     for (Player player : this.d_playerService.getAllPlayers()) {
+            
+    //         List<Order> orders = player.getOrders();
+            
+    //         for (Order order : orders) {
+    //             order.execute();
+    //         }
+    //     }
+    // }
 
     /**
      * Deoplys a given number of armies into a specified country

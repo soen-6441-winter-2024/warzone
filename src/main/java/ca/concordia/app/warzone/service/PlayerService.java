@@ -203,11 +203,14 @@ public class PlayerService {
         }
 
         DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
+        
         this.d_orders.get(this.d_currentRound).add(deployOrder);
         player.setNumberOfReinforcements(player.getNumberOfReinforcements() - d_numberOfReinforcements);
 
+        // changes from here
         if (player.getNumberOfReinforcements() == 0) {
             this.currentPlayerGivingOrder++;
+            
             if (this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
                 OrdersService ordersService = new OrdersService(d_countryService);
                 ordersService.setOrders(this.d_orders);
