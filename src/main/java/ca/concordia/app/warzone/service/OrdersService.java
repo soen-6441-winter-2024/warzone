@@ -1,8 +1,10 @@
 package ca.concordia.app.warzone.service;
 
+import ca.concordia.app.warzone.logging.LoggingService;
 import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import org.springframework.stereotype.Service;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class OrdersService {
     public void executeOrders() {
         List<Order> roundOrders = d_orders.get(d_currentRound);
         for (Order order : roundOrders) {
+            LoggingService.log("Executing Order from Player: " + order.getPlayer());
             executeOrder(order);
         }
     }

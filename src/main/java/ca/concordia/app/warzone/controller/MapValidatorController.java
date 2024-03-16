@@ -1,13 +1,11 @@
 package ca.concordia.app.warzone.controller;
 
-import ca.concordia.app.warzone.console.dto.ContinentDto;
-import ca.concordia.app.warzone.console.dto.CountryDto;
-import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 /**
  * Controller class for managing map editing operations.
@@ -41,6 +39,8 @@ public class MapValidatorController {
      * @return the result of the operation
      */
     public String validateMap() {
-        return d_mapService.validate();
+        String result = d_mapService.validate();
+        LoggingService.log(result);
+        return result;
     }
 }
