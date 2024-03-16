@@ -41,8 +41,6 @@ public class DeployCommand extends Command {
             throw new InvalidCommandException("reinforcement armies param not a valid number");
         }
 
-        d_gameEngineController.deploy(countryId, reinforcementArmies);
-
-        return null;
+        return d_gameEngineController.deploy(countryId, reinforcementArmies);
     }
 }
