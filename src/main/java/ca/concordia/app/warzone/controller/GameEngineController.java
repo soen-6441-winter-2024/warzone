@@ -4,7 +4,11 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.model.Continent;
+import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.repository.ContinentRepository;
+import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -54,7 +58,19 @@ public class GameEngineController {
      */
     private final PhaseRepository d_phaseRepository;
 
+    private CountryRepository d_repoCountry; // Data member for the CountryRepository
+
+    /**
+     * Data member for storing the ContinentRepository, for fetching and storing
+     * continents.
+     */
+    private ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+
+
     private final PlayerCardService d_playerCardService;
+
+    private final List<Continent> allContinents = d_repoContinent.findAll();
+
 
     /**
      * Constructs a GameEngineController with the specified services.
@@ -67,7 +83,7 @@ public class GameEngineController {
      * @param p_phaseRepository  The PhaseRepository to use.
      * @param p_PlayerCardService  The PlayerCardService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_repoContinent) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
@@ -75,6 +91,7 @@ public class GameEngineController {
         this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
+        this.d_repoContinent = p_repoContinent;
     }
 
     /**
@@ -222,5 +239,8 @@ public class GameEngineController {
 
         System.out.println("Time to give deploy orders");
         d_playerService.askForDeployOrder();
+        this.d_mapService.getContinentSize(allContinents);
+
+        this.d_playerCardService.newContinentConquered();
     }
 }

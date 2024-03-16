@@ -520,4 +520,23 @@ public class MapService {
         }
         return l_total;
     }
+
+    public void getContinentSize(List<Continent> allContinents){
+
+        for(Continent continent : allContinents){
+
+            int sizeOfContinent = getCountriesByContinentId(continent.getId());
+            continent.setSizeOfContinent(sizeOfContinent);
+        }
+    }
+    public int getCountriesByContinentId(String continentId){
+        List<Country> l_allCountries = d_repoCountry.findAll();
+        int sizeOfContinent = 0;
+        for(Country country : l_allCountries){
+            if(country.getContinent().getId().equals(continentId)){
+                sizeOfContinent++;
+            }
+        }
+        return  sizeOfContinent;
+    }
 }

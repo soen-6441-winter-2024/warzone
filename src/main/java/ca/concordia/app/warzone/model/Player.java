@@ -12,6 +12,7 @@ public class Player implements Entity {
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
 
+    private List<String> d_continentsConquered;
     /**
      *  Data member for cards received by player
      */
@@ -25,6 +26,7 @@ public class Player implements Entity {
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
+        this.d_continentsConquered = new ArrayList<String>();
     }
 
     /**
@@ -79,6 +81,10 @@ public class Player implements Entity {
     public List<Country> getCountriesAssigned(){
         return d_countriesAssigned;
     }
+
+    public void addContinentsConquered(String ContinentId){
+        d_continentsConquered.add(ContinentId);
+    };
 
     /**
      * Sets the list of countries assigned to the player.
