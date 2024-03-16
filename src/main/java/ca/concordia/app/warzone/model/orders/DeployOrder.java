@@ -1,5 +1,6 @@
-package ca.concordia.app.warzone.model;
+package ca.concordia.app.warzone.model.orders;
 
+import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.service.CountryService;
 
 /**

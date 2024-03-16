@@ -1,8 +1,9 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.logging.LoggingService;
-import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
+
 import org.springframework.stereotype.Service;
 import ca.concordia.app.warzone.logging.LoggingService;
 

@@ -6,6 +6,7 @@ import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -24,14 +25,14 @@ public class GameEngineController {
     /**
      * Data member for storing orders.
      */
-    List<List<Order>> d_orders;
+    // List<List<Order>> d_orders;
 
-    /**
-     * Data member for storing the current round number.
-     */
-    private int d_currentRound;
+    // /**
+    //  * Data member for storing the current round number.
+    //  */
+    private int d_currentRound = 0;
 
-    private int currentPlayerGivingOrder;
+    private int currentPlayerGivingOrder = 0;
 
     /**
      * ContinentService for continent-related operations
@@ -168,7 +169,7 @@ public class GameEngineController {
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
         this.startGameLoop();
-        return "";
+        return "Countries Assigned. Let's Play!";
     }
 
     /**
@@ -182,7 +183,6 @@ public class GameEngineController {
             LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
-
         this.d_playerService.addDeployOrder(countryId, numOfReinforcements);
         return "";
     }
@@ -206,32 +206,25 @@ public class GameEngineController {
     }
 
     /**
-     * assigns reinforcement to player
-     * @throws NotFoundException when players aren't found
-     */
-
-    public void assignReinforcements() throws NotFoundException{
-        d_playerService.assignReinforcements();
-    }
-
-    /**
      * Starts the game loop.
      *
      * @throws NotFoundException when players aren't found
      */
     public void startGameLoop() throws NotFoundException {
-        this.d_currentRound = 0;
-
-        // Assign reinforcements
-        this.assignReinforcements();
-
-        this.d_orders = new ArrayList<>();
-        this.d_orders.add(new ArrayList<>());
-
-        this.currentPlayerGivingOrder = 0;
+        this.d_playerService.startGame();
 
         System.out.println("Time to give deploy orders");
         LoggingService.log("Time to give deploy orders");
         d_playerService.askForDeployOrder();
+
+        /**
+         * create finishorder command for players to end issue order their issue order phase
+         * 
+         * 
+         * iterate over all the players and ask them for their orders
+         *  player.issue_orders()
+         * 
+         * once the last player gives his orders we excute
+         */
     }
 }
