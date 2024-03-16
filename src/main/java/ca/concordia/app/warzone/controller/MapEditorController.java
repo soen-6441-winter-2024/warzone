@@ -8,6 +8,7 @@ import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
 import org.springframework.stereotype.Component;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 /**
  * Controller class for managing map editing operations.
@@ -42,13 +43,15 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String addContinent(ContinentDto p_continentDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_continentService.add(p_continentDto);
+            result =  d_continentService.add(p_continentDto);
         } else {
-            return "Invalid Phase";
+            result = "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
-
     /**
      * Deletes a continent from the map.
      *
@@ -56,11 +59,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteContinent(String p_continentId) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_continentService.delete(p_continentId);
+            result =  d_continentService.delete(p_continentId);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -70,11 +76,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String addCountry(CountryDto p_countryDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_countryService.add(p_countryDto);
+            result =  d_countryService.add(p_countryDto);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -84,11 +93,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteCountry(String p_countryId) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_countryService.delete(p_countryId);
+            result =  d_countryService.delete(p_countryId);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -98,11 +110,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String addNeighbor(CountryDto p_neighborDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_countryService.addNeighbor(p_neighborDto);
+            result =  d_countryService.addNeighbor(p_neighborDto);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -112,11 +127,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteNeighbor(CountryDto p_neighborDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_countryService.deleteNeighbor(p_neighborDto);
+            result =  d_countryService.deleteNeighbor(p_neighborDto);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -126,11 +144,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String saveMap(MapDto p_mapDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_mapService.saveMap(p_mapDto);
+            result =  d_mapService.saveMap(p_mapDto);
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -140,13 +161,15 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String loadMap(MapDto p_mapDto) {
+        String result = "";
         if (!Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-             String result = d_mapService.loadMap(p_mapDto);
+             result = d_mapService.loadMap(p_mapDto);
              this.d_phaseRepository.setPhase(Phase.STARTUP);
-             return result;
         } else {
-            return "Invalid Phase";
+            result =  "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -156,11 +179,14 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String editMap(MapDto p_mapDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            return d_mapService.editMap(p_mapDto);
+            result = d_mapService.editMap(p_mapDto);
         } else {
-            return "Invalid Phase";
+            result = "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -169,6 +195,8 @@ public class MapEditorController {
      * @return the result of the operation
      */
     public String showMap() {
-        return d_mapService.showMap();
+        String result = d_mapService.showMap();
+        LoggingService.log(result);
+        return result;
     }
 }

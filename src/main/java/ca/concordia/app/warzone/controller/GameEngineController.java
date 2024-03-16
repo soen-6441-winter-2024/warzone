@@ -9,6 +9,7 @@ import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,11 +85,14 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addContinent(ContinentDto p_continentDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(this.d_phaseRepository.getPhase())) {
-            return d_continentService.add(p_continentDto);
+            result = d_continentService.add(p_continentDto);
         } else {
-            return "Invalid Phase";
+            result = "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -132,6 +136,7 @@ public class GameEngineController {
      */
     public String addPlayer(PlayerDto p_playerDto) {
         String playerName = p_playerDto.getPlayerName();
+        LoggingService.log(playerName);
         return d_playerService.add(p_playerDto);
     }
 
@@ -142,7 +147,9 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String removePlayer(String p_playerName) {
-        return d_playerService.remove(p_playerName);
+        String result = d_playerService.remove(p_playerName);
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -152,6 +159,7 @@ public class GameEngineController {
      */
     public String assignCountries() throws NotFoundException {
         if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
+            LoggingService.log("game not in startup phase");
             throw new InvalidCommandException("game not in startup phase");
         }
 
@@ -170,6 +178,7 @@ public class GameEngineController {
      */
     public String deploy(String countryId, int numOfReinforcements) {
         if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+            LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
 
@@ -191,7 +200,7 @@ public class GameEngineController {
         };
 
         this.d_phaseRepository.setPhase(nextPhase);
-
+        LoggingService.log("Current phase is " + nextPhase);
         return "Current phase is " + nextPhase;
     }
 
@@ -221,6 +230,7 @@ public class GameEngineController {
         this.currentPlayerGivingOrder = 0;
 
         System.out.println("Time to give deploy orders");
+        LoggingService.log("Time to give deploy orders");
         d_playerService.askForDeployOrder();
     }
 }

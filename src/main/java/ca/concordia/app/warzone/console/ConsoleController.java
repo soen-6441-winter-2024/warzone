@@ -3,10 +3,10 @@ package ca.concordia.app.warzone.console;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.commands.CommandFactory;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.controller.Phase;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -62,15 +62,18 @@ public class ConsoleController implements CommandLineRunner {
             System.out.print("> ");
             fullCommand = scanner.nextLine();
             if (fullCommand.isEmpty()) {
+                LoggingService.log("Command is empty, You must provide a command");
                 System.out.println("You must provide a command");
                 continue;
             }
 
             try {
+                LoggingService.log("fullCommand: " + fullCommand);
                 Command command = getCommand(fullCommand);
                 String[] options = getOptions(fullCommand);
                 System.out.println(command.run(options));;
             } catch (InvalidCommandException e) {
+                LoggingService.log("Exception: " + e.getMessage());
                 System.out.println("Invalid command provided: " + e.getMessage());
             }
 
@@ -100,4 +103,5 @@ public class ConsoleController implements CommandLineRunner {
         String firstCommand = splittedFullCommand[0];
         return d_commandFactory.newCommand(firstCommand);
     }
+
 }
