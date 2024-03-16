@@ -19,6 +19,9 @@ public abstract class Phase {
     abstract public String removeContinent(String p_continentId);
     abstract public String addCountry(CountryDto p_dto);
     abstract public String removeCountry(String p_countryId);
+    abstract public String addNeighbor(CountryDto p_dto);
+
+    abstract public String removeNeighbor(CountryDto p_dto);
 }
 
 

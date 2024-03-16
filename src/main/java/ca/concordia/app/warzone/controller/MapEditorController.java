@@ -106,12 +106,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String addNeighbor(CountryDto p_neighborDto) {
-        String result = "";
-        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
-            result =  d_countryService.addNeighbor(p_neighborDto);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = d_phaseRepository.getPhase().addNeighbor(p_neighborDto);
         LoggingService.log(result);
         return result;
     }

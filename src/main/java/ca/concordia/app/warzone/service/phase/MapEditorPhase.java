@@ -62,4 +62,14 @@ public class MapEditorPhase extends Phase {
     public String removeCountry(String p_countryId) {
         return this.d_countryService.delete(p_countryId);
     }
+
+    @Override
+    public String addNeighbor(CountryDto p_dto) {
+        return this.d_countryService.addNeighbor(p_dto);
+    }
+
+    @Override
+    public String removeNeighbor(CountryDto p_dto) {
+        return this.d_countryService.deleteNeighbor(p_dto);
+    }
 }

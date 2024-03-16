@@ -16,18 +16,22 @@ public class GamePhase extends Phase {
         return null;
     }
 
+    @Override
     public String editMap(MapDto p_mapDto) {
         return null;
     }
 
+    @Override
     public String showMap() {
         return "Implement me";
     }
 
+    @Override
     public String saveMap(MapDto p_dto) {
         return "Invalid phase";
     }
 
+    @Override
     public String addContinent(ContinentDto p_continentDto) {
         return  "Invalid phase";
     }
@@ -37,7 +41,23 @@ public class GamePhase extends Phase {
         return "Invalid phase";
     }
 
+    @Override
     public String addCountry(CountryDto p_dto) {
+        return "Invalid phase";
+    }
+
+    @Override
+    public String removeCountry(String p_countryId) {
+        return "Invalid phase";
+    }
+
+    @Override
+    public String addNeighbor(CountryDto p_dto) {
+        return "Invalid phase";
+    }
+
+    @Override
+    public String removeNeighbor(CountryDto p_dto) {
         return "Invalid phase";
     }
 }
