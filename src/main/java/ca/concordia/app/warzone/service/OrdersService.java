@@ -1,8 +1,9 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.logging.LoggingService;
-import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
+
 import org.springframework.stereotype.Service;
 import ca.concordia.app.warzone.logging.LoggingService;
 
@@ -62,11 +63,7 @@ public class OrdersService {
      */
     private void executeOrder(Order p_order) {
         if (p_order instanceof DeployOrder) {
-            String countryId = ((DeployOrder) p_order).getCountryId();
-            int number = ((DeployOrder) p_order).getNumber();
-            // Add the reinforcements to the country
-            System.out.println("Adding " + number + " armies to country " + countryId);
-            this.d_countryService.addArmiesToCountry(countryId, number);
+            ((DeployOrder)p_order).execute(p_order, d_countryService);
         }
     }
 }

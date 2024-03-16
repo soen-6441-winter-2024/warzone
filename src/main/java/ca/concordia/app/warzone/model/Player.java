@@ -11,6 +11,7 @@ public class Player implements Entity {
     private int d_playerID; // Data member for player ID
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
+    private List<List<Order>> d_playerOrders;
 
     /**
      *  Data member for cards received by player
@@ -25,6 +26,7 @@ public class Player implements Entity {
     public Player(){
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
+        this.d_playerOrders = new ArrayList<>();
     }
 
     /**
@@ -132,5 +134,22 @@ public class Player implements Entity {
      */
     public void setId(String p_id) {
         this.d_playerName = p_id;
+    }
+
+    /**
+     * Returns the list of orders player has issue for the currentTurn
+     * @param currentTurn
+     * @return
+     */
+    public List<Order> getPlayerCurrentTurnOrders(int currentTurn) {
+        return this.d_playerOrders.get(currentTurn);
+    }
+
+    /**
+     * Sets the list of orders a player has issued in a turn
+     * @param turnOrders
+     */
+    public void issueOrder(Order order, int turn) {
+        this.d_playerOrders.get(turn).add(order);
     }
 }

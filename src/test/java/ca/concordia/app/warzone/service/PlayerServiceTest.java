@@ -3,7 +3,6 @@ package ca.concordia.app.warzone.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
-import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.ContinentService;
