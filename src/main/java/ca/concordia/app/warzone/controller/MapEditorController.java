@@ -60,12 +60,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteContinent(String p_continentId) {
-        String result = "";
-        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
-            result =  d_continentService.delete(p_continentId);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().removeContinent(p_continentId);
         LoggingService.log(result);
         return result;
     }
@@ -174,12 +169,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String editMap(MapDto p_mapDto) {
-        String result = "";
-        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
-            result = d_mapService.editMap(p_mapDto);
-        } else {
-            result = "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().editMap(p_mapDto);
         LoggingService.log(result);
         return result;
     }
@@ -190,7 +180,7 @@ public class MapEditorController {
      * @return the result of the operation
      */
     public String showMap() {
-        String result = d_mapService.showMap();
+        String result = this.d_phaseRepository.getPhase().showMap();
         LoggingService.log(result);
         return result;
     }

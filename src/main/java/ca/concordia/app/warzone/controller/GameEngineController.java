@@ -76,6 +76,8 @@ public class GameEngineController {
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
+
+        this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService));
     }
 
     /**
@@ -85,12 +87,7 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addContinent(ContinentDto p_continentDto) {
-        String result = "";
-        if (this.d_phaseRepository.getPhase() instanceof MapEditorPhase) {
-            result = d_continentService.add(p_continentDto);
-        } else {
-            result = "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().addContinent(p_continentDto);
         LoggingService.log(result);
         return result;
     }
@@ -124,8 +121,7 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addCountry(CountryDto p_dto) {
-        d_countryService.add(p_dto);
-        return "Country " + p_dto.getId() + " added";
+        return this.d_phaseRepository.getPhase().addCountry(p_dto);
     }
 
     /**
