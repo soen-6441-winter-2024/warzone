@@ -1,17 +1,12 @@
 package ca.concordia.app.warzone.console;
 
-import ca.concordia.app.warzone.console.commands.Command;
-import ca.concordia.app.warzone.console.commands.CommandFactory;
-import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ca.concordia.app.warzone.logging.LoggingService;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Controller for handling commands from the console.
+ * Component that implements the runner to handle commands from the console.
  */
 @Component
 public class ConsoleRunner implements CommandLineRunner {
@@ -27,10 +22,13 @@ public class ConsoleRunner implements CommandLineRunner {
         type 'help' to show available commands
         """;
 
-    private CommandDispatcher d_commandDispatcher;
+    /**
+     * Dispatcher component to handle full commands from the console
+     */
+    private final CommandDispatcher d_commandDispatcher;
 
     /**
-     * Constructs a ConsoleController with the specified CommandFactory.
+     * Constructs a ConsoleController with the specified Command Dispatcher.
      *
      * @param p_commandDispatcher The CommandFactory to use.
      */

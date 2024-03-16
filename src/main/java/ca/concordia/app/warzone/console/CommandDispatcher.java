@@ -8,11 +8,22 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * Dispatcher Component that receive full line commands from console and process them using the command factory
+ */
 @Component
 public class CommandDispatcher {
 
+    /**
+     * Command factory to use
+     */
     private final CommandFactory d_commandFactory;
 
+    /**
+     * Constructor of the dispatcher component
+     *
+     * @param d_commandFactory Command factory that will be attached to this component
+     */
     public CommandDispatcher(CommandFactory d_commandFactory) {
         this.d_commandFactory = d_commandFactory;
     }
