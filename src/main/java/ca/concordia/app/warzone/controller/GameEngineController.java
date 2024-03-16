@@ -10,10 +10,7 @@ import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
-import ca.concordia.app.warzone.service.phase.GameIssueDeployPhase;
-import ca.concordia.app.warzone.service.phase.GameStartupPhase;
-import ca.concordia.app.warzone.service.phase.MapEditorPhase;
-import ca.concordia.app.warzone.service.phase.Phase;
+import ca.concordia.app.warzone.service.phase.*;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
 
@@ -67,7 +64,6 @@ public class GameEngineController {
      * @param p_countryService    The CountryService to use.
      * @param p_playerService     The PlayerService to use.
      * @param p_mapService        The MapService to use.
-     * @param p_ordersService     The CountryService to be used
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
      */
@@ -201,7 +197,7 @@ public class GameEngineController {
      * @return state of issuing an advance order.
      */
     public String advance() {
-        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+        if ( !(this.d_phaseRepository.getPhase() instanceof GamePhase) ) {
             LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
