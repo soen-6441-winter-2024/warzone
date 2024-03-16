@@ -5,14 +5,15 @@ import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Continent;
-import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.ContinentRepository;
-import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,12 @@ public class GameEngineController {
      */
     List<List<Order>> d_orders;
 
-    /**
-     * Data member for storing the current round number.
-     */
-    private int d_currentRound;
+     /**
+      * Data member for storing the current round number.
+      */
+    private int d_currentRound = 0;
 
-    private int currentPlayerGivingOrder;
+    private int currentPlayerGivingOrder = 0;
 
     /**
      * ContinentService for continent-related operations
@@ -58,19 +59,9 @@ public class GameEngineController {
      */
     private final PhaseRepository d_phaseRepository;
 
-    private CountryRepository d_repoCountry; // Data member for the CountryRepository
-
-    /**
-     * Data member for storing the ContinentRepository, for fetching and storing
-     * continents.
-     */
-    private ContinentRepository d_repoContinent; // Data member for the ContinentRepository
-
-
     private final PlayerCardService d_playerCardService;
 
-    private final List<Continent> allContinents = d_repoContinent.findAll();
-
+    private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
     /**
      * Constructs a GameEngineController with the specified services.
@@ -83,7 +74,7 @@ public class GameEngineController {
      * @param p_phaseRepository  The PhaseRepository to use.
      * @param p_PlayerCardService  The PlayerCardService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_repoContinent) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_RepoContinent) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
@@ -91,7 +82,7 @@ public class GameEngineController {
         this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
-        this.d_repoContinent = p_repoContinent;
+        this.d_repoContinent = p_RepoContinent;
     }
 
     /**
@@ -101,11 +92,14 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addContinent(ContinentDto p_continentDto) {
+        String result = "";
         if (Phase.MAP_EDITOR.equals(this.d_phaseRepository.getPhase())) {
-            return d_continentService.add(p_continentDto);
+            result = d_continentService.add(p_continentDto);
         } else {
-            return "Invalid Phase";
+            result = "Invalid Phase";
         }
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -149,6 +143,7 @@ public class GameEngineController {
      */
     public String addPlayer(PlayerDto p_playerDto) {
         String playerName = p_playerDto.getPlayerName();
+        LoggingService.log(playerName);
         return d_playerService.add(p_playerDto);
     }
 
@@ -159,7 +154,9 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String removePlayer(String p_playerName) {
-        return d_playerService.remove(p_playerName);
+        String result = d_playerService.remove(p_playerName);
+        LoggingService.log(result);
+        return result;
     }
 
     /**
@@ -169,6 +166,7 @@ public class GameEngineController {
      */
     public String assignCountries() throws NotFoundException {
         if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
+            LoggingService.log("game not in startup phase");
             throw new InvalidCommandException("game not in startup phase");
         }
 
@@ -176,7 +174,7 @@ public class GameEngineController {
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
         this.startGameLoop();
-        return "";
+        return "Countries Assigned. Let's Play!";
     }
 
     /**
@@ -187,6 +185,7 @@ public class GameEngineController {
      */
     public String deploy(String countryId, int numOfReinforcements) {
         if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+            LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
 
@@ -236,8 +235,10 @@ public class GameEngineController {
         this.d_orders.add(new ArrayList<>());
 
         this.currentPlayerGivingOrder = 0;
+        List<Continent> allContinents = d_repoContinent.findAll();
 
         System.out.println("Time to give deploy orders");
+        LoggingService.log("Time to give deploy orders");
         d_playerService.askForDeployOrder();
         this.d_mapService.getContinentSize(allContinents);
 

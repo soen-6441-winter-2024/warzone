@@ -1,7 +1,8 @@
 package ca.concordia.app.warzone.service;
 
-import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

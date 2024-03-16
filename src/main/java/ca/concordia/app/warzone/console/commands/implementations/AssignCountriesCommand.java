@@ -33,6 +33,7 @@ public class AssignCountriesCommand extends Command {
         try {
             d_gameEngineController.assignCountries();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return "Something went wrong assigning countries";
         }
 

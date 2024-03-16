@@ -5,11 +5,12 @@ import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
-import ca.concordia.app.warzone.model.DeployOrder;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
+import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,6 +106,7 @@ public class PlayerService {
      * @param p_player the player object to be updated
      */
     public void updatePlayer(Player p_player) {
+        LoggingService.log("Updating Player: Id" +  p_player.getId() + " name: " + p_player.getPlayerName());
         this.d_repository.save(p_player);
     }
 
@@ -132,6 +134,7 @@ public class PlayerService {
      * @return an Optional containing the player if found, empty otherwise
      */
     public Optional<Player> findByName(String p_playerName) {
+        LoggingService.log("Finding Player: name: " + p_playerName);
         return d_repository.findById(p_playerName);
     }
 
@@ -145,6 +148,7 @@ public class PlayerService {
         for (Player player : playerList) {
             int reinforcementsForPlayer = this.getReinforcementsForPlayer(player.getPlayerName());
             player.setNumberOfReinforcements(reinforcementsForPlayer);
+            LoggingService.log("Assigning " + String.valueOf(reinforcementsForPlayer) + " to the player: "+ player.getPlayerName());
         }
     }
 
@@ -158,6 +162,7 @@ public class PlayerService {
     private int getReinforcementsForPlayer(String p_playerName) throws NotFoundException {
         Optional<Player> playerOpt = this.findByName(p_playerName);
         if(playerOpt.isEmpty()) {
+            LoggingService.log("player not found");
             throw new NotFoundException("player not found");
         }
 
@@ -183,7 +188,15 @@ public class PlayerService {
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
+    public void startGame() throws NotFoundException {
+        this.d_currentRound = 0;
+        this.currentPlayerGivingOrder = 0;
 
+        this.d_orders = new ArrayList<>();
+        this.d_orders.add(new ArrayList<>());
+
+        this.assignReinforcements();
+    }
 
     /**
      * Adds a deploy order for a player.
@@ -192,31 +205,56 @@ public class PlayerService {
      * @param d_numberOfReinforcements the number of armies to deploy
      * @throws InvalidCommandException if the player does not own the country or does not have enough reinforcements
      */
-    public void addDeployOrder(String d_countryId, int d_numberOfReinforcements) throws InvalidCommandException {
+    public void addDeployOrder(String d_countryId, int d_numberOfReinforcements) throws InvalidCommandException {        
         Player player = this.getAllPlayers().get(this.currentPlayerGivingOrder);
         if (!player.ownsCountry(d_countryId)) {
+            LoggingService.log("player does not own country");
             throw new InvalidCommandException("player does not own country");
         }
 
         if (d_numberOfReinforcements > player.getNumberOfReinforcements()) {
+            LoggingService.log("player does not have enough reinforcements");
             throw new InvalidCommandException("player does not have enough reinforcements");
         }
 
         DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
+
         this.d_orders.get(this.d_currentRound).add(deployOrder);
-        player.setNumberOfReinforcements(player.getNumberOfReinforcements() - d_numberOfReinforcements);
+        int numberOfReinforcements = player.getNumberOfReinforcements() - d_numberOfReinforcements;
+        player.setNumberOfReinforcements(numberOfReinforcements);
+
+        LoggingService.log("player: " + player.getPlayerName() + " set number of reinforcements: " + numberOfReinforcements);
 
         if (player.getNumberOfReinforcements() == 0) {
             this.currentPlayerGivingOrder++;
+            
             if (this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
                 OrdersService ordersService = new OrdersService(d_countryService);
                 ordersService.setOrders(this.d_orders);
                 ordersService.executeOrders();
+                LoggingService.log("Executing Orders");
                 return;
             }
         }
 
         this.askForDeployOrder();
+    }
+
+    public void addDeployOrderToCurrentPlayer(String d_countryId, int d_numberOfReinforcements, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+        if (!player.ownsCountry(d_countryId)) {
+            LoggingService.log("player does not own country");
+            throw new InvalidCommandException("player does not own country");
+        }
+
+        if (d_numberOfReinforcements > player.getNumberOfReinforcements()) {
+            LoggingService.log("player does not have enough reinforcements");
+            throw new InvalidCommandException("player does not have enough reinforcements");
+        }
+
+        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
+        
+        player.issueOrder(deployOrder, gameTurn);
     }
 
     /**
@@ -225,10 +263,9 @@ public class PlayerService {
     public void askForDeployOrder() {
         List<Player> players = this.getAllPlayers();
         Player player = players.get(this.currentPlayerGivingOrder);
+        LoggingService.log("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
         System.out.println("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
     }
-
-
 
     /**
      * Assigns countries to players at the start of the game.
@@ -249,6 +286,7 @@ public class PlayerService {
             for (int j = 0; j < minCountriesPerPlayer; j++) {
                 player.addCountry(countries.get(i));
                 this.updatePlayer(player);
+                LoggingService.log(player.getPlayerName() + " was assigned " + countries.get(i));
                 System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
                 i++;
             }
@@ -259,6 +297,7 @@ public class PlayerService {
             Player player = players.get(j);
             player.addCountry(countries.get(i));
             this.updatePlayer(player);
+            LoggingService.log(player.getPlayerName() + " was assigned " + countries.get(i));
             System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
             i++;
         }
