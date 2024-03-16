@@ -28,11 +28,10 @@ public class GameEngineController {
     // List<List<Order>> d_orders;
 
     // /**
-    //  * Data member for storing the current round number.
-    //  */
-    private int d_currentRound = 0;
-
-    private int currentPlayerGivingOrder = 0;
+    // * Data member for storing the current round number.
+    // */
+    private int d_currentRound;
+    private int d_currentPlayerGivingOrder;
 
     /**
      * ContinentService for continent-related operations
@@ -50,8 +49,6 @@ public class GameEngineController {
      * MapService for map-related operations
      */
     private final MapService d_mapService;
-
-    private final OrdersService d_ordersService;
     /**
      * PhaseRepository for fetching and setting the current game phase
      */
@@ -62,20 +59,21 @@ public class GameEngineController {
     /**
      * Constructs a GameEngineController with the specified services.
      *
-     * @param p_continentService The ContinentService to use.
-     * @param p_countryService   The CountryService to use.
-     * @param p_playerService    The PlayerService to use.
-     * @param p_mapService       The MapService to use.
-     * @param p_ordersService    The CountryService to be used
-     * @param p_phaseRepository  The PhaseRepository to use.
-     * @param p_PlayerCardService  The PlayerCardService to use.
+     * @param p_continentService  The ContinentService to use.
+     * @param p_countryService    The CountryService to use.
+     * @param p_playerService     The PlayerService to use.
+     * @param p_mapService        The MapService to use.
+     * @param p_ordersService     The CountryService to be used
+     * @param p_phaseRepository   The PhaseRepository to use.
+     * @param p_PlayerCardService The PlayerCardService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
+            PlayerService p_playerService, MapService p_mapService,
+            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
         this.d_mapService = p_mapService;
-        this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
     }
@@ -156,6 +154,7 @@ public class GameEngineController {
 
     /**
      * Randomly assigns the countries to the players
+     * 
      * @return the result of the operation
      * @throws NotFoundException when countries aren't found
      */
@@ -168,13 +167,16 @@ public class GameEngineController {
         this.d_playerService.assignCountries();
         this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
 
+        System.out.println("\nCountries Assigned. Let's Play!");
+
         this.startGameLoop();
-        return "Countries Assigned. Let's Play!";
+        return "";
     }
 
     /**
-     * Deoplys a given number of armies into a specified country
-     * @param countryId the id of the country
+     * Deploys a given number of armies into a specified country
+     * 
+     * @param countryId           the id of the country
      * @param numOfReinforcements the number of reinforcement armies to deploy
      * @return the result of the operation
      */
@@ -183,8 +185,60 @@ public class GameEngineController {
             LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
-        this.d_playerService.addDeployOrder(countryId, numOfReinforcements);
+
+        return this.d_playerService.addDeployOrderToCurrentPlayer(countryId, numOfReinforcements,
+                d_currentPlayerGivingOrder, d_currentRound);
+
+    }
+
+    /**
+     * Issues an order to advance on a country.
+     * @return state of issuing an advance order.
+     */
+    public String advance() {
+        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+            LoggingService.log("game is not in game loop phase");
+            throw new InvalidCommandException("game is not in game loop phase");
+        }
+
+        // call addAdvanceOrder method on player service
         return "";
+    }
+
+    /**
+     * Notifies the game engine that a player has issued all their orders for the current round. 
+     * if the notifying player is the last player of the game, then the orders are executed and the next round is started.
+     * @return state of the current turn
+     * @throws NotFoundException
+     */
+    public String turnOrdersComplete() throws NotFoundException {
+        // all players have given their orders for the current round, now we execute all
+        // orders
+        if ((this.d_currentPlayerGivingOrder + 1) == this.d_playerService.getAllPlayers().size()) {
+            System.out.println("\nExecuting orders for round " + (this.d_currentRound + 1));
+            executeTurnOrders(this.d_currentRound);
+
+            // next round
+            this.d_currentRound++;
+            // reset back to player 1 for the next turn of orders
+            this.d_currentPlayerGivingOrder = 0;
+
+            // assign reinforcement for next round
+            this.d_playerService.assignReinforcements();
+
+            System.out.println("\n------------------------------\n" 
+            + "\tNext Round" + "\n------------------------------\n");
+            
+            this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
+            return "";
+        }
+        // next player can issue their orders
+        else {
+            this.d_currentPlayerGivingOrder++;
+            this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
+
+            return "";
+        }
     }
 
     /**
@@ -211,20 +265,28 @@ public class GameEngineController {
      * @throws NotFoundException when players aren't found
      */
     public void startGameLoop() throws NotFoundException {
-        this.d_playerService.startGame();
+        // assigns reinforcement to players for the first round.
+        this.d_playerService.assignReinforcements();
 
-        System.out.println("Time to give deploy orders");
+        this.d_currentRound = 0;
+        this.d_currentPlayerGivingOrder = 0;
+
         LoggingService.log("Time to give deploy orders");
-        d_playerService.askForDeployOrder();
+        d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
+    }
 
-        /**
-         * create finishorder command for players to end issue order their issue order phase
-         * 
-         * 
-         * iterate over all the players and ask them for their orders
-         *  player.issue_orders()
-         * 
-         * once the last player gives his orders we excute
-         */
+    /**
+     * Executes the order for the current turn following the command design pattern
+     * 
+     * @param p_currentRound the current round of the game
+     */
+    public void executeTurnOrders(int p_currentRound) {
+        List<Player> players = this.d_playerService.getAllPlayers();
+
+        for (Player player : players) {
+            for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
+                order.execute();
+            }
+        }
     }
 }
