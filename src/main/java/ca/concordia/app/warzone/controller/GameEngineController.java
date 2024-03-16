@@ -10,6 +10,10 @@ import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
+import ca.concordia.app.warzone.service.phase.GameIssueDeployPhase;
+import ca.concordia.app.warzone.service.phase.GameStartupPhase;
+import ca.concordia.app.warzone.service.phase.MapEditorPhase;
+import ca.concordia.app.warzone.service.phase.Phase;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
 
@@ -88,7 +92,7 @@ public class GameEngineController {
      */
     public String addContinent(ContinentDto p_continentDto) {
         String result = "";
-        if (Phase.MAP_EDITOR.equals(this.d_phaseRepository.getPhase())) {
+        if (this.d_phaseRepository.getPhase() instanceof MapEditorPhase) {
             result = d_continentService.add(p_continentDto);
         } else {
             result = "Invalid Phase";
@@ -160,13 +164,14 @@ public class GameEngineController {
      * @throws NotFoundException when countries aren't found
      */
     public String assignCountries() throws NotFoundException {
-        if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
+        if (this.d_phaseRepository.getPhase() instanceof GameStartupPhase) {
             LoggingService.log("game not in startup phase");
             throw new InvalidCommandException("game not in startup phase");
         }
 
+
         this.d_playerService.assignCountries();
-        this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
+        this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
 
         this.startGameLoop();
         return "Countries Assigned. Let's Play!";
@@ -179,7 +184,7 @@ public class GameEngineController {
      * @return the result of the operation
      */
     public String deploy(String countryId, int numOfReinforcements) {
-        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+        if (this.d_phaseRepository.getPhase() instanceof GameIssueDeployPhase) {
             LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
@@ -194,11 +199,7 @@ public class GameEngineController {
      */
     public String nextPhase() {
 
-        Phase nextPhase = switch (d_phaseRepository.getPhase()) {
-            case MAP_EDITOR -> Phase.STARTUP;
-            case STARTUP -> Phase.GAME_PLAY;
-            default -> Phase.GAME_LOOP;
-        };
+        Phase nextPhase =  d_phaseRepository.getPhase().next();
 
         this.d_phaseRepository.setPhase(nextPhase);
         LoggingService.log("Current phase is " + nextPhase);
