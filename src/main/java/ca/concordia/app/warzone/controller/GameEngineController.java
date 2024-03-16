@@ -55,6 +55,8 @@ public class GameEngineController {
      */
     private final PhaseRepository d_phaseRepository;
 
+    private final PlayerCardService d_playerCardService;
+
     /**
      * Constructs a GameEngineController with the specified services.
      *
@@ -64,14 +66,16 @@ public class GameEngineController {
      * @param p_mapService       The MapService to use.
      * @param p_ordersService    The CountryService to be used
      * @param p_phaseRepository  The PhaseRepository to use.
+     * @param p_PlayerCardService  The PlayerCardService to use.
      */
-    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository) {
+    public GameEngineController(ContinentService p_continentService, CountryService p_countryService, PlayerService p_playerService, MapService p_mapService, OrdersService p_ordersService, PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
         this.d_mapService = p_mapService;
         this.d_ordersService = p_ordersService;
         this.d_phaseRepository = p_phaseRepository;
+        this.d_playerCardService = p_PlayerCardService;
     }
 
     /**
@@ -159,17 +163,6 @@ public class GameEngineController {
         return "";
     }
 
-    // public void executeOrders() {
-    //     for (Player player : this.d_playerService.getAllPlayers()) {
-            
-    //         List<Order> orders = player.getOrders();
-            
-    //         for (Order order : orders) {
-    //             order.execute();
-    //         }
-    //     }
-    // }
-
     /**
      * Deoplys a given number of armies into a specified country
      * @param countryId the id of the country
@@ -205,7 +198,7 @@ public class GameEngineController {
 
     /**
      * assigns reinforcement to player
-     * @throws NotFoundException when players arent found
+     * @throws NotFoundException when players aren't found
      */
 
     public void assignReinforcements() throws NotFoundException{

@@ -37,7 +37,7 @@ public class DeployCommand extends Command {
         int reinforcementArmies = 0;
         try {
             reinforcementArmies = Integer.parseInt(reinforcementArmiesStr);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new InvalidCommandException("reinforcement armies param not a valid number");
         }
 

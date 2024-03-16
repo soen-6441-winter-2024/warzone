@@ -204,6 +204,14 @@ public class PlayerService {
 
         DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
         
+        System.out.println(this.d_orders.size());
+
+        try {
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
         this.d_orders.get(this.d_currentRound).add(deployOrder);
         player.setNumberOfReinforcements(player.getNumberOfReinforcements() - d_numberOfReinforcements);
 
