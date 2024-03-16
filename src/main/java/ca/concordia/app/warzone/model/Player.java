@@ -11,12 +11,18 @@ public class Player implements Entity {
     private int d_playerID; // Data member for player ID
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
+    /**
+     * A list of player's order for each round of the game.
+     */
     private List<List<Order>> d_playerOrders;
 
     /**
      *  Data member for cards received by player
      */
     public List<String> d_cardsReceived;
+    /**
+     * The number of reinforcement armies available to a player each round of the game
+     */
     private int numberOfReinforcementsAvailable;
 
     /**
@@ -149,7 +155,10 @@ public class Player implements Entity {
      * Sets the list of orders a player has issued in a turn
      * @param turnOrders
      */
-    public void issueOrder(Order order, int turn) {
-        this.d_playerOrders.get(turn).add(order);
+    public void issueOrder(Order order, int round) {
+        if(round == this.d_playerOrders.size()) {
+            this.d_playerOrders.add(new ArrayList<>());
+        }
+        this.d_playerOrders.get(round).add(order);
     }
 }

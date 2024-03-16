@@ -29,12 +29,12 @@ public class PlayerService {
      */
     List<List<Order>> d_orders;
 
-    /**
-     * Data member for storing the current round number.
-     */
-    private int d_currentRound;
+    // /**
+    //  * Data member for storing the current round number.
+    //  */
+    // private int d_currentRound;
 
-    private int currentPlayerGivingOrder;
+    // private int currentPlayerGivingOrder;
 
     /**
      * Default reinforcement number.
@@ -56,8 +56,6 @@ public class PlayerService {
      */
     private final MapService d_mapService;
 
-    private final OrdersService d_ordersService;
-
     /**
      * Service for continent-related operations
      */
@@ -73,11 +71,10 @@ public class PlayerService {
      * @param p_ordersService the CountryService to be used
      * @param p_continentService  the ContinentService to be used
      */
-    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, OrdersService p_ordersService, ContinentService p_continentService) {
+    public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, ContinentService p_continentService) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
-        this.d_ordersService = p_ordersService;
         this.d_continentService = p_continentService;
     }
 
@@ -183,88 +180,53 @@ public class PlayerService {
                 bonus += Integer.parseInt(continent.getValue());
         }
 
-
-
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
-    public void startGame() throws NotFoundException {
-        this.d_currentRound = 0;
-        this.currentPlayerGivingOrder = 0;
+    public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
 
-        this.d_orders = new ArrayList<>();
-        this.d_orders.add(new ArrayList<>());
-
-        this.assignReinforcements();
-    }
-
-    /**
-     * Adds a deploy order for a player.
-     *
-     * @param d_countryId              the ID of the country to deploy armies to
-     * @param d_numberOfReinforcements the number of armies to deploy
-     * @throws InvalidCommandException if the player does not own the country or does not have enough reinforcements
-     */
-    public void addDeployOrder(String d_countryId, int d_numberOfReinforcements) throws InvalidCommandException {        
-        Player player = this.getAllPlayers().get(this.currentPlayerGivingOrder);
-        if (!player.ownsCountry(d_countryId)) {
+        if (!player.ownsCountry(p_countryId)) {
             LoggingService.log("player does not own country");
             throw new InvalidCommandException("player does not own country");
         }
 
-        if (d_numberOfReinforcements > player.getNumberOfReinforcements()) {
+        if (p_numberOfReinforcements <= 0) {
+            LoggingService.log("Player entered invalid reinforcement armies number");
+            throw new InvalidCommandException("Invalid reinforcement armies number");
+        }
+
+        if (Math.abs(p_numberOfReinforcements) > player.getNumberOfReinforcements()) {
             LoggingService.log("player does not have enough reinforcements");
             throw new InvalidCommandException("player does not have enough reinforcements");
         }
+        
+        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), p_countryId, p_numberOfReinforcements, d_countryService);
+        player.issueOrder(deployOrder, gameTurn);
 
-        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
-
-        this.d_orders.get(this.d_currentRound).add(deployOrder);
-        int numberOfReinforcements = player.getNumberOfReinforcements() - d_numberOfReinforcements;
+        int numberOfReinforcements = player.getNumberOfReinforcements() - Math.abs(p_numberOfReinforcements);
         player.setNumberOfReinforcements(numberOfReinforcements);
 
         LoggingService.log("player: " + player.getPlayerName() + " set number of reinforcements: " + numberOfReinforcements);
-
-        if (player.getNumberOfReinforcements() == 0) {
-            this.currentPlayerGivingOrder++;
-            
-            if (this.currentPlayerGivingOrder == this.getAllPlayers().size()) {
-                OrdersService ordersService = new OrdersService(d_countryService);
-                ordersService.setOrders(this.d_orders);
-                ordersService.executeOrders();
-                LoggingService.log("Executing Orders");
-                return;
-            }
-        }
-
-        this.askForDeployOrder();
-    }
-
-    public void addDeployOrderToCurrentPlayer(String d_countryId, int d_numberOfReinforcements, int p_playerGivingOrder, int gameTurn) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-        if (!player.ownsCountry(d_countryId)) {
-            LoggingService.log("player does not own country");
-            throw new InvalidCommandException("player does not own country");
-        }
-
-        if (d_numberOfReinforcements > player.getNumberOfReinforcements()) {
-            LoggingService.log("player does not have enough reinforcements");
-            throw new InvalidCommandException("player does not have enough reinforcements");
-        }
-
-        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), d_countryId, d_numberOfReinforcements);
         
-        player.issueOrder(deployOrder, gameTurn);
+        if (player.getNumberOfReinforcements() == 0) {
+            return "\nAll your reinforcement armies have been deployed. Give your advance or special orders.";
+        } else {
+            // All of the current player's reinforcement have been deployed
+            this.askForDeployOrder(p_playerGivingOrder); 
+        }
+
+        return "";
     }
 
     /**
      * Asks the current player to give a deploy order.
      */
-    public void askForDeployOrder() {
+    public void askForDeployOrder(int p_playerGivingOrder) {        
         List<Player> players = this.getAllPlayers();
-        Player player = players.get(this.currentPlayerGivingOrder);
-        LoggingService.log("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
-        System.out.println("Player " + player.getPlayerName() + " give your order. Reinforcements available: " + player.getNumberOfReinforcements());
+        Player player = players.get(p_playerGivingOrder);
+        LoggingService.log("Player " + player.getPlayerName() + " give a deploy order. Reinforcements available: " + player.getNumberOfReinforcements());
+        System.out.println("Player " + player.getPlayerName() + " give a deploy order. Reinforcements available: " + player.getNumberOfReinforcements());
     }
 
     /**

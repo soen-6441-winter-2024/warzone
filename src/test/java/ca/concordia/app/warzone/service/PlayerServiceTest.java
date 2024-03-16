@@ -39,10 +39,6 @@ public class PlayerServiceTest {
     @Mock
     private MapService mapService;
 
-    @Mock
-    private OrdersService ordersService;
-
-
 
     private List<List<Order>> d_orders;
 
@@ -56,7 +52,7 @@ public class PlayerServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, ordersService, continentService);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
     }
 
     @Test

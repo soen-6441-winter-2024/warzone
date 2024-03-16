@@ -25,6 +25,7 @@ public class CommandFactory {
     private DeployCommand d_deployCommand;
     private ValidateMapCommand d_validateMapCommand;
     private NextPhaseCommand d_nextPhaseCommand;
+    private OrdersCompletedCommand d_OrdersCompletedCommand;
 
     /**
      * Constructs a CommandFactory object.
@@ -47,7 +48,7 @@ public class CommandFactory {
                           GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
                           AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
                           LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
-                          ValidateMapCommand p_validateMapCommand) {
+                          ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -60,6 +61,7 @@ public class CommandFactory {
         this.d_deployCommand = p_deployCommand;
         this.d_nextPhaseCommand = p_nextPhaseCommand;
         this.d_validateMapCommand = p_validateMapCommand;
+        this.d_OrdersCompletedCommand = p_ordersCompletedCommand;
     }
 
     /**
@@ -94,6 +96,8 @@ public class CommandFactory {
             return d_nextPhaseCommand;
         } else if (p_commandName.equals(CommandType.VALIDATE_MAP.toString())) {
             return d_validateMapCommand;
+        } else if(p_commandName.equals(CommandType.ORDERS_COMPLETED.toString())) {
+            return d_OrdersCompletedCommand;
         }
 
         throw new InvalidCommandException("invalid command");
