@@ -58,15 +58,21 @@ public class PlayerCardService {
     public void newContinentConquered(){
         List<Player> players = d_playerService.getAllPlayers();
         for(Player player : players){
-            findNewContinents(player.getCountriesAssigned());
+            int continentSizeBefore = player.getContinents().size();
+            findNewContinents(player);
+            if(continentSizeBefore < player.getContinents().size()){
+                for (int i = 0; i < player.getContinents().size() - continentSizeBefore; i++ ){
+                    assignPlayerCards(player);
+                }
+            }
         }
     }
 
-    public void findNewContinents(List<Country> countriesAssigned){
+    public void findNewContinents(Player player){
         Map<String, List<Country>> countriesByContinent = new HashMap<>();
         List<Continent> allContinents = d_repoContinent.findAll();
 
-        for(Country country : countriesAssigned){
+        for(Country country : player.getCountriesAssigned()){
             String continentId = country.getContinent().getId();
 
             List<Country> countriesForContinent = countriesByContinent.getOrDefault(continentId, new ArrayList<>());
@@ -81,8 +87,8 @@ public class PlayerCardService {
 
             List<Country> countriesForContinent = countriesByContinent.getOrDefault(continentID, new ArrayList<>());
 
-            if(countriesForContinent.size() == sizeOfContinent){
-                //player.addContinentConquered
+            if(countriesForContinent.size() == sizeOfContinent && !player.getContinents().contains(continentID)){
+                player.addContinentConquered(continentID);
             }
         }
     }

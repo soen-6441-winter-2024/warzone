@@ -226,15 +226,12 @@ public class GameEngineController {
      * @throws NotFoundException when players aren't found
      */
     public void startGameLoop() throws NotFoundException {
-        this.d_currentRound = 0;
+        this.d_playerService.startGame();
 
-        // Assign reinforcements
-        this.assignReinforcements();
 
-        this.d_orders = new ArrayList<>();
-        this.d_orders.add(new ArrayList<>());
+        //this.d_orders = new ArrayList<>();
+        //this.d_orders.add(new ArrayList<>());
 
-        this.currentPlayerGivingOrder = 0;
         List<Continent> allContinents = d_repoContinent.findAll();
 
         System.out.println("Time to give deploy orders");
