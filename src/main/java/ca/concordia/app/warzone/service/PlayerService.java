@@ -32,13 +32,6 @@ public class PlayerService {
      */
     List<List<Order>> d_orders;
 
-    // /**
-    //  * Data member for storing the current round number.
-    //  */
-    // private int d_currentRound;
-
-    // private int currentPlayerGivingOrder;
-
     /**
      * Default reinforcement number.
      */
@@ -305,6 +298,7 @@ public class PlayerService {
             for (int j = 0; j < minCountriesPerPlayer; j++) {
                 player.addCountry(countries.get(i));
                 this.updatePlayer(player);
+                countries.get(i).setPlayer(this.findByName(player.getPlayerName()));
                 LoggingService.log(player.getPlayerName() + " was assigned " + countries.get(i));
                 System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
                 i++;
@@ -316,6 +310,7 @@ public class PlayerService {
             Player player = players.get(j);
             player.addCountry(countries.get(i));
             this.updatePlayer(player);
+            countries.get(i).setPlayer(this.findByName(player.getPlayerName()));
             LoggingService.log(player.getPlayerName() + " was assigned " + countries.get(i));
             System.out.println(player.getPlayerName() + " was assigned " + countries.get(i));
             i++;
