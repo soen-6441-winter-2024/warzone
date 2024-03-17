@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.model.orders.AdvanceOrder;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
@@ -183,6 +184,15 @@ public class PlayerService {
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
+    public String addAdvanceOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+
+        AdvanceOrder advanceOrder = new AdvanceOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity, d_countryService);
+        player.issueOrder(advanceOrder, gameTurn);
+
+        return "";
+    }
+
     public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements, int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
 
@@ -210,7 +220,7 @@ public class PlayerService {
         LoggingService.log("player: " + player.getPlayerName() + " set number of reinforcements: " + numberOfReinforcements);
         
         if (player.getNumberOfReinforcements() == 0) {
-            return "\nAll your reinforcement armies have been deployed. Give your advance or special orders.";
+            return "";
         } else {
             // All of the current player's reinforcement have been deployed
             this.askForDeployOrder(p_playerGivingOrder); 
@@ -218,6 +228,7 @@ public class PlayerService {
 
         return "";
     }
+
 
     /**
      * Asks the current player to give a deploy order.
@@ -227,6 +238,13 @@ public class PlayerService {
         Player player = players.get(p_playerGivingOrder);
         LoggingService.log("Player " + player.getPlayerName() + " give a deploy order. Reinforcements available: " + player.getNumberOfReinforcements());
         System.out.println("Player " + player.getPlayerName() + " give a deploy order. Reinforcements available: " + player.getNumberOfReinforcements());
+    }
+
+    public void askForRegularOrders(int p_playerGivingOrder) {
+        List<Player> players = this.getAllPlayers();
+        Player player = players.get(p_playerGivingOrder);
+        LoggingService.log("Player " + player.getPlayerName() + " give an advance or a special order.");
+        System.out.println("Player " + player.getPlayerName() + " give an advance or a special order.");
     }
 
     /**

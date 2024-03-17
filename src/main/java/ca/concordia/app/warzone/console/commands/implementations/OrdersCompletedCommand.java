@@ -27,7 +27,7 @@ public class OrdersCompletedCommand extends Command {
     @Override
     public String run(String[] p_subCommandsAndOptions){
         try {
-            String result = d_gameEngineController.turnOrdersComplete();
+            String result = d_gameEngineController.commit();
             
             return result;
         } catch (Exception e) {

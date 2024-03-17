@@ -118,12 +118,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteNeighbor(CountryDto p_neighborDto) {
-        String result = "";
-        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
-            result =  d_countryService.deleteNeighbor(p_neighborDto);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = d_phaseRepository.getPhase().removeNeighbor(p_neighborDto) ;
         LoggingService.log(result);
         return result;
     }
@@ -154,6 +149,8 @@ public class MapEditorController {
     public String loadMap(MapDto p_mapDto) {
        String result = d_phaseRepository.getPhase().loadMap(p_mapDto);
         LoggingService.log(result);
+
+        d_phaseRepository.setPhase(d_phaseRepository.getPhase().next());
         return result;
     }
 

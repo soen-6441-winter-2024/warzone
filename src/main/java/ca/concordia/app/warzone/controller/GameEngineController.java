@@ -77,7 +77,7 @@ public class GameEngineController {
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
 
-        this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService));
+        this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
     }
 
     /**
@@ -155,19 +155,12 @@ public class GameEngineController {
      * @throws NotFoundException when countries aren't found
      */
     public String assignCountries() throws NotFoundException {
-        if (this.d_phaseRepository.getPhase() instanceof GameStartupPhase) {
-            LoggingService.log("game not in startup phase");
-            throw new InvalidCommandException("game not in startup phase");
-        }
+        String result = this.d_phaseRepository.getPhase().assignCountries();
 
-
-        this.d_playerService.assignCountries();
         this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
 
-        System.out.println("\nCountries Assigned. Let's Play!");
-
         this.startGameLoop();
-        return "";
+        return result;
     }
 
     /**
@@ -178,28 +171,40 @@ public class GameEngineController {
      * @return the result of the operation
      */
     public String deploy(String countryId, int numOfReinforcements) {
-        if (this.d_phaseRepository.getPhase() instanceof GameIssueDeployPhase) {
-            LoggingService.log("game is not in game loop phase");
-            throw new InvalidCommandException("game is not in game loop phase");
+        String result = this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryId, numOfReinforcements, d_currentPlayerGivingOrder, d_currentRound);
+        d_currentPlayerGivingOrder++;
+        if(d_currentPlayerGivingOrder == d_playerService.getAllPlayers().size()) {
+            this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
+            d_currentPlayerGivingOrder = 0;
+            this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        } else {
+            this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
         }
 
-        return this.d_playerService.addDeployOrderToCurrentPlayer(countryId, numOfReinforcements,
-                d_currentPlayerGivingOrder, d_currentRound);
-
+        return result;
     }
+
 
     /**
      * Issues an order to advance on a country.
      * @return state of issuing an advance order.
      */
-    public String advance() {
-        if ( !(this.d_phaseRepository.getPhase() instanceof GamePhase) ) {
-            LoggingService.log("game is not in game loop phase");
-            throw new InvalidCommandException("game is not in game loop phase");
+    public String advance(String countryFrom, String countryTo, int armiesQuantity) {
+        String result = this.d_phaseRepository.getPhase().addRegularOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
+    }
+
+    public String commit() throws NotFoundException {
+        Player currentPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
+        String result = "Player " + currentPlayer.getPlayerName() + " finished issuing orders";
+
+        d_currentPlayerGivingOrder++;
+        if(d_currentPlayerGivingOrder == this.d_playerService.getAllPlayers().size()) {
+                this.turnOrdersComplete();
         }
 
-        // call addAdvanceOrder method on player service
-        return "";
+        return  result;
     }
 
     /**
@@ -211,7 +216,7 @@ public class GameEngineController {
     public String turnOrdersComplete() throws NotFoundException {
         // all players have given their orders for the current round, now we execute all
         // orders
-        if ((this.d_currentPlayerGivingOrder + 1) == this.d_playerService.getAllPlayers().size()) {
+        if ((this.d_currentPlayerGivingOrder) == this.d_playerService.getAllPlayers().size()) {
             System.out.println("\nExecuting orders for round " + (this.d_currentRound + 1));
             executeTurnOrders(this.d_currentRound);
 
@@ -282,4 +287,6 @@ public class GameEngineController {
             }
         }
     }
+
+
 }
