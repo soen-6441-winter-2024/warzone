@@ -31,12 +31,13 @@ public class AssignCountriesCommand extends Command {
     @Override
     public String run(String[] p_subCommandsAndOptions){
         try {
-            d_gameEngineController.assignCountries();
+            return d_gameEngineController.assignCountries();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return "Something went wrong assigning countries";
         }
 
-        return "Countries assigned";
+        // return "Countries assigned";
     }
 
 

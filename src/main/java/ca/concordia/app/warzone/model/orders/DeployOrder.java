@@ -1,14 +1,21 @@
-package ca.concordia.app.warzone.model;
+package ca.concordia.app.warzone.model.orders;
+
+import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.service.CountryService;
 
 /**
  * Represents a deploy order in the game, where a player deploys a certain number of armies to a country.
  */
 public class DeployOrder extends Order {
-
     /**
      * The ID of the country to deploy armies to.
      */
     private String countryId;
+
+    /**
+     * The country service
+     */
+    private CountryService d_countryService;
 
     /**
      * The number of armies to deploy.
@@ -22,10 +29,11 @@ public class DeployOrder extends Order {
      * @param countryId The ID of the country to deploy armies to.
      * @param number    The number of armies to deploy.
      */
-    public DeployOrder(String player, String countryId, int number) {
+    public DeployOrder(String player, String countryId, int number, CountryService p_countryService) {
         super(player);
         this.countryId = countryId;
         this.number = number;
+        this.d_countryService = p_countryService;
     }
 
     /**
@@ -62,6 +70,15 @@ public class DeployOrder extends Order {
      */
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    /**
+     * Executes the logic for the type of order.
+     */
+    @Override
+    public void execute() {
+        System.out.println("Adding " + number + " armies to country " + countryId);
+        d_countryService.addArmiesToCountry(countryId, number);
     }
 }
 

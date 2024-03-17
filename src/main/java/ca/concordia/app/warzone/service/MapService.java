@@ -345,7 +345,7 @@ public class MapService {
 
             for (Country country : l_allCountries) {
                 if (country.getContinent().getId().equals(l_continent.getId())) {
-                    result.append(" - Country: " + country.getId() + ", Owner: "
+                    result.append(" - Country: " + country.getId() + " Armies: " + country.getArmiesCount() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
                                     : country.getPlayer().get().getPlayerName())
                             + ", Neighbors: ");

@@ -58,11 +58,20 @@ public enum CommandType {
      * Command to validate the map.
      */
     VALIDATE_MAP("validatemap"),
+    /**
+     * Command to notify game engine that a player has given all his orders for a round
+     */
+    ORDERS_COMPLETED("orderscompleted"),
 
     /**
      * Command to move to the next phase.
      */
-    NEXT_PHASE("nextphase");
+    NEXT_PHASE("nextphase"),
+
+    /**
+     * Command to issue the advance order
+     */
+    ADVANCE("advance");
 
     /**
      * The text representation of the command type.

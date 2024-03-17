@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.controller;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.PlayerRepository;
+import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,17 +31,16 @@ class GameEngineControllerTest {
     @Mock
     private MapService mapService;
 
-    @Mock
-    private OrdersService ordersService;
-
-
-
+    
     private List<List<Order>> d_orders;
 
     private int d_currentRound;
 
     @Mock
     private PlayerCardService playerCardService;
+
+    @Mock
+    private PhaseRepository phaseRepository;
 
     @InjectMocks
     private PlayerService playerService;
@@ -51,8 +51,8 @@ class GameEngineControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, ordersService, continentService);
-        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, ordersService, null, playerCardService);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
+        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService);
     }
 
     @Test

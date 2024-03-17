@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -215,6 +216,20 @@ public class CountryService {
         return result.toString();
     }
 
+    public boolean areNeighbors(String first, String second) throws NotFoundException {
+        Optional<Country> countryOpt = d_repoCountry.findById(first);
+        if(!countryOpt.isPresent()) {
+            throw new NotFoundException("country does not exist");
+        }
+
+        Optional<Country> secondCountryOpt = d_repoCountry.findById(second);
+        if(!secondCountryOpt.isPresent()) {
+            throw new NotFoundException("country does not exist");
+        }
+
+        return countryOpt.get().getNeighbors().contains(secondCountryOpt.get());
+    }
+
     /**
      * Deletes a neighbor country from the specified country.
      *
@@ -270,6 +285,14 @@ public class CountryService {
         this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
             int armiesCount = country.getArmiesCount();
             country.setArmiesCount(armiesCount + p_count);
+            d_repoCountry.save(country);
+        });
+    }
+
+    public void removeArmiesFromCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            int armiesCount = country.getArmiesCount();
+            country.setArmiesCount(armiesCount - p_count);
             d_repoCountry.save(country);
         });
     }

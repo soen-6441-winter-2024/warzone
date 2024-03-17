@@ -1,5 +1,7 @@
 package ca.concordia.app.warzone.model;
 
+import ca.concordia.app.warzone.service.CountryService;
+
 /**
  * Represents an abstract order in the game, issued by a player.
  */
@@ -27,5 +29,9 @@ public abstract class Order {
     public String getPlayer() {
         return player;
     }
+    /**
+     * Executes the logic for the type of order
+     */
+    public abstract void execute();
 }
 
