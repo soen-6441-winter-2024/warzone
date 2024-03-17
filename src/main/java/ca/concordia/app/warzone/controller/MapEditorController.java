@@ -172,7 +172,8 @@ public class MapEditorController {
      * @return the result of the operation
      */
     public String showMap() {
-        String result = this.d_phaseRepository.getPhase().showMap();
+        // String result = this.d_phaseRepository.getPhase().showMap();
+        String result = this.d_mapService.showMap(); // show map should be available in all phases
         LoggingService.log(result);
         return result;
     }

@@ -54,7 +54,7 @@ public class AdvanceOrder extends Order {
 
 
     @Override
-    public void execute() throws NotFoundException {
+    public void execute() {
         Optional<Country> countryFromOptional = this.d_countryService.findCountryById(d_countryFrom);
         Optional<Country> countryToOptional = this.d_countryService.findCountryById(d_countryTo);
 

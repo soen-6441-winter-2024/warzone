@@ -33,6 +33,6 @@ public abstract class Order {
     /**
      * Executes the logic for the type of order
      */
-    public abstract void execute() throws NotFoundException;
+    public abstract void execute();
 }
 

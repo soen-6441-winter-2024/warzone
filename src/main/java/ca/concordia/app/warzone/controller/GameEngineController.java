@@ -24,13 +24,8 @@ import java.util.List;
 public class GameEngineController {
 
     /**
-     * Data member for storing orders.
-     */
-    // List<List<Order>> d_orders;
-
-    // /**
-    // * Data member for storing the current round number.
-    // */
+    * Data member for storing the current round number.
+    */
     private int d_currentRound;
     private int d_currentPlayerGivingOrder;
 
@@ -205,6 +200,20 @@ public class GameEngineController {
         }
 
         return  result;
+    }
+
+    /**
+     * Validates and issues an order to advance on a country.
+     * @param countryId
+     * @return
+     */
+    public String bomb(String countryId) {
+        if (!(this.d_phaseRepository.getPhase() instanceof GameIssueOrderPhase)) {
+            LoggingService.log("game is not in game loop phase");
+            throw new InvalidCommandException("game is not in game loop phase");
+        }
+
+        return this.d_playerService.addBombOrderToCurrentPlayer(countryId, d_currentPlayerGivingOrder, d_currentRound);
     }
 
     /**

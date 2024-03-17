@@ -12,12 +12,12 @@ import java.util.Collections;
  */
 @Service
 public class PlayerCardService {
-    private static final String bombCard = "bomb card";
-    private static final String diplomacyCard = "diplomacy card";
+    private static final String bombCard = "bomb_card";
+    private static final String diplomacyCard = "diplomacy_card";
 
-    private static final String blockadeCard = "blockade card";
+    private static final String blockadeCard = "blockade_card";
 
-    private static final String airliftCard = "airlift card";
+    private static final String airliftCard = "airlift_card";
 
     private final ArrayList<String> playerCards;
 
