@@ -1,8 +1,5 @@
 package ca.concordia.app.warzone.logging;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,14 +10,7 @@ public class LoggingService {
 
     private static final String LOG_FILE_NAME = "src/main/resources/warzone.log";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     private static LogEntryBuffer s_LogEntryBuffer;
-
-    // Initialize the log file and LogEntryBuffer
-    static {
-        s_LogEntryBuffer = new LogEntryBuffer();
-        s_LogEntryBuffer.addObserver(new LogWriter(LOG_FILE_NAME));
-    }
 
     /**
      * Adds a log entry to the LogEntryBuffer.
@@ -28,6 +18,8 @@ public class LoggingService {
      * @param p_LogText the log text to be written
      */
     public static void log(String p_LogText) {
+        s_LogEntryBuffer = new LogEntryBuffer();
+        s_LogEntryBuffer.addObserver(new LogWriter(LOG_FILE_NAME));
         String l_ParentClassName = "";
         String l_ParentMethodName = "";
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
