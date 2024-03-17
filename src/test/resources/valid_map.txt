@@ -1,6 +1,6 @@
 [continents]
-1 America
-2 Europe
+1 10
+2 15
 
 [countries]
 Canada 1

@@ -1,0 +1,3 @@
+Continent ID: Europe, Continent Value: 10
+ - Country: France, Owner: Not yet assigned, Neighbors:
+ - Country: Spain, Owner: Not yet assigned, Neighbors: France,
