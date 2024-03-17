@@ -7,6 +7,7 @@ import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.ContinentService;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.MapService;
+import ca.concordia.app.warzone.service.phase.MapEditorPhase;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
 
@@ -44,8 +45,8 @@ public class MapEditorController {
      */
     public String addContinent(ContinentDto p_continentDto) {
         String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            result =  d_continentService.add(p_continentDto);
+        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
+            result =   d_continentService.add(p_continentDto);
         } else {
             result = "Invalid Phase";
         }
@@ -59,12 +60,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteContinent(String p_continentId) {
-        String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            result =  d_continentService.delete(p_continentId);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().removeContinent(p_continentId);
         LoggingService.log(result);
         return result;
     }
@@ -77,7 +73,7 @@ public class MapEditorController {
      */
     public String addCountry(CountryDto p_countryDto) {
         String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
+        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
             result =  d_countryService.add(p_countryDto);
         } else {
             result =  "Invalid Phase";
@@ -94,7 +90,7 @@ public class MapEditorController {
      */
     public String deleteCountry(String p_countryId) {
         String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
+        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
             result =  d_countryService.delete(p_countryId);
         } else {
             result =  "Invalid Phase";
@@ -110,12 +106,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String addNeighbor(CountryDto p_neighborDto) {
-        String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            result =  d_countryService.addNeighbor(p_neighborDto);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = d_phaseRepository.getPhase().addNeighbor(p_neighborDto);
         LoggingService.log(result);
         return result;
     }
@@ -127,12 +118,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String deleteNeighbor(CountryDto p_neighborDto) {
-        String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            result =  d_countryService.deleteNeighbor(p_neighborDto);
-        } else {
-            result =  "Invalid Phase";
-        }
+        String result = d_phaseRepository.getPhase().removeNeighbor(p_neighborDto) ;
         LoggingService.log(result);
         return result;
     }
@@ -145,7 +131,7 @@ public class MapEditorController {
      */
     public String saveMap(MapDto p_mapDto) {
         String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
+        if (d_phaseRepository.getPhase() instanceof MapEditorPhase) {
             result =  d_mapService.saveMap(p_mapDto);
         } else {
             result =  "Invalid Phase";
@@ -161,14 +147,10 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String loadMap(MapDto p_mapDto) {
-        String result = "";
-        if (!Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-             result = d_mapService.loadMap(p_mapDto);
-             this.d_phaseRepository.setPhase(Phase.STARTUP);
-        } else {
-            result =  "Invalid Phase";
-        }
+       String result = d_phaseRepository.getPhase().loadMap(p_mapDto);
         LoggingService.log(result);
+
+        d_phaseRepository.setPhase(d_phaseRepository.getPhase().next());
         return result;
     }
 
@@ -179,12 +161,7 @@ public class MapEditorController {
      * @return A string indicating the result of the operation.
      */
     public String editMap(MapDto p_mapDto) {
-        String result = "";
-        if (Phase.MAP_EDITOR.equals(d_phaseRepository.getPhase())) {
-            result = d_mapService.editMap(p_mapDto);
-        } else {
-            result = "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().editMap(p_mapDto);
         LoggingService.log(result);
         return result;
     }
@@ -195,7 +172,7 @@ public class MapEditorController {
      * @return the result of the operation
      */
     public String showMap() {
-        String result = d_mapService.showMap();
+        String result = this.d_phaseRepository.getPhase().showMap();
         LoggingService.log(result);
         return result;
     }

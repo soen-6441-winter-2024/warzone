@@ -12,36 +12,27 @@ import org.springframework.stereotype.Component;
 public class AdvanceCommand extends Command {
     private final GameEngineController d_gameEngineController;
 
-    /**
-     * Constructor for AdvanceCommand.
-     * @param p_gameEngineController The game engine controller
-     * @throws InvalidCommandException Throws if the command is invalid.
-     */
-    public AdvanceCommand(GameEngineController p_gameEngineController) throws InvalidCommandException {
-        this.d_gameEngineController = p_gameEngineController;
+
+    public AdvanceCommand(GameEngineController p_GameEngineController) {
+        d_gameEngineController = p_GameEngineController;
     }
 
-    /**
-     * Runs the advance command.
-     * @param p_subCommandsAndOptions The array of subcommands and options.
-     * @return The result of the command execution.
-     */
     @Override
     public String run(String[] p_subCommandsAndOptions) {
         if(p_subCommandsAndOptions.length != 3) {
-            throw new InvalidCommandException("expected 3 argument");
+            throw new InvalidCommandException("expected 2 arguments");
         }
 
         String countryFrom = p_subCommandsAndOptions[0];
         String countryTo = p_subCommandsAndOptions[1];
-        int numOfArmies = 0;
-
+        String armiesQuantityStr = p_subCommandsAndOptions[2];
+        int armiesQuantity = 0;
         try {
-            numOfArmies = Integer.parseInt(p_subCommandsAndOptions[2]);
+            armiesQuantity = Integer.parseInt(armiesQuantityStr);
         } catch (NumberFormatException e) {
-            throw new InvalidCommandException("number of armies param not a valid number");
+            throw new InvalidCommandException("armies quantity should be a number");
         }
 
-        return d_gameEngineController.advance();
+        return d_gameEngineController.advance(countryFrom, countryTo, armiesQuantity);
     }
 }

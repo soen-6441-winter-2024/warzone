@@ -31,6 +31,8 @@ public class CommandFactory {
     private BombCommand d_BombCommand;
     private AdvanceCommand d_AdvanceCommand;
 
+    private AdvanceCommand d_advanceCommand;
+
     /**
      * Constructs a CommandFactory object.
      *

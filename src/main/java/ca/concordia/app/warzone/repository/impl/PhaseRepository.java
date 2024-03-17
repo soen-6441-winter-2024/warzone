@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.repository.impl;
 
-import ca.concordia.app.warzone.controller.Phase;
+import ca.concordia.app.warzone.service.phase.MapEditorPhase;
+import ca.concordia.app.warzone.service.phase.Phase;
 import org.springframework.stereotype.Repository;
 
 
@@ -18,7 +19,7 @@ public class PhaseRepository {
      * Constructs a PhaseRepository with the initial phase set to MAP_EDITOR.
      */
     public PhaseRepository() {
-        this.phase = Phase.MAP_EDITOR;
+
     }
 
     /**

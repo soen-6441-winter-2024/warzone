@@ -10,6 +10,7 @@ import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
+import ca.concordia.app.warzone.service.phase.*;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
 
@@ -23,13 +24,8 @@ import java.util.List;
 public class GameEngineController {
 
     /**
-     * Data member for storing orders.
-     */
-    // List<List<Order>> d_orders;
-
-    // /**
-    // * Data member for storing the current round number.
-    // */
+    * Data member for storing the current round number.
+    */
     private int d_currentRound;
     private int d_currentPlayerGivingOrder;
 
@@ -63,7 +59,6 @@ public class GameEngineController {
      * @param p_countryService    The CountryService to use.
      * @param p_playerService     The PlayerService to use.
      * @param p_mapService        The MapService to use.
-     * @param p_ordersService     The CountryService to be used
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
      */
@@ -76,6 +71,8 @@ public class GameEngineController {
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
+
+        this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
     }
 
     /**
@@ -85,12 +82,7 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addContinent(ContinentDto p_continentDto) {
-        String result = "";
-        if (Phase.MAP_EDITOR.equals(this.d_phaseRepository.getPhase())) {
-            result = d_continentService.add(p_continentDto);
-        } else {
-            result = "Invalid Phase";
-        }
+        String result = this.d_phaseRepository.getPhase().addContinent(p_continentDto);
         LoggingService.log(result);
         return result;
     }
@@ -124,8 +116,7 @@ public class GameEngineController {
      * @return A string indicating the result of the operation.
      */
     public String addCountry(CountryDto p_dto) {
-        d_countryService.add(p_dto);
-        return "Country " + p_dto.getId() + " added";
+        return this.d_phaseRepository.getPhase().addCountry(p_dto);
     }
 
     /**
@@ -159,18 +150,12 @@ public class GameEngineController {
      * @throws NotFoundException when countries aren't found
      */
     public String assignCountries() throws NotFoundException {
-        if (this.d_phaseRepository.getPhase() != Phase.STARTUP) {
-            LoggingService.log("game not in startup phase");
-            throw new InvalidCommandException("game not in startup phase");
-        }
+        String result = this.d_phaseRepository.getPhase().assignCountries();
 
-        this.d_playerService.assignCountries();
-        this.d_phaseRepository.setPhase(Phase.GAME_LOOP);
-
-        System.out.println("\nCountries Assigned. Let's Play!");
+        this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
 
         this.startGameLoop();
-        return "";
+        return result;
     }
 
     /**
@@ -181,38 +166,49 @@ public class GameEngineController {
      * @return the result of the operation
      */
     public String deploy(String countryId, int numOfReinforcements) {
-        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
-            LoggingService.log("game is not in game loop phase");
-            throw new InvalidCommandException("game is not in game loop phase");
+        String result = this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryId, numOfReinforcements, d_currentPlayerGivingOrder, d_currentRound);
+        d_currentPlayerGivingOrder++;
+        if(d_currentPlayerGivingOrder == d_playerService.getAllPlayers().size()) {
+            this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
+            d_currentPlayerGivingOrder = 0;
+            this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        } else {
+            this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
         }
 
-        return this.d_playerService.addDeployOrderToCurrentPlayer(countryId, numOfReinforcements,
-                d_currentPlayerGivingOrder, d_currentRound);
+        return result;
     }
+
 
     /**
      * Issues an order to advance on a country.
      * @return state of issuing an advance order.
      */
-    public String advance() {
-        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
-            LoggingService.log("game is not in game loop phase");
-            throw new InvalidCommandException("game is not in game loop phase");
-        }
-
-        // The code below is only done so that the special orders e.g bomb order can be tested, since the advance methods hasn't been implemented yet and the cards are only given after an advancement.
-        /** note that: A player receives a card at the end of his turn if they successfully conquered at least one territory during their turn. 
-         *  */
-        Player player = d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
-        this.d_playerCardService.assignPlayerCards(player);
-        System.out.println(player.getPlayerName() + " Received " + player.d_cardsReceived.toString() + " special cards");
-
-        // write advance logic here
-        return "";
+    public String advance(String countryFrom, String countryTo, int armiesQuantity) {
+        String result = this.d_phaseRepository.getPhase().addRegularOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
     }
 
+    public String commit() throws NotFoundException {
+        Player currentPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
+        String result = "Player " + currentPlayer.getPlayerName() + " finished issuing orders";
+
+        d_currentPlayerGivingOrder++;
+        if(d_currentPlayerGivingOrder == this.d_playerService.getAllPlayers().size()) {
+                this.turnOrdersComplete();
+        }
+
+        return  result;
+    }
+
+    /**
+     * Validates and issues an order to advance on a country.
+     * @param countryId
+     * @return
+     */
     public String bomb(String countryId) {
-        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+        if (!(this.d_phaseRepository.getPhase() instanceof GameIssueOrderPhase)) {
             LoggingService.log("game is not in game loop phase");
             throw new InvalidCommandException("game is not in game loop phase");
         }
@@ -229,7 +225,7 @@ public class GameEngineController {
     public String turnOrdersComplete() throws NotFoundException {
         // all players have given their orders for the current round, now we execute all
         // orders
-        if ((this.d_currentPlayerGivingOrder + 1) == this.d_playerService.getAllPlayers().size()) {
+        if ((this.d_currentPlayerGivingOrder) == this.d_playerService.getAllPlayers().size()) {
             System.out.println("\nExecuting orders for round " + (this.d_currentRound + 1));
             executeTurnOrders(this.d_currentRound);
 
@@ -263,11 +259,7 @@ public class GameEngineController {
      */
     public String nextPhase() {
 
-        Phase nextPhase = switch (d_phaseRepository.getPhase()) {
-            case MAP_EDITOR -> Phase.STARTUP;
-            case STARTUP -> Phase.GAME_PLAY;
-            default -> Phase.GAME_LOOP;
-        };
+        Phase nextPhase =  d_phaseRepository.getPhase().next();
 
         this.d_phaseRepository.setPhase(nextPhase);
         LoggingService.log("Current phase is " + nextPhase);
@@ -304,4 +296,6 @@ public class GameEngineController {
             }
         }
     }
+
+
 }
