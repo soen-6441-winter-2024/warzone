@@ -1,5 +1,6 @@
 package ca.concordia.app.warzone.service;
 
+import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.repository.PlayerRepository;
@@ -7,6 +8,7 @@ import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.BombOrder;
 import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
@@ -183,6 +185,14 @@ public class PlayerService {
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
+    /**
+     * Validates and adds a deploy order to the current player's list of orders
+     * @param p_countryId the country to deploy armies to
+     * @param p_numberOfReinforcements the number of army units to deploy
+     * @param p_playerGivingOrder the player currently giving orders
+     * @param gameTurn the current round of the game
+     * @return the state of the order
+     */
     public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements, int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
 
@@ -217,6 +227,35 @@ public class PlayerService {
         }
 
         return "";
+    }
+
+    /**
+     * Validates and adds a bomb order to the current player's list of orders
+     * @param countryId The country to bomb
+     * @param p_playerGivingOrder the player currently giving orders
+     * @param gameTurn the current round of the game
+     * @return the state of the bomb order
+     * @throws NotFoundException 
+     */
+    public String addBombOrderToCurrentPlayer(String p_targetCountryId, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+        Optional<CountryDto> country = this.d_countryService.findById(p_targetCountryId);
+
+        if(!country.isPresent()) throw new InvalidCommandException("Country not found.");
+
+        // check if player has bomb card
+        if(!player.hasCard("bomb_card")) {
+            throw new InvalidCommandException(player.getPlayerName() + " You do not have a bomb card");
+        }
+        
+        // create bomb order
+        BombOrder bombOrder = new BombOrder(player.getPlayerName(), d_countryService, p_targetCountryId);
+        player.issueOrder(bombOrder, gameTurn);
+        player.removeUsedCard("bomb_card");
+
+        LoggingService.log("player: " + player.getPlayerName() + " issued a bomb order on " + p_targetCountryId);
+        
+        return "Bomb order issued. Issue more advance or special orders.";
     }
 
     /**

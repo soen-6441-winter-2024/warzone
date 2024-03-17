@@ -273,4 +273,17 @@ public class CountryService {
             d_repoCountry.save(country);
         });
     }
+    /**
+     * Bombs a country causing it to lose half of it's armies.
+     * @param p_countryId
+     */
+    public void bombACountry(String p_countryId) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(
+            country -> {
+                int armiesCount = country.getArmiesCount();
+                country.setArmiesCount((int) (armiesCount / 2));
+                d_repoCountry.save(country);
+            }
+        );
+    }
 }

@@ -64,6 +64,15 @@ public enum CommandType {
     ORDERS_COMPLETED("orderscompleted"),
 
     /**
+     * Command to bomb a target country.
+     */
+    BOMB_ORDER("bomb"),
+    /**
+     * Command to attack or move army units across countries.
+     */
+    ADVANCE("advance"),
+
+    /**
      * Command to move to the next phase.
      */
     NEXT_PHASE("nextphase");

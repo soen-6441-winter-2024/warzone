@@ -188,7 +188,6 @@ public class GameEngineController {
 
         return this.d_playerService.addDeployOrderToCurrentPlayer(countryId, numOfReinforcements,
                 d_currentPlayerGivingOrder, d_currentRound);
-
     }
 
     /**
@@ -201,8 +200,24 @@ public class GameEngineController {
             throw new InvalidCommandException("game is not in game loop phase");
         }
 
-        // call addAdvanceOrder method on player service
+        // The code below is only done so that the special orders e.g bomb order can be tested, since the advance methods hasn't been implemented yet and the cards are only given after an advancement.
+        /** note that: A player receives a card at the end of his turn if they successfully conquered at least one territory during their turn. 
+         *  */
+        Player player = d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
+        this.d_playerCardService.assignPlayerCards(player);
+        System.out.println(player.getPlayerName() + " Received " + player.d_cardsReceived.toString() + " special cards");
+
+        // write advance logic here
         return "";
+    }
+
+    public String bomb(String countryId) {
+        if (this.d_phaseRepository.getPhase() != Phase.GAME_LOOP) {
+            LoggingService.log("game is not in game loop phase");
+            throw new InvalidCommandException("game is not in game loop phase");
+        }
+
+        return this.d_playerService.addBombOrderToCurrentPlayer(countryId, d_currentPlayerGivingOrder, d_currentRound);
     }
 
     /**

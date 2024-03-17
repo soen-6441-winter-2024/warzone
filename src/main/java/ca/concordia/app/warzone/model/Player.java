@@ -33,6 +33,7 @@ public class Player implements Entity {
         this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
         this.d_playerOrders = new ArrayList<>();
+        this.d_cardsReceived = new ArrayList<>();
     }
 
     /**
@@ -50,6 +51,14 @@ public class Player implements Entity {
      */
     public void addCard(String card){
         d_cardsReceived.add(card);
+    }
+
+    /**
+     *method that removes used card from players list of cards
+     * @param card the card to be added
+     */
+    public void removeUsedCard(String card){
+        d_cardsReceived.remove(card);
     }
 
     /**
