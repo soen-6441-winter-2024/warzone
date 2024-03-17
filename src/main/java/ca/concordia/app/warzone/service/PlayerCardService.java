@@ -35,6 +35,8 @@ public class PlayerCardService {
 
     /**
      * Constructor for PlayerCardsService.
+     * @param d_PlayerService playerservice to be used
+     * @param d_repoContinent continent repository to be used
      */
     public PlayerCardService(PlayerService d_PlayerService, ContinentRepository d_repoContinent) {
         this.d_playerService = d_PlayerService;
@@ -55,6 +57,9 @@ public class PlayerCardService {
         player.addCard(playerCards.get(0));
     }
 
+    /**
+     * Checks to see if a player has conquered a new continent
+     */
     public void newContinentConquered(){
         List<Player> players = d_playerService.getAllPlayers();
         for(Player player : players){
@@ -68,6 +73,10 @@ public class PlayerCardService {
         }
     }
 
+    /**
+     * searches to see if a player now has conrol over a new continent
+     * @param player the player
+     */
     public void findNewContinents(Player player){
         Map<String, List<Country>> countriesByContinent = new HashMap<>();
         List<Continent> allContinents = d_repoContinent.findAll();
