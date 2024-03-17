@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.model;
 
 import ca.concordia.app.warzone.service.CountryService;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 
 /**
  * Represents an abstract order in the game, issued by a player.
@@ -10,7 +11,7 @@ public abstract class Order {
     /**
      * The player who issued the order.
      */
-    private final String player;
+    protected final String player;
 
     /**
      * Constructs an Order object with the specified player.
@@ -32,6 +33,6 @@ public abstract class Order {
     /**
      * Executes the logic for the type of order
      */
-    public abstract void execute();
+    public abstract void execute() throws NotFoundException;
 }
 

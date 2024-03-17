@@ -1,10 +1,15 @@
 package ca.concordia.app.warzone.model.orders;
 
+import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.service.CountryService;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class AdvanceOrder extends Order {
     public String getD_countryFrom() {
@@ -49,18 +54,82 @@ public class AdvanceOrder extends Order {
 
 
     @Override
-    public void execute() {
+    public void execute() throws NotFoundException {
+        Optional<Country> countryFromOptional = this.d_countryService.findCountryById(d_countryFrom);
+        Optional<Country> countryToOptional = this.d_countryService.findCountryById(d_countryTo);
+
+        if(countryFromOptional.isEmpty()){
+            return;
+        }
+
+        if(countryToOptional.isEmpty()){
+            return;
+        }
+
+        Country countryTo = countryToOptional.get();
+        Country countryFrom = countryFromOptional.get();
+
+        if(countryFrom.getPlayer().isEmpty()) {
+            return;
+        }
+
+        Player countryFromOwner = countryFrom.getPlayer().get();
+
+        if(!countryFromOwner.getPlayerName().equals(this.player)) {
+            return;
+        }
+
+        if(countryFrom.getArmiesCount() < this.d_number) {
+            return;
+        }
+
         this.d_countryService.removeArmiesFromCountry(this.d_countryFrom, this.d_number);
 
-        // TODO: check of countryFrom has available armies
+        Optional<Player> countryToOwnerOptional = countryTo.getPlayer();
+
+        // If the countryTo has no owner, then we just move the armies to the country
+        if(countryToOwnerOptional.isEmpty()) {
+            this.d_countryService.addArmiesToCountry(this.d_countryTo,  this.d_number);
+            return;
+        }
+
+        Player countryToOwner = countryToOwnerOptional.get();
+
+        // If the player is the owner, we just move the armies to the country
+        if(countryToOwner.ownsCountry(this.d_countryTo)) {
+            this.d_countryService.addArmiesToCountry(this.d_countryTo,  this.d_number);
+            return;
+        }
+
+        // Otherwise, there's a battle
+        int attackingArmies = this.d_number;
+        int defendingArmies = countryTo.getArmiesCount();
 
 
-        // Get countryTo and countryFrom
+        while (true) {
+            double randomNumberForAttacking = Math.random();
+            if(randomNumberForAttacking <= 0.6) {
+                attackingArmies--;
+            }
 
-        // Calculate battle
+            double randomNumberForDefending = Math.random();
+            if(randomNumberForDefending <= 0.7) {
+                defendingArmies--;
+            }
 
-        // Update armies count on countryTo
+            if(attackingArmies == 0 || defendingArmies == 0) {
+                break;
+            }
+        }
 
+        // Defending won
+        if(defendingArmies > attackingArmies) {
+            this.d_countryService.setArmiesCountToCountry(this.d_countryTo, defendingArmies);
+            return;
+        }
 
+        // Attacking won, the owner of the country changes
+        this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
+        countryTo.setPlayer(Optional.of(countryFromOwner));
     }
 }
