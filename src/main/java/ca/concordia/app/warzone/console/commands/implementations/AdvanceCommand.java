@@ -5,6 +5,9 @@ import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents the advance command to attack or move army units across countries.
+ */
 @Component
 public class AdvanceCommand extends Command {
     private final GameEngineController d_gameEngineController;
