@@ -94,6 +94,10 @@ public class CountryService {
         return countryOptional.map(this::convertToDto);
     }
 
+    public Optional<Country> findCountryById(String p_id) {
+        return d_repoCountry.findById(p_id);
+    }
+
     /**
      * Returns all the countries
      * @return all the countries
@@ -313,6 +317,12 @@ public class CountryService {
             int armiesCount = country.getArmiesCount();
             country.setArmiesCount(armiesCount - p_count);
             d_repoCountry.save(country);
+        });
+    }
+
+    public void setArmiesCountToCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            country.setArmiesCount(p_count);
         });
     }
 }
