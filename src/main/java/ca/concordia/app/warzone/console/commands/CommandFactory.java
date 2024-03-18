@@ -53,7 +53,7 @@ public class CommandFactory {
      * @param p_ordersCompletedCommand The command to notify game engine that player
      *                                 is done issuing commands for current round.
      * @param p_bombCommand            The command to issue a bomb order
-     * @param p_AdvanceCommand         Command to attack or move army units across countries.
+     * @param p_advanceCommand         Command to attack or move army units across countries.
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
