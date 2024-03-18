@@ -6,14 +6,14 @@ import ca.concordia.app.warzone.controller.GameEngineController;
 import org.springframework.stereotype.Component;
 
 /**
- * Represents the advance command to attack or move army units across countries.
+ * Represents the airlift command to attack or move army units across countries.
  */
 @Component
-public class AdvanceCommand extends Command {
+public class AirliftCommand extends Command {
     private final GameEngineController d_gameEngineController;
 
 
-    public AdvanceCommand(GameEngineController p_GameEngineController) {
+    public AirliftCommand(GameEngineController p_GameEngineController) {
         d_gameEngineController = p_GameEngineController;
     }
 
@@ -33,6 +33,6 @@ public class AdvanceCommand extends Command {
             throw new InvalidCommandException("armies quantity should be a number");
         }
 
-        return d_gameEngineController.advance(countryFrom, countryTo, armiesQuantity);
+        return d_gameEngineController.airlift(countryFrom, countryTo, armiesQuantity);
     }
 }

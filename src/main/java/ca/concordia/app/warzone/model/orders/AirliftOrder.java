@@ -1,17 +1,14 @@
 package ca.concordia.app.warzone.model.orders;
 
-import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.service.CountryService;
-import ca.concordia.app.warzone.service.exceptions.NotFoundException;
+import ca.concordia.app.warzone.service.PlayerService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
-public class AdvanceOrder extends Order {
+public class AirliftOrder extends Order {
     public String getD_countryFrom() {
         return d_countryFrom;
     }
@@ -41,20 +38,28 @@ public class AdvanceOrder extends Order {
     private int d_number;
 
     final private CountryService d_countryService;
+    final private PlayerService d_playerService;
 
-
-
-    public AdvanceOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService) {
+    public AirliftOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService, PlayerService p_playerService) {
         super(p_player);
         this.d_countryFrom = p_countryFrom;
         this.d_countryTo = p_countryTo;
         this.d_number = p_number;
-        d_countryService = p_countryService;
+        this.d_countryService = p_countryService;
+        this.d_playerService = p_playerService;
     }
-
 
     @Override
     public void execute() {
+        Optional<Player> playerObj = this.d_playerService.findByName(this.player);
+        if(playerObj.isEmpty()){
+            return;
+        }
+
+        if(!playerObj.get().hasCard("airlift_card")) {
+            return;
+        }
+
         Optional<Country> countryFromOptional = this.d_countryService.findCountryById(d_countryFrom);
         Optional<Country> countryToOptional = this.d_countryService.findCountryById(d_countryTo);
 
@@ -72,15 +77,6 @@ public class AdvanceOrder extends Order {
         if(countryFrom.getPlayer().isEmpty()) {
             return;
         }
-
-        try {
-            if(!this.d_countryService.areNeighbors(this.d_countryFrom, this.d_countryTo)) {
-                return;
-            }
-        } catch (NotFoundException e) {
-            return;
-        }
-
 
         Player countryFromOwner = countryFrom.getPlayer().get();
 

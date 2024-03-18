@@ -10,7 +10,17 @@ public class GameIssueOrderPhase extends GamePhase {
     }
 
     @Override
-    public String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound) {
+    public String addAdvanceOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound) {
         return this.d_playerService.addAdvanceOrderToCurrentPlayer(countryNameFrom, countryNameTo, armiesQuantity, p_currentPlayerGivingOrder, p_currentRound);
+    }
+
+    @Override
+    public String addAirliftOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound) {
+        return this.d_playerService.addAirliftOrderToCurrentPlayer(countryNameFrom, countryNameTo, armiesQuantity, p_currentPlayerGivingOrder, p_currentRound);
+    }
+
+    @Override
+    public String addBlockadeOrderToPlayer(String country, int p_currentPlayerGivingOrder, int p_currentRound) {
+        return this.d_playerService.addBlockadeOrderToCurrentPlayer(country, p_currentPlayerGivingOrder, p_currentRound);
     }
 }

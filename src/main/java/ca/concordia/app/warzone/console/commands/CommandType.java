@@ -64,6 +64,11 @@ public enum CommandType {
     ORDERS_COMPLETED("orderscompleted"),
 
     /**
+     * Command to bomb a target country.
+     */
+    BOMB_ORDER("bomb"),
+
+    /**
      * Command to move to the next phase.
      */
     NEXT_PHASE("nextphase"),
@@ -71,7 +76,17 @@ public enum CommandType {
     /**
      * Command to issue the advance order
      */
-    ADVANCE("advance");
+    ADVANCE("advance"),
+
+    /**
+     * Command to show the current phase
+     */
+    SHOW_PHASE("showphase"),
+
+    /**
+     * Command to issue the blockade order
+     */
+    BLOCKADE("blockade");
 
     /**
      * The text representation of the command type.
