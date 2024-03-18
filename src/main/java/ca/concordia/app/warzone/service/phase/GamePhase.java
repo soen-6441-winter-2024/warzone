@@ -6,8 +6,10 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
-import ca.concordia.app.warzone.service.ContinentService;
 
+/**
+ * Represents a generic game phase.
+ */
 public class GamePhase extends Phase {
     @Override
     public String loadMap(MapDto mapDto) {

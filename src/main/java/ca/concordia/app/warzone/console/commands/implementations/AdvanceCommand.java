@@ -12,11 +12,22 @@ import org.springframework.stereotype.Component;
 public class AdvanceCommand extends Command {
     private final GameEngineController d_gameEngineController;
 
-
+    /**
+     * Constructs a new advance command with the specified game engine controller.
+     *
+     * @param p_GameEngineController The game engine controller.
+     */
     public AdvanceCommand(GameEngineController p_GameEngineController) {
         d_gameEngineController = p_GameEngineController;
     }
 
+    /**
+     * Executes the advance command to move armies from one country to another.
+     *
+     * @param p_subCommandsAndOptions The array containing the command arguments.
+     * @return A message indicating the success or failure of the command.
+     * @throws InvalidCommandException If the command is invalid or the arguments are incorrect.
+     */
     @Override
     public String run(String[] p_subCommandsAndOptions) {
         if(p_subCommandsAndOptions.length != 3) {

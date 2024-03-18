@@ -57,49 +57,33 @@ public class PlayerCardService {
         player.addCard(playerCards.get(0));
     }
 
-    /**
-     * Checks to see if a player has conquered a new continent
-     */
-    public void newContinentConquered(){
+    public void newCountryConquered(Map<String, Integer> sizeBeforeLoop, Map<String, Integer> sizeAfterLoop){
         List<Player> players = d_playerService.getAllPlayers();
-        for(Player player : players){
-            int continentSizeBefore = player.getContinents().size();
-            findNewContinents(player);
-            if(continentSizeBefore < player.getContinents().size()){
-                for (int i = 0; i < player.getContinents().size() - continentSizeBefore; i++ ){
-                    assignPlayerCards(player);
+        for(Map.Entry<String, Integer> entry : sizeBeforeLoop.entrySet()){
+            String playerName = entry.getKey();
+            int sizeBefore = entry.getValue();
+            int sizeAfter = sizeAfterLoop.getOrDefault(playerName, 0);
+            if(sizeAfter > sizeBefore){
+                for(Player player : players){
+                    if(player.getPlayerName().equals(playerName)){
+                        for(int i = 0; i < sizeAfter - sizeBefore; i++){
+                            assignPlayerCards(player);
+                        }
+                        break;
+                    }
                 }
             }
         }
     }
 
-    /**
-     * searches to see if a player now has conrol over a new continent
-     * @param player the player
-     */
-    public void findNewContinents(Player player){
-        Map<String, List<Country>> countriesByContinent = new HashMap<>();
-        List<Continent> allContinents = d_repoContinent.findAll();
-
-        for(Country country : player.getCountriesAssigned()){
-            String continentId = country.getContinent().getId();
-
-            List<Country> countriesForContinent = countriesByContinent.getOrDefault(continentId, new ArrayList<>());
-            countriesForContinent.add(country);
-
-            countriesByContinent.put(continentId, countriesForContinent);
+    public Map<String, Integer> getSizeOfCountriesAssigned(){
+        Map<String, Integer> sizeOfCountriesAssigned = new HashMap<>();
+        List<Player> players = d_playerService.getAllPlayers();
+        for(Player player : players){
+            sizeOfCountriesAssigned.put(player.getPlayerName(), player.getCountriesAssigned().size());
         }
 
-        for(Continent continent: allContinents){
-            String continentID  = continent.getId();
-            int sizeOfContinent = continent.getSizeOfContinent();
-
-            List<Country> countriesForContinent = countriesByContinent.getOrDefault(continentID, new ArrayList<>());
-
-            if(countriesForContinent.size() == sizeOfContinent && !player.getContinents().contains(continentID)){
-                player.addContinentConquered(continentID);
-            }
-        }
+        return sizeOfCountriesAssigned;
     }
 
 }
