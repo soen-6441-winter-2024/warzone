@@ -57,6 +57,11 @@ public class Player implements Entity {
         d_continent.add(p_continent);
     }
 
+    /**
+     * Get list of continents
+     *
+     * @return list of continents
+     */
     public List<String> getContinents(){
         return d_continent;
     }

@@ -14,48 +14,52 @@ import java.util.Optional;
 public class AirliftOrder extends Order {
 
     /**
-     * Getter for the country from which the airlift is initiated.
-     * @return The country from which the airlift is initiated.
+     * get origin country
+     * @return origin country id
      */
     public String getD_countryFrom() {
         return d_countryFrom;
     }
 
     /**
-     * Setter for the country from which the airlift is initiated.
-     * @param d_countryFrom The country from which the airlift is initiated.
+     * set the origin country
+     *
+     * @param d_countryFrom origin country id
      */
     public void setD_countryFrom(String d_countryFrom) {
         this.d_countryFrom = d_countryFrom;
     }
 
     /**
-     * Getter for the country to which the airlift is directed.
-     * @return The country to which the airlift is directed.
+     * get destination country
+     * @return destination country id
      */
     public String getD_countryTo() {
         return d_countryTo;
     }
 
     /**
-     * Setter for the country to which the airlift is directed.
-     * @param d_countryTo The country to which the airlift is directed.
+     * set the destination country
+     *
+     * @param d_countryTo destination country id
      */
     public void setD_countryTo(String d_countryTo) {
         this.d_countryTo = d_countryTo;
     }
 
     /**
-     * Getter for the number of armies involved in the airlift.
-     * @return The number of armies involved in the airlift.
+     * get number of armies
+     *
+     * @return number of armies
      */
     public int getD_number() {
         return d_number;
     }
 
     /**
-     * Setter for the number of armies involved in the airlift.
-     * @param d_number The number of armies involved in the airlift.
+     * set the number of armies
+     *
+     * @param d_number number of armies
      */
     public void setD_number(int d_number) {
         this.d_number = d_number;
@@ -69,14 +73,14 @@ public class AirliftOrder extends Order {
     final private PlayerService d_playerService;
 
     /**
-     * Constructor for AirliftOrder.
+     * Creates an airlift order
      *
-     * @param p_player          The player initiating the airlift.
-     * @param p_countryFrom     The country from which the airlift is initiated.
-     * @param p_countryTo       The country to which the airlift is directed.
-     * @param p_number          The number of armies involved in the airlift.
-     * @param p_countryService The service managing countries.
-     * @param p_playerService  The service managing players.
+     * @param p_player player id
+     * @param p_countryFrom origin country id
+     * @param p_countryTo destination country id
+     * @param p_number numer of armies
+     * @param p_countryService country service
+     * @param p_playerService player service
      */
     public AirliftOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService, PlayerService p_playerService) {
         super(p_player);

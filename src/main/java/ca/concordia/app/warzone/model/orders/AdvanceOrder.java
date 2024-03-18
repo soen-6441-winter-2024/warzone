@@ -1,49 +1,67 @@
 package ca.concordia.app.warzone.model.orders;
 
-import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-
 
 /**
- * Class for handling advance orders
+ * Represents advance order
+ *
  */
 public class AdvanceOrder extends Order {
+
     /**
-     *
-     * @return the country from which armies advance
+     * get origin country
+     * @return origin country id
      */
     public String getD_countryFrom() {
         return d_countryFrom;
     }
 
     /**
+     * set the origin country
      *
-     * @param d_countryFrom
+     * @param d_countryFrom origin country id
      */
     public void setD_countryFrom(String d_countryFrom) {
         this.d_countryFrom = d_countryFrom;
     }
 
+    /**
+     * get destination country
+     * @return destination country id
+     */
     public String getD_countryTo() {
         return d_countryTo;
     }
 
+    /**
+     * set the destination country
+     *
+     * @param d_countryTo destination country id
+     */
     public void setD_countryTo(String d_countryTo) {
         this.d_countryTo = d_countryTo;
     }
 
+    /**
+     * get number of armies
+     *
+     * @return number of armies
+     */
     public int getD_number() {
         return d_number;
     }
 
+    /**
+     * set the number of armies
+     *
+     * @param d_number number of armies
+     */
     public void setD_number(int d_number) {
         this.d_number = d_number;
     }
@@ -54,16 +72,16 @@ public class AdvanceOrder extends Order {
 
     final private CountryService d_countryService;
 
-
     /**
-     * Conatructs advance order with specified player
-     * @param p_player name of player
-     * @param p_countryFrom id of the country armies are to be moved from
-     * @param p_countryTo id of country which armies are moved to
-     * @param p_number number of armies to advance
-     * @param p_countryService country service used to interact with countries
+     * Creates an advance order
+     *
+     * @param p_player player id
+     * @param p_countryFrom origin country id
+     * @param p_countryTo destination country id
+     * @param p_number numer of armies
+     * @param p_countryService country service
+     *
      */
-
     public AdvanceOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService) {
         super(p_player);
         this.d_countryFrom = p_countryFrom;
