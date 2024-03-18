@@ -28,6 +28,7 @@ public class DeployOrder extends Order {
      * @param player    The player issuing the deploy order.
      * @param countryId The ID of the country to deploy armies to.
      * @param number    The number of armies to deploy.
+     * @param p_countryService country service
      */
     public DeployOrder(String player, String countryId, int number, CountryService p_countryService) {
         super(player);
