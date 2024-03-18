@@ -5,11 +5,21 @@ import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.model.Country;
 import java.util.Optional;
 
+/**
+ * Represents the blockade order
+ */
 public class BlockadeOrder extends Order {
     private final String d_country;
 
     final private CountryService d_countryService;
 
+    /**
+     * Creates a blockade order
+     *
+     * @param p_player player that issued the order
+     * @param p_country country
+     * @param p_countryService country service
+     */
     public BlockadeOrder(String p_player, String p_country, CountryService p_countryService) {
         super(p_player);
         d_countryService = p_countryService;
