@@ -87,7 +87,12 @@ public enum CommandType {
     /**
      * Command to show the current phase
      */
-    SHOW_PHASE("showphase");
+    SHOW_PHASE("showphase"),
+
+    /**
+     * Command to issue the blockade order
+     */
+    BLOCKADE("blockade");
 
     /**
      * The text representation of the command type.

@@ -4,9 +4,10 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
-import ca.concordia.app.warzone.model.orders.DeployOrder;
+import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -56,6 +57,8 @@ public class GameEngineController {
 
     private final PlayerCardService d_playerCardService;
 
+    private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+
     /**
      * Constructs a GameEngineController with the specified services.
      *
@@ -68,7 +71,7 @@ public class GameEngineController {
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
-            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
+            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_RepoContinent) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
@@ -76,6 +79,7 @@ public class GameEngineController {
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
         this.d_diplomacyList = new ArrayList<>();
+        this.d_repoContinent = p_RepoContinent;
 
         this.d_phaseRepository
                 .setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
@@ -151,7 +155,6 @@ public class GameEngineController {
 
     /**
      * Randomly assigns the countries to the players
-     * 
      * @return the result of the operation
      * @throws NotFoundException when countries aren't found
      */
@@ -166,7 +169,7 @@ public class GameEngineController {
 
     /**
      * Deploys a given number of armies into a specified country
-     * 
+     *
      * @param countryId           the id of the country
      * @param numOfReinforcements the number of reinforcement armies to deploy
      * @return the result of the operation
@@ -195,12 +198,38 @@ public class GameEngineController {
      * @return state of issuing an advance order.
      */
     public String advance(String countryFrom, String countryTo, int armiesQuantity) {
-        String result = this.d_phaseRepository.getPhase().addRegularOrderToPlayer(countryFrom, countryTo,
-                armiesQuantity, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         return result;
     }
 
+    /**
+     * Issues an order to advance on a country through an airligt.
+     * @return state of issuing an advance order.
+     */
+    public String airlift(String countryFrom, String countryTo, int armiesQuantity) {
+        String result = this.d_phaseRepository.getPhase().addAirliftOrderToPlayer
+        (countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
+    }
+
+    /**
+     * Issues a blockade order
+     * @param p_country the country where the blockade will take place
+     * @return The result
+     */
+    public String blockade(String p_country) {
+        String result = this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(p_country, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
+    }
+
+    /**
+     * Indicates that a player has finished issuing orders
+     * @return the result
+     * @throws NotFoundException when the
+     */
     public String commit() throws NotFoundException {
         Player currentPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
         String result = "Player " + currentPlayer.getPlayerName() + " finished issuing orders";
@@ -291,7 +320,7 @@ public class GameEngineController {
             this.d_playerService.assignReinforcements();
 
             System.out.println("\n------------------------------\n"
-                    + "\tNext Round" + "\n------------------------------\n");
+            + "\tNext Round" + "\n------------------------------\n");
 
             this.d_phaseRepository.setPhase(new GameIssueDeployPhase(d_playerService));
             this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
@@ -332,13 +361,19 @@ public class GameEngineController {
         this.d_currentRound = 0;
         this.d_currentPlayerGivingOrder = 0;
 
+
+        List<Continent> allContinents = d_repoContinent.findAll();
+
         LoggingService.log("Time to give deploy orders");
+        this.d_mapService.getContinentSize(allContinents);
         d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
+        this.d_playerCardService.newContinentConquered();
     }
+
 
     /**
      * Executes the order for the current turn following the command design pattern
-     * 
+     *
      * @param p_currentRound the current round of the game
      */
     public void executeTurnOrders(int p_currentRound) {

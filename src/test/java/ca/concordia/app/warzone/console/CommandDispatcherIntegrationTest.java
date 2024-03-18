@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CommandDispatcherTest {
+public class CommandDispatcherIntegrationTest {
 
     @MockBean
     private ConsoleRunner runner;

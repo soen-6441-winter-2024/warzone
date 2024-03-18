@@ -3,14 +3,12 @@ package ca.concordia.app.warzone.service;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.model.orders.AdvanceOrder;
+import ca.concordia.app.warzone.model.orders.*;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
-import ca.concordia.app.warzone.model.orders.BombOrder;
-import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
 import ca.concordia.app.warzone.logging.LoggingService;
@@ -206,7 +204,24 @@ public class PlayerService {
         return "";
     }
 
-    /**
+    public String addAirliftOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+
+        AirliftOrder advanceOrder = new AirliftOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity, d_countryService, this);
+        player.issueOrder(advanceOrder, gameTurn);
+        player.removeUsedCard("airlift_card");
+        return "";
+    }
+
+    public String addBlockadeOrderToCurrentPlayer(String p_country, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+        BlockadeOrder order = new BlockadeOrder(player.getPlayerName(), p_country, d_countryService);
+        player.issueOrder(order, gameTurn);
+        player.removeUsedCard("blockade_card");
+        return  "";
+    }
+
+     /**
      * Validates and adds a deploy order to the current player's list of orders
      * 
      * @param p_countryId              the country to deploy armies to

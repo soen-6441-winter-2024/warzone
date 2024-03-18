@@ -32,7 +32,7 @@ public class CommandFactory {
     private AdvanceCommand d_AdvanceCommand;
     private DiplomacyCommand d_DiplomacyCommand;
     private ShowPhaseCommand d_showPhaseCommand;
-
+    private BlockadeCommand d_blockadeCommand;
 
     /**
      * Constructs a CommandFactory object.
@@ -53,7 +53,8 @@ public class CommandFactory {
      * @param p_ordersCompletedCommand The command to notify game engine that player
      *                                 is done issuing commands for current round.
      * @param p_bombCommand            The command to issue a bomb order
-     * @param p_AdvanceCommand         Command to attack or move army units across countries.
+     * @param p_AdvanceCommand         Command to attack or move army units across
+     *                                 countries.
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
@@ -62,7 +63,7 @@ public class CommandFactory {
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
             BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
-            DiplomacyCommand p_diplomacyCommand) {
+            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -80,6 +81,7 @@ public class CommandFactory {
         this.d_AdvanceCommand = p_advanceCommand;
         this.d_showPhaseCommand = p_showPhaseCommand;
         this.d_DiplomacyCommand = p_diplomacyCommand;
+        this.d_blockadeCommand = p_blockadeCommand;
     }
 
     /**
@@ -118,12 +120,14 @@ public class CommandFactory {
             return d_OrdersCompletedCommand;
         } else if (p_commandName.equals(CommandType.BOMB_ORDER.toString())) {
             return d_BombCommand;
-        } else if(p_commandName.equals(CommandType.ADVANCE.toString())) {
+        } else if (p_commandName.equals(CommandType.ADVANCE.toString())) {
             return d_AdvanceCommand;
         } else if (p_commandName.equals(CommandType.SHOW_PHASE.toString())) {
             return d_showPhaseCommand;
-        } else if(p_commandName.equals(CommandType.NEGOTIATE.toString())) {
+        } else if (p_commandName.equals(CommandType.NEGOTIATE.toString())) {
             return d_DiplomacyCommand;
+        } else if (p_commandName.equals(CommandType.BLOCKADE.toString())) {
+            return d_blockadeCommand;
         }
 
         throw new InvalidCommandException("invalid command");

@@ -100,7 +100,17 @@ public class MapEditorPhase extends Phase {
     }
 
     @Override
-    public String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound, List<List<String>> p_diplomacyList) {
+    public String addAdvanceOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound, List<List<String>> p_diplomacyList) {
+        return "Invalid phase";
+    }
+
+    @Override
+    public String addAirliftOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound) {
+        return "Invalid phase";
+    }
+
+    @Override
+    public String addBlockadeOrderToPlayer(String country, int p_currentPlayerGivingOrder, int p_currentRound) {
         return "Invalid phase";
     }
 }
