@@ -62,7 +62,6 @@ public class PlayerService {
      * @param p_repository       the PlayerRepository to be used
      * @param p_mapService       the MapService to be used
      * @param p_countryService   the CountryService to be used
-     * @param p_ordersService    the CountryService to be used
      * @param p_continentService the ContinentService to be used
      */
     public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService,
@@ -179,6 +178,17 @@ public class PlayerService {
         return DEFAULT_REINFORCEMENT_NUMBER + bonus;
     }
 
+    /**
+     * Add advance order to the current player
+     *
+     * @param p_countryFrom origin country
+     * @param p_countryTo destination country
+     * @param armiesQuantity quantity of armies
+     * @param p_playerGivingOrder player id
+     * @param gameTurn game turn
+     * @param p_diplomacyList list of diplomacy players
+     * @return result of the operation
+     */
     public String addAdvanceOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity,
             int p_playerGivingOrder, int gameTurn, List<List<String>> p_diplomacyList) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
@@ -204,6 +214,16 @@ public class PlayerService {
         return "";
     }
 
+    /**
+     * Add airlift order to the current player
+     *
+     * @param p_countryFrom origin country
+     * @param p_countryTo destination country
+     * @param armiesQuantity quantity of armies
+     * @param p_playerGivingOrder player id
+     * @param gameTurn game turn
+     * @return result of the operation
+     */
     public String addAirliftOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
 
@@ -213,6 +233,14 @@ public class PlayerService {
         return "";
     }
 
+    /**
+     * Adds blockade order to the current player
+     *
+     * @param p_country country to block
+     * @param p_playerGivingOrder player id
+     * @param gameTurn game turn
+     * @return result of the operation
+     */
     public String addBlockadeOrderToCurrentPlayer(String p_country, int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
         BlockadeOrder order = new BlockadeOrder(player.getPlayerName(), p_country, d_countryService);
@@ -272,11 +300,10 @@ public class PlayerService {
     /**
      * Validates and adds a bomb order to the current player's list of orders
      * 
-     * @param countryId           The country to bomb
+     * @param p_targetCountryId           The country to bomb
      * @param p_playerGivingOrder the player currently giving orders
      * @param gameTurn            the current round of the game
      * @return the state of the bomb order
-     * @throws NotFoundException
      */
     public String addBombOrderToCurrentPlayer(String p_targetCountryId, int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
@@ -302,6 +329,8 @@ public class PlayerService {
 
     /**
      * Asks the current player to give a deploy order.
+     *
+     * @param p_playerGivingOrder player to ask
      */
     public void askForDeployOrder(int p_playerGivingOrder) {
         List<Player> players = this.getAllPlayers();
@@ -312,6 +341,11 @@ public class PlayerService {
                 + player.getNumberOfReinforcements());
     }
 
+    /**
+     * Asks the current player to give regular orders
+     *
+     * @param p_playerGivingOrder player to ask
+     */
     public void askForRegularOrders(int p_playerGivingOrder) {
         List<Player> players = this.getAllPlayers();
         Player player = players.get(p_playerGivingOrder);
