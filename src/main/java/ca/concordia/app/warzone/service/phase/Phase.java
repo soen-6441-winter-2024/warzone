@@ -35,6 +35,7 @@ public abstract class Phase {
     public abstract String addAdvanceOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound);
 
     public abstract String addAirliftOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound);
+    public abstract String addBlockadeOrderToPlayer(String country, int p_currentPlayerGivingOrder, int p_currentRound);
 }
 
 

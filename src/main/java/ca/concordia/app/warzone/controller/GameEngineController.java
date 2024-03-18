@@ -206,6 +206,22 @@ public class GameEngineController {
         return result;
     }
 
+    /**
+     * Issues a blockade order
+     * @param p_country the country where the blockade will take place
+     * @return The result
+     */
+    public String blockade(String p_country) {
+        String result = this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(p_country, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
+    }
+
+    /**
+     * Indicates that a player has finished issuing orders
+     * @return the result
+     * @throws NotFoundException when the
+     */
     public String commit() throws NotFoundException {
         Player currentPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
         String result = "Player " + currentPlayer.getPlayerName() + " finished issuing orders";
