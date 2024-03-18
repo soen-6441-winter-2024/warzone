@@ -107,29 +107,29 @@ public class MapService {
     /**
      * Validates is a paragraph is formatted correctly
      *
-     * @param iterator Iterator of the lines
-     * @param title Title of the paragraph
-     * @param lineValidator Predicate method to validate each line
+     * @param p_iterator Iterator of the lines
+     * @param p_title Title of the paragraph
+     * @param p_lineValidator Predicate method to validate each line
      * @return true if valid, else false.
      */
-    protected boolean validateParagraph(Iterator<String> iterator, String title, Predicate<String> lineValidator) {
+    protected boolean validateParagraph(Iterator<String> p_iterator, String p_title, Predicate<String> p_lineValidator) {
 
-        String line = getFirstNonEmptyLine(iterator);
+        String line = getFirstNonEmptyLine(p_iterator);
 
-        if (iterator.hasNext() && line.equals("[" + title +"]")) {
-            line = iterator.next();
+        if (p_iterator.hasNext() && line.equals("[" + p_title +"]")) {
+            line = p_iterator.next();
         } else {
             return false;
         }
 
         while (!line.trim().isEmpty()){
 
-            if (!lineValidator.test(line)) {
+            if (!p_lineValidator.test(line)) {
                 return false;
             }
 
-            if (iterator.hasNext()) {
-                line = iterator.next();
+            if (p_iterator.hasNext()) {
+                line = p_iterator.next();
             } else {
                 break;
             }
@@ -141,15 +141,15 @@ public class MapService {
     /**
      * Get the first non-empty line from the lines of the file
      *
-     * @param iterator Iterator referencing the lines of the file
+     * @param p_iterator Iterator referencing the lines of the file
      * @return Non-empty line
      */
-    private String getFirstNonEmptyLine(Iterator<String> iterator) {
+    private String getFirstNonEmptyLine(Iterator<String> p_iterator) {
 
         String line = "";
 
-        while (iterator.hasNext() && line.trim().isEmpty()) {
-            line = iterator.next();
+        while (p_iterator.hasNext() && line.trim().isEmpty()) {
+            line = p_iterator.next();
         }
 
         return line;
@@ -158,11 +158,11 @@ public class MapService {
     /**
      * Validates if a line is a valid continent format
      *
-     * @param line line of a file
+     * @param p_line line of a file
      * @return true if valid, else false
      */
-    private boolean isValidContinent(String line) {
-        String[] words = line.split("\\s+");
+    private boolean isValidContinent(String p_line) {
+        String[] words = p_line.split("\\s+");
         // Invalid format: Each line after [continents] should contain two
         // words separated by one blank space
         return words.length == 2;
@@ -171,11 +171,11 @@ public class MapService {
     /**
      * Validates if a line is a valid country format
      *
-     * @param line line of a file
+     * @param p_line line of a file
      * @return true if valid, else false
      */
-    private boolean isValidCountry(String line) {
-        String[] words = line.split("\\s+");
+    private boolean isValidCountry(String p_line) {
+        String[] words = p_line.split("\\s+");
         // Invalid format: Each line after [countries] should contain two
         // words separated by one blank space
         return words.length == 2;
@@ -184,11 +184,11 @@ public class MapService {
     /**
      * Validates if a line is a valid border format
      *
-     * @param line line of a file
+     * @param p_line line of a file
      * @return true if valid, else false
      */
-    private boolean isValidBorder(String line) {
-        String[] words = line.split("\\s+");
+    private boolean isValidBorder(String p_line) {
+        String[] words = p_line.split("\\s+");
         // Invalid format: Each line after [borders] should contain at
         // least two words or more separated by one blank space
         return words.length >= 2;
