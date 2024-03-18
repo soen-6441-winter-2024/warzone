@@ -8,6 +8,9 @@ import ca.concordia.app.warzone.service.PlayerService;
 
 import java.util.Optional;
 
+/**
+ * Represents an airlift order in the game.
+ */
 public class AirliftOrder extends Order {
 
     /**
