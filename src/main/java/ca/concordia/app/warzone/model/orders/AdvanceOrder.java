@@ -16,10 +16,18 @@ import java.util.Random;
  * Class for handling advance orders
  */
 public class AdvanceOrder extends Order {
+    /**
+     *
+     * @return the country from which armies advance
+     */
     public String getD_countryFrom() {
         return d_countryFrom;
     }
 
+    /**
+     *
+     * @param d_countryFrom
+     */
     public void setD_countryFrom(String d_countryFrom) {
         this.d_countryFrom = d_countryFrom;
     }
