@@ -70,6 +70,7 @@ public class GameEngineController {
      * @param p_mapService        The MapService to use.
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
+     * @param p_RepoContinent     The continent repository to use
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
@@ -268,9 +269,10 @@ public class GameEngineController {
 
     /**
      * Validates and issues a diplomacy between 2 players to prevent attacks on each other for that round.
-     * @param targetPlayerName
-     * @return
+     * @param targetPlayerName player name of the targeted player
+     * @return A string containing result of the diplomacy order
      */
+
     public String diplomacy(String targetPlayerName) {
         if (!(this.d_phaseRepository.getPhase() instanceof GameIssueOrderPhase)) {
             LoggingService.log("game is not in game loop phase");
