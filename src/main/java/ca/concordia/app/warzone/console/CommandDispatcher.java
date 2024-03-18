@@ -49,6 +49,9 @@ public class CommandDispatcher {
         } catch (InvalidCommandException e) {
             LoggingService.log("Exception: " + e.getMessage());
             System.out.println("Invalid command provided: " + e.getMessage());
+        } catch (Exception e) {
+            LoggingService.log("Exception: " + e.getMessage());
+            System.out.println("General Exception during execution: " + e.getMessage());
         }
     }
 

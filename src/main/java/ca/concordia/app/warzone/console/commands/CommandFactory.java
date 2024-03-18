@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.console.commands;
 
 import ca.concordia.app.warzone.console.commands.implementations.*;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+
+import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,31 +28,46 @@ public class CommandFactory {
     private ValidateMapCommand d_validateMapCommand;
     private NextPhaseCommand d_nextPhaseCommand;
     private OrdersCompletedCommand d_OrdersCompletedCommand;
-
-    private AdvanceCommand d_advanceCommand;
+    private BombCommand d_BombCommand;
+    private AdvanceCommand d_AdvanceCommand;
+    private DiplomacyCommand d_DiplomacyCommand;
+    private ShowPhaseCommand d_showPhaseCommand;
+    private BlockadeCommand d_blockadeCommand;
 
     /**
      * Constructs a CommandFactory object.
      *
-     * @param p_editContinentCommand The command for editing continents.
-     * @param p_editCountryCommand The command for editing countries.
-     * @param p_editNeighborCommand The command for editing neighbors.
-     * @param p_showMapCommand The command for showing the map.
-     * @param p_editGamePlayerCommand The command for editing game players.
-     * @param p_saveMapCommand The command for saving the map.
+     * @param p_editContinentCommand   The command for editing continents.
+     * @param p_editCountryCommand     The command for editing countries.
+     * @param p_editNeighborCommand    The command for editing neighbors.
+     * @param p_showMapCommand         The command for showing the map.
+     * @param p_editGamePlayerCommand  The command for editing game players.
+     * @param p_saveMapCommand         The command for saving the map.
      * @param p_assignCountriesCommand The command for assigning countries.
      * @param p_editMapCommand         The command for editing the map.
      * @param p_loadMap                The command for loading the map.
      * @param p_deployCommand          The command to deploy
      * @param p_nextPhaseCommand       The command for going to the next phase
-     * @param p_validateMapCommand     The command to validate a created or load map in memory
+     * @param p_validateMapCommand     The command to validate a created or load map
+     *                                 in memory
+     * @param p_ordersCompletedCommand The command to notify game engine that player
+     *                                 is done issuing commands for current round.
+     * @param p_bombCommand            The command to issue a bomb order
+<<<<<<< HEAD
+     * @param p_AdvanceCommand         Command to attack or move army units across
+     *                                 countries.
+=======
+     * @param p_advanceCommand         Command to attack or move army units across countries.
+>>>>>>> e02fae84b8971dbbe62e85682666597f234bebf2
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
-                          EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
-                          GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
-                          AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
-                          LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
-                          ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand, AdvanceCommand p_advanceCommand) {
+            EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
+            GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,
+            AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
+            LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
+            ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
+            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
+            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -64,7 +81,11 @@ public class CommandFactory {
         this.d_nextPhaseCommand = p_nextPhaseCommand;
         this.d_validateMapCommand = p_validateMapCommand;
         this.d_OrdersCompletedCommand = p_ordersCompletedCommand;
-        this.d_advanceCommand = p_advanceCommand;
+        this.d_BombCommand = p_bombCommand;
+        this.d_AdvanceCommand = p_advanceCommand;
+        this.d_showPhaseCommand = p_showPhaseCommand;
+        this.d_DiplomacyCommand = p_diplomacyCommand;
+        this.d_blockadeCommand = p_blockadeCommand;
     }
 
     /**
@@ -90,7 +111,7 @@ public class CommandFactory {
         } else if (p_commandName.equals(CommandType.EDIT_MAP.toString())) {
             return d_EditMapCommand;
         } else if (p_commandName.equals(CommandType.ASSIGN_COUNTRIES.toString())) {
-            return  d_AssignCountriesCommand;
+            return d_AssignCountriesCommand;
         } else if (p_commandName.equals(CommandType.LOAD_MAP.toString())) {
             return d_loadMapCommand;
         } else if (p_commandName.equals(CommandType.DEPLOY.toString())) {
@@ -99,10 +120,18 @@ public class CommandFactory {
             return d_nextPhaseCommand;
         } else if (p_commandName.equals(CommandType.VALIDATE_MAP.toString())) {
             return d_validateMapCommand;
-        } else if(p_commandName.equals(CommandType.ORDERS_COMPLETED.toString())) {
+        } else if (p_commandName.equals(CommandType.ORDERS_COMPLETED.toString())) {
             return d_OrdersCompletedCommand;
-        } else if(p_commandName.equals(CommandType.ADVANCE.toString())){
-            return d_advanceCommand;
+        } else if (p_commandName.equals(CommandType.BOMB_ORDER.toString())) {
+            return d_BombCommand;
+        } else if (p_commandName.equals(CommandType.ADVANCE.toString())) {
+            return d_AdvanceCommand;
+        } else if (p_commandName.equals(CommandType.SHOW_PHASE.toString())) {
+            return d_showPhaseCommand;
+        } else if (p_commandName.equals(CommandType.NEGOTIATE.toString())) {
+            return d_DiplomacyCommand;
+        } else if (p_commandName.equals(CommandType.BLOCKADE.toString())) {
+            return d_blockadeCommand;
         }
 
         throw new InvalidCommandException("invalid command");

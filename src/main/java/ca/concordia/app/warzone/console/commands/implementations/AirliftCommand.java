@@ -6,23 +6,23 @@ import ca.concordia.app.warzone.controller.GameEngineController;
 import org.springframework.stereotype.Component;
 
 /**
- * Represents the advance command to attack or move army units across countries.
+ * Represents the airlift command to attack or move army units across countries.
  */
 @Component
-public class AdvanceCommand extends Command {
+public class AirliftCommand extends Command {
     private final GameEngineController d_gameEngineController;
 
     /**
-     * Constructs a new advance command with the specified game engine controller.
+     * Constructs a new airlift command with the specified game engine controller.
      *
      * @param p_GameEngineController The game engine controller.
      */
-    public AdvanceCommand(GameEngineController p_GameEngineController) {
+    public AirliftCommand(GameEngineController p_GameEngineController) {
         d_gameEngineController = p_GameEngineController;
     }
 
     /**
-     * Executes the advance command to move armies from one country to another.
+     * Executes the airlift command to move armies from one country to another.
      *
      * @param p_subCommandsAndOptions The array containing the command arguments.
      * @return A message indicating the success or failure of the command.
@@ -31,7 +31,7 @@ public class AdvanceCommand extends Command {
     @Override
     public String run(String[] p_subCommandsAndOptions) {
         if(p_subCommandsAndOptions.length != 3) {
-            throw new InvalidCommandException("expected 3 arguments");
+            throw new InvalidCommandException("expected 2 arguments");
         }
 
         String countryFrom = p_subCommandsAndOptions[0];
@@ -44,6 +44,6 @@ public class AdvanceCommand extends Command {
             throw new InvalidCommandException("armies quantity should be a number");
         }
 
-        return d_gameEngineController.advance(countryFrom, countryTo, armiesQuantity);
+        return d_gameEngineController.airlift(countryFrom, countryTo, armiesQuantity);
     }
 }

@@ -94,6 +94,10 @@ public class CountryService {
         return countryOptional.map(this::convertToDto);
     }
 
+    public Optional<Country> findCountryById(String p_id) {
+        return d_repoCountry.findById(p_id);
+    }
+
     /**
      * Returns all the countries
      * @return all the countries
@@ -215,7 +219,13 @@ public class CountryService {
 
         return result.toString();
     }
-
+    /**
+     * Checks if 2 countries are neighbors
+     * @param first
+     * @param second
+     * @return true if they are neighbors, false otherwise.
+     * @throws NotFoundException
+     */
     public boolean areNeighbors(String first, String second) throws NotFoundException {
         Optional<Country> countryOpt = d_repoCountry.findById(first);
         if(!countryOpt.isPresent()) {
@@ -288,12 +298,31 @@ public class CountryService {
             d_repoCountry.save(country);
         });
     }
+    /**
+     * Bombs a country causing it to lose half of it's armies.
+     * @param p_countryId
+     */
+    public void bombACountry(String p_countryId) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(
+            country -> {
+                int armiesCount = country.getArmiesCount();
+                country.setArmiesCount((int) (armiesCount / 2));
+                d_repoCountry.save(country);
+            }
+        );
+    }
 
     public void removeArmiesFromCountry(String p_countryId, int p_count) {
         this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
             int armiesCount = country.getArmiesCount();
             country.setArmiesCount(armiesCount - p_count);
             d_repoCountry.save(country);
+        });
+    }
+
+    public void setArmiesCountToCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            country.setArmiesCount(p_count);
         });
     }
 }
