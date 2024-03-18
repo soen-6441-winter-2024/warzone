@@ -1,0 +1,10 @@
+[continents]
+1 America
+2 Europe
+
+[borders]
+Canada USA
+USA Canada
+USA France
+France Spain
+Spain USA
