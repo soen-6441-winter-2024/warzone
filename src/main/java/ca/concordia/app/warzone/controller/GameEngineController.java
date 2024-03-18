@@ -18,6 +18,7 @@ import ca.concordia.app.warzone.logging.LoggingService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class for managing game engine operations.
@@ -288,13 +289,12 @@ public class GameEngineController {
         this.d_currentRound = 0;
         this.d_currentPlayerGivingOrder = 0;
 
-
-        List<Continent> allContinents = d_repoContinent.findAll();
+        Map<String, Integer> sizeBeforeLoop = this.d_playerCardService.getSizeOfCountriesAssigned();
 
         LoggingService.log("Time to give deploy orders");
-        this.d_mapService.getContinentSize(allContinents);
         d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
-        this.d_playerCardService.newContinentConquered();
+        Map<String, Integer> sizeAfterLoop = this.d_playerCardService.getSizeOfCountriesAssigned();
+        this.d_playerCardService.newCountryConquered(sizeBeforeLoop, sizeAfterLoop);
     }
 
 
