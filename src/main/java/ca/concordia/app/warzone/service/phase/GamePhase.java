@@ -1,5 +1,7 @@
 package ca.concordia.app.warzone.service.phase;
 
+import java.util.List;
+
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.MapDto;
@@ -83,7 +85,7 @@ public class GamePhase extends Phase {
     }
 
     @Override
-    public String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound) {
+    public String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound, List<List<String>> p_diplomacyList) {
         return "Invalid phase";
     }
 }

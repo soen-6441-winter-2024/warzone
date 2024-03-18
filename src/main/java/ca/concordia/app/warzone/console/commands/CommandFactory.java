@@ -30,7 +30,7 @@ public class CommandFactory {
     private OrdersCompletedCommand d_OrdersCompletedCommand;
     private BombCommand d_BombCommand;
     private AdvanceCommand d_AdvanceCommand;
-
+    private DiplomacyCommand d_DiplomacyCommand;
     private ShowPhaseCommand d_showPhaseCommand;
 
 
@@ -61,7 +61,8 @@ public class CommandFactory {
             AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
-            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand) {
+            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
+            DiplomacyCommand p_diplomacyCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -78,6 +79,7 @@ public class CommandFactory {
         this.d_BombCommand = p_bombCommand;
         this.d_AdvanceCommand = p_advanceCommand;
         this.d_showPhaseCommand = p_showPhaseCommand;
+        this.d_DiplomacyCommand = p_diplomacyCommand;
     }
 
     /**
@@ -120,6 +122,8 @@ public class CommandFactory {
             return d_AdvanceCommand;
         } else if (p_commandName.equals(CommandType.SHOW_PHASE.toString())) {
             return d_showPhaseCommand;
+        } else if(p_commandName.equals(CommandType.NEGOTIATE.toString())) {
+            return d_DiplomacyCommand;
         }
 
         throw new InvalidCommandException("invalid command");

@@ -20,7 +20,7 @@ public class AdvanceCommand extends Command {
     @Override
     public String run(String[] p_subCommandsAndOptions) {
         if(p_subCommandsAndOptions.length != 3) {
-            throw new InvalidCommandException("expected 2 arguments");
+            throw new InvalidCommandException("expected 3 arguments");
         }
 
         String countryFrom = p_subCommandsAndOptions[0];

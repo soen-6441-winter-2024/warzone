@@ -59,7 +59,8 @@ public enum CommandType {
      */
     VALIDATE_MAP("validatemap"),
     /**
-     * Command to notify game engine that a player has given all his orders for a round
+     * Command to notify game engine that a player has given all his orders for a
+     * round
      */
     ORDERS_COMPLETED("orderscompleted"),
 
@@ -67,6 +68,11 @@ public enum CommandType {
      * Command to bomb a target country.
      */
     BOMB_ORDER("bomb"),
+
+    /**
+     * Command to bomb a target country.
+     */
+    NEGOTIATE("negotiate"),
 
     /**
      * Command to move to the next phase.

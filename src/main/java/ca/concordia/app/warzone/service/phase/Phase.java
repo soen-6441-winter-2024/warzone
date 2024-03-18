@@ -1,6 +1,8 @@
 package ca.concordia.app.warzone.service.phase;
 
 
+import java.util.List;
+
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.MapDto;
@@ -32,7 +34,7 @@ public abstract class Phase {
     // Game play phase
     public abstract String addDeployOrdersToPlayer(String countryId, int numOfReinforcements, int p_currentPlayerGivingOrder, int p_currentRound);
 
-    public abstract String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound);
+    public abstract String addRegularOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound, List<List<String>> p_diplomacyList);
 }
 
 
