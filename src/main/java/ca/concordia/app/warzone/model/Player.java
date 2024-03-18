@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class Player implements Entity {
     private static int d_lastPlayerID = 0; // Static member for the last player ID
-    private int d_playerID; // Data member for player ID
     private String d_playerName; // Data member for player name
     private List<Country> d_countriesAssigned; // Data member for countries assigned to the player
     /**
@@ -16,6 +15,9 @@ public class Player implements Entity {
      */
     private List<List<Order>> d_playerOrders;
 
+    /**
+     * List of continents
+     */
     private List<String> d_continent;
     /**
      *  Data member for cards received by player
@@ -31,7 +33,6 @@ public class Player implements Entity {
      * Initializes player ID and countries assigned list.
      */
     public Player(){
-        this.d_playerID = d_lastPlayerID + 1;
         this.d_countriesAssigned = new ArrayList<>();
         this.d_playerOrders = new ArrayList<>();
         this.d_cardsReceived = new ArrayList<>();
@@ -47,6 +48,11 @@ public class Player implements Entity {
         d_countriesAssigned.add(p_country);
     }
 
+    /**
+     * Add Continent conquered
+     *
+     * @param p_continent continent id
+     */
     public void addContinentConquered(String p_continent){
         d_continent.add(p_continent);
     }
@@ -162,8 +168,8 @@ public class Player implements Entity {
 
     /**
      * Returns the list of orders player has issue for the currentTurn
-     * @param currentTurn
-     * @return
+     * @param currentTurn turn
+     * @return list of orders
      */
     public List<Order> getPlayerCurrentTurnOrders(int currentTurn) {
         return this.d_playerOrders.get(currentTurn);
@@ -171,7 +177,8 @@ public class Player implements Entity {
 
     /**
      * Sets the list of orders a player has issued in a turn
-     * @param turnOrders
+     * @param order order to be issued
+     * @param round turn
      */
     public void issueOrder(Order order, int round) {
         if(round == this.d_playerOrders.size()) {
