@@ -94,6 +94,11 @@ public class CountryService {
         return countryOptional.map(this::convertToDto);
     }
 
+    /**
+     *
+     * @param p_id id of the country
+     * @return oprional containing the country if found
+     */
     public Optional<Country> findCountryById(String p_id) {
         return d_repoCountry.findById(p_id);
     }
@@ -221,10 +226,10 @@ public class CountryService {
     }
     /**
      * Checks if 2 countries are neighbors
-     * @param first
-     * @param second
+     * @param first the first country
+     * @param second the second country
      * @return true if they are neighbors, false otherwise.
-     * @throws NotFoundException
+     * @throws NotFoundException when country isnt found
      */
     public boolean areNeighbors(String first, String second) throws NotFoundException {
         Optional<Country> countryOpt = d_repoCountry.findById(first);
@@ -300,7 +305,7 @@ public class CountryService {
     }
     /**
      * Bombs a country causing it to lose half of it's armies.
-     * @param p_countryId
+     * @param p_countryId the id of the country
      */
     public void bombACountry(String p_countryId) {
         this.d_repoCountry.findById(p_countryId).ifPresent(
@@ -312,6 +317,11 @@ public class CountryService {
         );
     }
 
+    /**
+     * removes speciied number of armies
+     * @param p_countryId the id of the country from which armies are to be removed
+     * @param p_count the count of armies to be removed
+     */
     public void removeArmiesFromCountry(String p_countryId, int p_count) {
         this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
             int armiesCount = country.getArmiesCount();
@@ -320,6 +330,11 @@ public class CountryService {
         });
     }
 
+    /**
+     * Sets number of armies for each country with the specified id
+     * @param p_countryId the id of the country
+     * @param p_count the new count of armies for the country
+     */
     public void setArmiesCountToCountry(String p_countryId, int p_count) {
         this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
             country.setArmiesCount(p_count);

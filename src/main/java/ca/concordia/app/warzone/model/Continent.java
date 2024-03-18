@@ -51,10 +51,18 @@ public class Continent implements Entity{
         this.d_value = value;
     }
 
+    /**
+     * sets size of the continent
+     * @param sizeOfContinent the size of the continent
+     */
     public void setSizeOfContinent(int sizeOfContinent){
         this.d_sizeOfContinent = sizeOfContinent;
     }
 
+    /**
+     * gets size of the continent
+     * @return the size of the continent
+     */
     public int getSizeOfContinent(){
         return d_sizeOfContinent;
     }
