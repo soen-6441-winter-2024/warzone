@@ -12,6 +12,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -107,6 +110,17 @@ public class MapRepositoryFileImpl implements MapRepository {
             return "Map was saved in the following filepath " + filePath;
         } else {
             return "There are no continents to save";
+        }
+    }
+
+    @Override
+    public List<String> getMap(String p_filePath) {
+
+        try {
+            Path path = Paths.get(p_filePath);
+            return Files.readAllLines(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while reading the file", e);
         }
     }
 }

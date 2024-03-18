@@ -32,7 +32,7 @@ public class CommandFactory {
     private AdvanceCommand d_AdvanceCommand;
 
     private ShowPhaseCommand d_showPhaseCommand;
-
+    private BlockadeCommand d_blockadeCommand;
 
     /**
      * Constructs a CommandFactory object.
@@ -53,7 +53,7 @@ public class CommandFactory {
      * @param p_ordersCompletedCommand The command to notify game engine that player
      *                                 is done issuing commands for current round.
      * @param p_bombCommand            The command to issue a bomb order
-     * @param p_AdvanceCommand         Command to attack or move army units across countries.
+     * @param p_advanceCommand         Command to attack or move army units across countries.
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
@@ -61,7 +61,7 @@ public class CommandFactory {
             AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
-            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand) {
+            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand, BlockadeCommand p_blockadeCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -78,6 +78,7 @@ public class CommandFactory {
         this.d_BombCommand = p_bombCommand;
         this.d_AdvanceCommand = p_advanceCommand;
         this.d_showPhaseCommand = p_showPhaseCommand;
+        this.d_blockadeCommand = p_blockadeCommand;
     }
 
     /**
@@ -120,6 +121,8 @@ public class CommandFactory {
             return d_AdvanceCommand;
         } else if (p_commandName.equals(CommandType.SHOW_PHASE.toString())) {
             return d_showPhaseCommand;
+        } else if(p_commandName.equals(CommandType.BLOCKADE.toString())) {
+            return d_blockadeCommand;
         }
 
         throw new InvalidCommandException("invalid command");
