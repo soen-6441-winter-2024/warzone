@@ -11,11 +11,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+
+/**
+ * Class for handling advance orders
+ */
 public class AdvanceOrder extends Order {
+    /**
+     *
+     * @return the country from which armies advance
+     */
     public String getD_countryFrom() {
         return d_countryFrom;
     }
 
+    /**
+     *
+     * @param d_countryFrom
+     */
     public void setD_countryFrom(String d_countryFrom) {
         this.d_countryFrom = d_countryFrom;
     }
@@ -43,6 +55,14 @@ public class AdvanceOrder extends Order {
     final private CountryService d_countryService;
 
 
+    /**
+     * Conatructs advance order with specified player
+     * @param p_player name of player
+     * @param p_countryFrom id of the country armies are to be moved from
+     * @param p_countryTo id of country which armies are moved to
+     * @param p_number number of armies to advance
+     * @param p_countryService country service used to interact with countries
+     */
 
     public AdvanceOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService) {
         super(p_player);
@@ -51,7 +71,6 @@ public class AdvanceOrder extends Order {
         this.d_number = p_number;
         d_countryService = p_countryService;
     }
-
 
     @Override
     public void execute() {
