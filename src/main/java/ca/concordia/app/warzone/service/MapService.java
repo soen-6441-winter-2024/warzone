@@ -547,6 +547,11 @@ public class MapService {
         return l_total;
     }
 
+    /**
+     * Get continent size
+     *
+     * @param allContinents list of continents
+     */
     public void getContinentSize(List<Continent> allContinents){
 
         for(Continent continent : allContinents){
@@ -555,6 +560,13 @@ public class MapService {
             continent.setSizeOfContinent(sizeOfContinent);
         }
     }
+
+    /**
+     * Get countries by continent
+     *
+     * @param continentId continent id
+     * @return number of countries
+     */
     public int getCountriesByContinentId(String continentId){
         List<Country> l_allCountries = d_repoCountry.findAll();
         int sizeOfContinent = 0;
