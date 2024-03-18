@@ -13,13 +13,8 @@ import ca.concordia.app.warzone.repository.MapRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Service class for managing map-related operations.
@@ -100,68 +95,103 @@ public class MapService {
      * @return true if the map file structure is valid, false otherwise
      */
     public boolean validateMapStructure(String p_file) {
-        boolean resultValidation = true;
-        boolean continentsFound = false;
-        boolean countriesFound = false;
-        boolean bordersFound = false;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(p_file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Remove leading and trailing whitespace
+        List<String> mapLines = d_repoMap.getMap(p_file);
+        Iterator<String> iterator = mapLines.iterator();
 
-                if (line.equals("[continents]")) {
-                    continentsFound = true;
-                    countriesFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[countries]")) {
-                    if (!continentsFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [countries] section before [continents]
-                    }
-                    countriesFound = true;
-                    continentsFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[borders]")) {
-                    if (!countriesFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [borders] section before [countries]
-                    }
-                    bordersFound = true;
-                    countriesFound = false;
-                    continentsFound = false;
-                } else {
-                    // Validate content format
-                    if (continentsFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [continents] should contain two
-                                                     // elements separated by one blank space
-                        }
-                    } else if (countriesFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [countries] should contain two
-                                                     // elements separated by one blank space
-                        }
-                    } else if (bordersFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length <= 1) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [borders] should contain at
-                                                     // least two elements or more separated by one blank space
-                        }
-                    }
-                }
-            }
-            return resultValidation;
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
-            return false; // Error reading file
+        return validateParagraph(iterator, "continents", this::isValidContinent) &&
+                validateParagraph(iterator, "countries", this::isValidCountry) &&
+                validateParagraph(iterator, "borders", this::isValidBorder);
+    }
+
+    /**
+     * Validates is a paragraph is formatted correctly
+     *
+     * @param p_iterator Iterator of the lines
+     * @param p_title Title of the paragraph
+     * @param p_lineValidator Predicate method to validate each line
+     * @return true if valid, else false.
+     */
+    protected boolean validateParagraph(Iterator<String> p_iterator, String p_title, Predicate<String> p_lineValidator) {
+
+        String line = getFirstNonEmptyLine(p_iterator);
+
+        if (p_iterator.hasNext() && line.equals("[" + p_title +"]")) {
+            line = p_iterator.next();
+        } else {
+            return false;
         }
+
+        while (!line.trim().isEmpty()){
+
+            if (!p_lineValidator.test(line)) {
+                return false;
+            }
+
+            if (p_iterator.hasNext()) {
+                line = p_iterator.next();
+            } else {
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the first non-empty line from the lines of the file
+     *
+     * @param p_iterator Iterator referencing the lines of the file
+     * @return Non-empty line
+     */
+    private String getFirstNonEmptyLine(Iterator<String> p_iterator) {
+
+        String line = "";
+
+        while (p_iterator.hasNext() && line.trim().isEmpty()) {
+            line = p_iterator.next();
+        }
+
+        return line;
+    }
+
+    /**
+     * Validates if a line is a valid continent format
+     *
+     * @param p_line line of a file
+     * @return true if valid, else false
+     */
+    private boolean isValidContinent(String p_line) {
+        String[] words = p_line.split("\\s+");
+        // Invalid format: Each line after [continents] should contain two
+        // words separated by one blank space
+        return words.length == 2;
+    }
+
+    /**
+     * Validates if a line is a valid country format
+     *
+     * @param p_line line of a file
+     * @return true if valid, else false
+     */
+    private boolean isValidCountry(String p_line) {
+        String[] words = p_line.split("\\s+");
+        // Invalid format: Each line after [countries] should contain two
+        // words separated by one blank space
+        return words.length == 2;
+    }
+
+    /**
+     * Validates if a line is a valid border format
+     *
+     * @param p_line line of a file
+     * @return true if valid, else false
+     */
+    private boolean isValidBorder(String p_line) {
+        String[] words = p_line.split("\\s+");
+        // Invalid format: Each line after [borders] should contain at
+        // least two words or more separated by one blank space
+        return words.length >= 2;
     }
 
     /**
@@ -310,12 +340,8 @@ public class MapService {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | InvalidMapContentFormat e) {
             System.out.println(e.getMessage());
-            //System.exit(0);
-        } catch (InvalidMapContentFormat e) {
-            System.out.println(e.getMessage());
-            //System.exit(0);
         }
         if (l_continentService.findAll().isEmpty())
         {

@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -83,6 +85,14 @@ public class MapRepositoryFileImplTest {
         assertEquals("Map was saved in the following filepath " + FILE_NAME,result);
         assertEquals(readFileToString(new File(EXPECTED_FILE_NAME), StandardCharsets.UTF_8),
                 readFileToString(new File(FILE_NAME), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void testGetMap() {
+
+        List<String> lines = underTest.getMap(EXPECTED_FILE_NAME);
+
+        assertThat(lines, hasSize(16));
     }
 
     private Country newCountry(String id, Continent continent) {
