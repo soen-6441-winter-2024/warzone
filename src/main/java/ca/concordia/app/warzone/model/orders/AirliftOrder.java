@@ -8,27 +8,60 @@ import ca.concordia.app.warzone.service.PlayerService;
 
 import java.util.Optional;
 
+/**
+ * Represents the airlift order
+ *
+ */
 public class AirliftOrder extends Order {
+
+    /**
+     * get origin country
+     * @return origin country id
+     */
     public String getD_countryFrom() {
         return d_countryFrom;
     }
 
+    /**
+     * set the origin country
+     *
+     * @param d_countryFrom origin country id
+     */
     public void setD_countryFrom(String d_countryFrom) {
         this.d_countryFrom = d_countryFrom;
     }
 
+    /**
+     * get destination country
+     * @return destination country id
+     */
     public String getD_countryTo() {
         return d_countryTo;
     }
 
+    /**
+     * set the destination country
+     *
+     * @param d_countryTo destination country id
+     */
     public void setD_countryTo(String d_countryTo) {
         this.d_countryTo = d_countryTo;
     }
 
+    /**
+     * get number of armies
+     *
+     * @return number of armies
+     */
     public int getD_number() {
         return d_number;
     }
 
+    /**
+     * set the number of armies
+     *
+     * @param d_number number of armies
+     */
     public void setD_number(int d_number) {
         this.d_number = d_number;
     }
@@ -40,6 +73,16 @@ public class AirliftOrder extends Order {
     final private CountryService d_countryService;
     final private PlayerService d_playerService;
 
+    /**
+     * Creates an airlift order
+     *
+     * @param p_player player id
+     * @param p_countryFrom origin country id
+     * @param p_countryTo destination country id
+     * @param p_number numer of armies
+     * @param p_countryService country service
+     * @param p_playerService player service
+     */
     public AirliftOrder(String p_player, String p_countryFrom, String p_countryTo, int p_number, CountryService p_countryService, PlayerService p_playerService) {
         super(p_player);
         this.d_countryFrom = p_countryFrom;

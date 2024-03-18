@@ -54,6 +54,9 @@ public class CommandFactory {
      *                                 is done issuing commands for current round.
      * @param p_bombCommand            The command to issue a bomb order
      * @param p_advanceCommand         Command to attack or move army units across countries.
+     * @param p_showPhaseCommand       Command to show which phase you are
+     * @param p_blockadeCommand        Command to issue blockage order
+     * @param p_diplomacyCommand       Command to issue diplomacy order
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
