@@ -98,8 +98,8 @@ public class AdvanceOrder extends Order {
 
         // If the countryTo has no owner, then we just move the armies to the country
         if(countryToOwnerOptional.isEmpty()) {
-            System.out.println("Advanced " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo );
-            this.d_countryService.addArmiesToCountry(this.d_countryTo,  this.d_number);
+            System.out.println("Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo );
+            countryTo.setArmiesCount(countryTo.getArmiesCount() + this.d_number);
             countryTo.setPlayer(Optional.of(countryFromOwner));
             return;
         }
@@ -108,8 +108,8 @@ public class AdvanceOrder extends Order {
 
         // If the player is the owner, we just move the armies to the country
         if(countryToOwner.ownsCountry(this.d_countryTo)) {
-            System.out.println("Advanced " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo );
-            this.d_countryService.addArmiesToCountry(this.d_countryTo,  this.d_number);
+            System.out.println("Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo );
+            countryTo.setArmiesCount(countryTo.getArmiesCount() + this.d_number);
             return;
         }
 
@@ -141,7 +141,7 @@ public class AdvanceOrder extends Order {
             return;
         }
 
-        System.out.println("Advanced " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". Attacking armies won armies won.");
+        System.out.println("Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". Attacking armies won armies won.");
         // Attacking won, the owner of the country changes
         this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
         countryTo.setPlayer(Optional.of(countryFromOwner));

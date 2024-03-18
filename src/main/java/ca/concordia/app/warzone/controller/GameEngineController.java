@@ -18,6 +18,7 @@ import ca.concordia.app.warzone.logging.LoggingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Controller class for managing game engine operations.
@@ -26,10 +27,14 @@ import java.util.Map;
 public class GameEngineController {
 
     /**
-    * Data member for storing the current round number.
-    */
+     * Data member for storing the current round number.
+     */
     private int d_currentRound;
     private int d_currentPlayerGivingOrder;
+    /**
+     * Data member for storing pairs of players whom have diplomacy in the current round.
+     */
+    private List<List<String>> d_diplomacyList;
 
     /**
      * ContinentService for continent-related operations
@@ -75,9 +80,11 @@ public class GameEngineController {
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
+        this.d_diplomacyList = new ArrayList<>();
         this.d_repoContinent = p_RepoContinent;
 
-        this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
+        this.d_phaseRepository
+                .setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
     }
 
     /**
@@ -170,12 +177,13 @@ public class GameEngineController {
      * @return the result of the operation
      */
     public String deploy(String countryId, int numOfReinforcements) {
-        String result = this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryId, numOfReinforcements, d_currentPlayerGivingOrder, d_currentRound);
-        if(this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder).getNumberOfReinforcements() == 0) {
+        String result = this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryId, numOfReinforcements,
+                d_currentPlayerGivingOrder, d_currentRound);
+        if (this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder).getNumberOfReinforcements() == 0) {
             d_currentPlayerGivingOrder++;
         }
 
-        if(d_currentPlayerGivingOrder == d_playerService.getAllPlayers().size()) {
+        if (d_currentPlayerGivingOrder == d_playerService.getAllPlayers().size()) {
             this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
             d_currentPlayerGivingOrder = 0;
             this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
@@ -195,7 +203,7 @@ public class GameEngineController {
      * @return state of issuing an advance order.
      */
     public String advance(String countryFrom, String countryTo, int armiesQuantity) {
-        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         return result;
     }
@@ -208,7 +216,8 @@ public class GameEngineController {
      * @return state of issuing an advance order.
      */
     public String airlift(String countryFrom, String countryTo, int armiesQuantity) {
-        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        String result = this.d_phaseRepository.getPhase().addAirliftOrderToPlayer
+        (countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
         this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         return result;
     }
@@ -234,11 +243,12 @@ public class GameEngineController {
         String result = "Player " + currentPlayer.getPlayerName() + " finished issuing orders";
 
         d_currentPlayerGivingOrder++;
-        if(d_currentPlayerGivingOrder == this.d_playerService.getAllPlayers().size()) {
-                this.turnOrdersComplete();
+        if (d_currentPlayerGivingOrder == this.d_playerService.getAllPlayers().size()) {
+            this.turnOrdersComplete();
         } else {
             d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         }
+
         return result;
     }
 
@@ -257,8 +267,44 @@ public class GameEngineController {
     }
 
     /**
-     * Notifies the game engine that a player has issued all their orders for the current round.
-     * if the notifying player is the last player of the game, then the orders are executed and the next round is started.
+     * Validates and issues a diplomacy between 2 players to prevent attacks on each other for that round.
+     * @param targetPlayerName
+     * @return
+     */
+    public String diplomacy(String targetPlayerName) {
+        if (!(this.d_phaseRepository.getPhase() instanceof GameIssueOrderPhase)) {
+            LoggingService.log("game is not in game loop phase");
+            throw new InvalidCommandException("game is not in game loop phase");
+        }
+
+        Player issuingPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
+
+        if(!issuingPlayer.hasCard("diplomacy_card")) {
+            return issuingPlayer.getPlayerName() + " You do not have a diplomacy card to issue.";
+        };
+
+        Optional<Player> targetPlayer = this.d_playerService.findByName(targetPlayerName);
+        if (targetPlayer.isEmpty()) {
+            throw new InvalidCommandException("Target player not found.");
+        }
+
+        List<String> diplomacyContract = new ArrayList<>();
+        diplomacyContract.add(issuingPlayer.getPlayerName());
+        diplomacyContract.add(targetPlayer.get().getPlayerName());
+
+        this.d_diplomacyList.add(diplomacyContract);
+        issuingPlayer.removeUsedCard("diplomacy_card");
+
+        LoggingService.log("Diplomacy between " + issuingPlayer.getPlayerName() + " and " + targetPlayer.get().getPlayerName() + " is active!");
+        return "Diplomacy between " + issuingPlayer.getPlayerName() + " and " + targetPlayer.get().getPlayerName() + " is active!";
+    }
+
+    /**
+     * Notifies the game engine that a player has issued all their orders for the
+     * current round.
+     * if the notifying player is the last player of the game, then the orders are
+     * executed and the next round is started.
+     *
      * @return state of the current turn
      * @throws NotFoundException when #todo
      */
@@ -273,6 +319,9 @@ public class GameEngineController {
             this.d_currentRound++;
             // reset back to player 1 for the next turn of orders
             this.d_currentPlayerGivingOrder = 0;
+
+            //reset diplomacy list for next round
+            this.d_diplomacyList.clear();
 
             // assign reinforcement for next round
             this.d_playerService.assignReinforcements();
@@ -300,7 +349,7 @@ public class GameEngineController {
      */
     public String nextPhase() {
 
-        Phase nextPhase =  d_phaseRepository.getPhase().next();
+        Phase nextPhase = d_phaseRepository.getPhase().next();
 
         this.d_phaseRepository.setPhase(nextPhase);
         LoggingService.log("Current phase is " + nextPhase);

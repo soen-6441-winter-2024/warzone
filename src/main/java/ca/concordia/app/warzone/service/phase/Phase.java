@@ -1,5 +1,7 @@
 package ca.concordia.app.warzone.service.phase;
 
+
+import java.util.List;
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.MapDto;
@@ -138,9 +140,10 @@ public abstract class Phase {
      * @param armiesQuantity The number of armies to advance.
      * @param p_currentPlayerGivingOrder The ID of the current player issuing the order.
      * @param p_currentRound The current round number.
+     * @param p_diplomacyList The list of diplomacy contracts for the current round
      * @return A message indicating the success or failure of the operation.
      */
-    public abstract String addAdvanceOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound);
+    public abstract String addAdvanceOrderToPlayer(String countryNameFrom, String countryNameTo, int armiesQuantity, int p_currentPlayerGivingOrder, int p_currentRound, List<List<String>> p_diplomacyList);
 
     /**
      * Adds airlift orders to a player during the game.
