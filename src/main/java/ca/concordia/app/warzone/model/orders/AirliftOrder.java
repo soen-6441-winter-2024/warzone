@@ -92,6 +92,9 @@ public class AirliftOrder extends Order {
         this.d_playerService = p_playerService;
     }
 
+    /**
+     * Executes the airlift order.
+     */
     @Override
     public void execute() {
         Optional<Player> playerObj = this.d_playerService.findByName(this.player);

@@ -90,7 +90,6 @@ public class AdvanceOrder extends Order {
         d_countryService = p_countryService;
     }
 
-
     @Override
     public void execute() {
         Optional<Country> countryFromOptional = this.d_countryService.findCountryById(d_countryFrom);
