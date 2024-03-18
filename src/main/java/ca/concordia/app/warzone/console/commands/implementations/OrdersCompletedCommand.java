@@ -6,6 +6,10 @@ import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
 
+/**
+ * Command to indicate that issue orders are finished
+ *
+ */
 @Component
 public class OrdersCompletedCommand extends Command {
     private final GameEngineController d_gameEngineController;
