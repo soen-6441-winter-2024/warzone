@@ -7,6 +7,8 @@ public class Continent implements Entity{
     private String d_id; // Data member for continent ID
     private String d_value; // Data member for continent value
 
+    private int d_sizeOfContinent;
+
     /**
      * Default constructor
      */
@@ -47,5 +49,13 @@ public class Continent implements Entity{
      */
     public void setValue(String value) {
         this.d_value = value;
+    }
+
+    public void setSizeOfContinent(int sizeOfContinent){
+        this.d_sizeOfContinent = sizeOfContinent;
+    }
+
+    public int getSizeOfContinent(){
+        return d_sizeOfContinent;
     }
 }

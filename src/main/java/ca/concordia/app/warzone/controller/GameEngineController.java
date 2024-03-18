@@ -4,9 +4,11 @@ import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.model.orders.DeployOrder;
+import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -52,6 +54,8 @@ public class GameEngineController {
 
     private final PlayerCardService d_playerCardService;
 
+    private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+
     /**
      * Constructs a GameEngineController with the specified services.
      *
@@ -64,13 +68,14 @@ public class GameEngineController {
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
-            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService) {
+            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_RepoContinent) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerCardService = p_PlayerCardService;
+        this.d_repoContinent = p_RepoContinent;
 
         this.d_phaseRepository.setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
     }
@@ -145,7 +150,6 @@ public class GameEngineController {
 
     /**
      * Randomly assigns the countries to the players
-     * 
      * @return the result of the operation
      * @throws NotFoundException when countries aren't found
      */
@@ -160,7 +164,7 @@ public class GameEngineController {
 
     /**
      * Deploys a given number of armies into a specified country
-     * 
+     *
      * @param countryId           the id of the country
      * @param numOfReinforcements the number of reinforcement armies to deploy
      * @return the result of the operation
@@ -222,7 +226,7 @@ public class GameEngineController {
     }
 
     /**
-     * Notifies the game engine that a player has issued all their orders for the current round. 
+     * Notifies the game engine that a player has issued all their orders for the current round.
      * if the notifying player is the last player of the game, then the orders are executed and the next round is started.
      * @return state of the current turn
      * @throws NotFoundException
@@ -242,7 +246,7 @@ public class GameEngineController {
             // assign reinforcement for next round
             this.d_playerService.assignReinforcements();
 
-            System.out.println("\n------------------------------\n" 
+            System.out.println("\n------------------------------\n"
             + "\tNext Round" + "\n------------------------------\n");
 
             this.d_phaseRepository.setPhase(new GameIssueDeployPhase(d_playerService));
@@ -284,13 +288,19 @@ public class GameEngineController {
         this.d_currentRound = 0;
         this.d_currentPlayerGivingOrder = 0;
 
+
+        List<Continent> allContinents = d_repoContinent.findAll();
+
         LoggingService.log("Time to give deploy orders");
+        this.d_mapService.getContinentSize(allContinents);
         d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
+        this.d_playerCardService.newContinentConquered();
     }
+
 
     /**
      * Executes the order for the current turn following the command design pattern
-     * 
+     *
      * @param p_currentRound the current round of the game
      */
     public void executeTurnOrders(int p_currentRound) {

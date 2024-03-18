@@ -16,6 +16,7 @@ public class Player implements Entity {
      */
     private List<List<Order>> d_playerOrders;
 
+    private List<String> d_continent;
     /**
      *  Data member for cards received by player
      */
@@ -34,6 +35,7 @@ public class Player implements Entity {
         this.d_countriesAssigned = new ArrayList<>();
         this.d_playerOrders = new ArrayList<>();
         this.d_cardsReceived = new ArrayList<>();
+        this.d_continent = new ArrayList<>();
     }
 
     /**
@@ -45,6 +47,13 @@ public class Player implements Entity {
         d_countriesAssigned.add(p_country);
     }
 
+    public void addContinentConquered(String p_continent){
+        d_continent.add(p_continent);
+    }
+
+    public List<String> getContinents(){
+        return d_continent;
+    }
     /**
      *method that adds card to list of cards
      * @param card the card to be added
