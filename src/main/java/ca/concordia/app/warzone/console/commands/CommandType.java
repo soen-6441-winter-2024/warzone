@@ -76,7 +76,12 @@ public enum CommandType {
     /**
      * Command to issue the advance order
      */
-    ADVANCE("advance");
+    ADVANCE("advance"),
+
+    /**
+     * Command to show the current phase
+     */
+    SHOW_PHASE("showphase");
 
     /**
      * The text representation of the command type.

@@ -167,7 +167,10 @@ public class GameEngineController {
      */
     public String deploy(String countryId, int numOfReinforcements) {
         String result = this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryId, numOfReinforcements, d_currentPlayerGivingOrder, d_currentRound);
-        d_currentPlayerGivingOrder++;
+        if(this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder).getNumberOfReinforcements() == 0) {
+            d_currentPlayerGivingOrder++;
+        }
+
         if(d_currentPlayerGivingOrder == d_playerService.getAllPlayers().size()) {
             this.d_phaseRepository.setPhase(this.d_phaseRepository.getPhase().next());
             d_currentPlayerGivingOrder = 0;
@@ -197,9 +200,11 @@ public class GameEngineController {
         d_currentPlayerGivingOrder++;
         if(d_currentPlayerGivingOrder == this.d_playerService.getAllPlayers().size()) {
                 this.turnOrdersComplete();
+        } else {
+            d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         }
 
-        return  result;
+        return result;
     }
 
     /**
@@ -239,7 +244,8 @@ public class GameEngineController {
 
             System.out.println("\n------------------------------\n" 
             + "\tNext Round" + "\n------------------------------\n");
-            
+
+            this.d_phaseRepository.setPhase(new GameIssueDeployPhase(d_playerService));
             this.d_playerService.askForDeployOrder(d_currentPlayerGivingOrder);
             return "";
         }
@@ -297,5 +303,7 @@ public class GameEngineController {
         }
     }
 
-
+    public String getCurrentPhase() {
+        return this.d_phaseRepository.getPhase().getClass().getSimpleName();
+    }
 }
