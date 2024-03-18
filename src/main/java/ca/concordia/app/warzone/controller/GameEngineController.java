@@ -7,7 +7,6 @@ import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
-import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
@@ -192,7 +191,17 @@ public class GameEngineController {
      * @return state of issuing an advance order.
      */
     public String advance(String countryFrom, String countryTo, int armiesQuantity) {
-        String result = this.d_phaseRepository.getPhase().addRegularOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
+        return result;
+    }
+
+    /**
+     * Issues an order to advance on a country through an airligt.
+     * @return state of issuing an advance order.
+     */
+    public String airlift(String countryFrom, String countryTo, int armiesQuantity) {
+        String result = this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryFrom, countryTo, armiesQuantity, d_currentPlayerGivingOrder, d_currentRound);
         this.d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         return result;
     }

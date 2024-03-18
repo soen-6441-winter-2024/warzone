@@ -4,6 +4,7 @@ import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.orders.AdvanceOrder;
+import ca.concordia.app.warzone.model.orders.AirliftOrder;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
@@ -185,6 +186,15 @@ public class PlayerService {
         AdvanceOrder advanceOrder = new AdvanceOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity, d_countryService);
         player.issueOrder(advanceOrder, gameTurn);
 
+        return "";
+    }
+
+    public String addAirliftOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
+        Player player = this.getAllPlayers().get(p_playerGivingOrder);
+
+        AirliftOrder advanceOrder = new AirliftOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity, d_countryService);
+        player.issueOrder(advanceOrder, gameTurn);
+        player.removeUsedCard("airlift_card");
         return "";
     }
 
