@@ -31,7 +31,8 @@ public class CommandFactory {
     private BombCommand d_BombCommand;
     private AdvanceCommand d_AdvanceCommand;
 
-    private AdvanceCommand d_advanceCommand;
+    private ShowPhaseCommand d_showPhaseCommand;
+
 
     /**
      * Constructs a CommandFactory object.
@@ -60,7 +61,7 @@ public class CommandFactory {
             AssignCountriesCommand p_assignCountriesCommand, EditMapCommand p_editMapCommand,
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
-            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand) {
+            BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -76,6 +77,7 @@ public class CommandFactory {
         this.d_OrdersCompletedCommand = p_ordersCompletedCommand;
         this.d_BombCommand = p_bombCommand;
         this.d_AdvanceCommand = p_advanceCommand;
+        this.d_showPhaseCommand = p_showPhaseCommand;
     }
 
     /**
@@ -116,6 +118,8 @@ public class CommandFactory {
             return d_BombCommand;
         } else if(p_commandName.equals(CommandType.ADVANCE.toString())) {
             return d_AdvanceCommand;
+        } else if (p_commandName.equals(CommandType.SHOW_PHASE.toString())) {
+            return d_showPhaseCommand;
         }
 
         throw new InvalidCommandException("invalid command");
