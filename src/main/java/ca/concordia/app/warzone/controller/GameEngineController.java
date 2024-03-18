@@ -189,6 +189,9 @@ public class GameEngineController {
 
     /**
      * Issues an order to advance on a country.
+     * @param countryFrom countryfrom  which armies advance
+     * @param countryTo countries armies advance to
+     * @param armiesQuantity quantity of armies to advance
      * @return state of issuing an advance order.
      */
     public String advance(String countryFrom, String countryTo, int armiesQuantity) {
@@ -199,6 +202,9 @@ public class GameEngineController {
 
     /**
      * Issues an order to advance on a country through an airligt.
+     * @param countryFrom the country airlift is sent from
+     * @param countryTo the country airlifted armies are sent to
+     * @param armiesQuantity the quatity of armies to be sent
      * @return state of issuing an advance order.
      */
     public String airlift(String countryFrom, String countryTo, int armiesQuantity) {
@@ -233,14 +239,13 @@ public class GameEngineController {
         } else {
             d_playerService.askForRegularOrders(d_currentPlayerGivingOrder);
         }
-
         return result;
     }
 
     /**
      * Validates and issues an order to advance on a country.
-     * @param countryId
-     * @return
+     * @param countryId the id of the country to be used
+     * @return result of bomb order
      */
     public String bomb(String countryId) {
         if (!(this.d_phaseRepository.getPhase() instanceof GameIssueOrderPhase)) {
@@ -255,7 +260,7 @@ public class GameEngineController {
      * Notifies the game engine that a player has issued all their orders for the current round.
      * if the notifying player is the last player of the game, then the orders are executed and the next round is started.
      * @return state of the current turn
-     * @throws NotFoundException
+     * @throws NotFoundException when #todo
      */
     public String turnOrdersComplete() throws NotFoundException {
         // all players have given their orders for the current round, now we execute all
@@ -338,6 +343,11 @@ public class GameEngineController {
         }
     }
 
+    /**
+     * Retrieves current phase of the game
+     *
+     * @return name of class representing the name
+     */
     public String getCurrentPhase() {
         return this.d_phaseRepository.getPhase().getClass().getSimpleName();
     }

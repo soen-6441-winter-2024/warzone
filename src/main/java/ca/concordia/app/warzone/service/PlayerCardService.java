@@ -57,6 +57,11 @@ public class PlayerCardService {
         player.addCard(playerCards.get(0));
     }
 
+    /**
+     *
+     * @param sizeBeforeLoop map containing size of the countries assigned before each loop
+     * @param sizeAfterLoop map containing size of the countries assigned after each loop
+     */
     public void newCountryConquered(Map<String, Integer> sizeBeforeLoop, Map<String, Integer> sizeAfterLoop){
         List<Player> players = d_playerService.getAllPlayers();
         for(Map.Entry<String, Integer> entry : sizeBeforeLoop.entrySet()){
@@ -76,6 +81,11 @@ public class PlayerCardService {
         }
     }
 
+    /**
+     * gets size of countries assigned
+     *
+     * @return the size of the countryassigned
+     */
     public Map<String, Integer> getSizeOfCountriesAssigned(){
         Map<String, Integer> sizeOfCountriesAssigned = new HashMap<>();
         List<Player> players = d_playerService.getAllPlayers();
