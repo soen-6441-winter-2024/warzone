@@ -102,6 +102,20 @@ public class PlayerService {
     }
 
     /**
+     * Retrieves the cards assigned to a player.
+     *
+     * @param p_playerId the player to return their cards.
+     */
+    public String showPlayerCards(int p_playerId) {
+        Player player = this.getAllPlayers().get(p_playerId);
+        List<String> cards = player.d_cardsReceived;
+
+        if(cards.size() == 0) return player.getPlayerName() + " You have special 0 cards.";
+
+        return player.getPlayerName() + " your cards: " + cards.toString();
+    }
+    
+    /**
      * Removes a player.
      *
      * @param p_playerName the name of the player to be removed
