@@ -19,6 +19,8 @@ public enum CommandType {
      */
     EDIT_NEIGHBOR("editneighbor"),
 
+    SHOW_MY_CARDS("showmycards"),
+
     /**
      * Command to show the map.
      */

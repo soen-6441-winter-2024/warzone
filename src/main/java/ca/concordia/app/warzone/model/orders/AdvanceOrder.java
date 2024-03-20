@@ -92,6 +92,7 @@ public class AdvanceOrder extends Order {
 
     @Override
     public void execute() {
+        System.out.println("Trying to execute advance order...");
         Optional<Country> countryFromOptional = this.d_countryService.findCountryById(d_countryFrom);
         Optional<Country> countryToOptional = this.d_countryService.findCountryById(d_countryTo);
 
@@ -107,11 +108,13 @@ public class AdvanceOrder extends Order {
         Country countryFrom = countryFromOptional.get();
 
         if(countryFrom.getPlayer().isEmpty()) {
+            System.out.println(countryFrom.getId() + " has no owner. Aborting advance order");
             return;
         }
 
         try {
             if(!this.d_countryService.areNeighbors(this.d_countryFrom, this.d_countryTo)) {
+                System.out.println(countryFrom.getId() + " and " + countryTo.getId() + " are not neighbors. Aborting advance order.");
                 return;
             }
         } catch (NotFoundException e) {
@@ -122,10 +125,12 @@ public class AdvanceOrder extends Order {
         Player countryFromOwner = countryFrom.getPlayer().get();
 
         if(!countryFromOwner.getPlayerName().equals(this.player)) {
+            System.out.println(this.player + " does not own " + countryFrom.getId() + ". Aborting advance order.");
             return;
         }
 
         if(countryFrom.getArmiesCount() < this.d_number) {
+            System.out.println(countryFrom.getId() + " does not have enough armies. " + ". Aborting advance order.");
             return;
         }
 

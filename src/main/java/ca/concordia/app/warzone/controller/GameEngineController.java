@@ -157,6 +157,17 @@ public class GameEngineController {
     }
 
     /**
+     * Shows the special cards of a player.
+     *
+     * @return A string indicating the result of the operation.
+     */
+    public String showMyCards() {
+        String result = d_playerService.showPlayerCards(d_currentPlayerGivingOrder);
+        LoggingService.log(result);
+        return result;
+    }
+
+    /**
      * Randomly assigns the countries to the players
      * @return the result of the operation
      * @throws NotFoundException when countries aren't found
@@ -237,7 +248,7 @@ public class GameEngineController {
     /**
      * Indicates that a player has finished issuing orders
      * @return the result
-     * @throws NotFoundException when the
+     * @throws NotFoundException when the player can not be found
      */
     public String commit() throws NotFoundException {
         Player currentPlayer = this.d_playerService.getAllPlayers().get(d_currentPlayerGivingOrder);
@@ -386,12 +397,16 @@ public class GameEngineController {
      */
     public void executeTurnOrders(int p_currentRound) {
         List<Player> players = this.d_playerService.getAllPlayers();
+        Map<String, Integer> sizeBeforeLoop = this.d_playerCardService.getSizeOfCountriesAssigned();
 
         for (Player player : players) {
             for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
                 order.execute();
             }
         }
+
+        Map<String, Integer> sizeAfterLoop = this.d_playerCardService.getSizeOfCountriesAssigned();
+        this.d_playerCardService.newCountryConquered(sizeBeforeLoop, sizeAfterLoop);
     }
 
     /**
