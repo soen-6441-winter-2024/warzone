@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.console.commands;
 
 import ca.concordia.app.warzone.console.commands.implementations.*;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
+import ca.concordia.app.warzone.controller.GameEngineController;
 
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,7 @@ public class CommandFactory {
     private DiplomacyCommand d_DiplomacyCommand;
     private ShowPhaseCommand d_showPhaseCommand;
     private BlockadeCommand d_blockadeCommand;
+    private ShowMyCardsCommand d_ShowMyCardsCommand;
 
     /**
      * Constructs a CommandFactory object.
@@ -57,6 +59,7 @@ public class CommandFactory {
      * @param p_showPhaseCommand       Command to show which phase you are
      * @param p_blockadeCommand        Command to issue blockage order
      * @param p_diplomacyCommand       Command to issue diplomacy order
+     * @param ShowMyCardsCommand       Command to show current issuing player's special cards.
      */
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
@@ -65,7 +68,8 @@ public class CommandFactory {
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
             BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
-            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand) {
+            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand,
+            ShowMyCardsCommand p_ShowMyCardsCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -84,7 +88,9 @@ public class CommandFactory {
         this.d_showPhaseCommand = p_showPhaseCommand;
         this.d_DiplomacyCommand = p_diplomacyCommand;
         this.d_blockadeCommand = p_blockadeCommand;
+        this.d_ShowMyCardsCommand = p_ShowMyCardsCommand;
     }
+
 
     /**
      * Creates a new command based on the given command name.
@@ -130,6 +136,8 @@ public class CommandFactory {
             return d_DiplomacyCommand;
         } else if (p_commandName.equals(CommandType.BLOCKADE.toString())) {
             return d_blockadeCommand;
+        } else if (p_commandName.equals(CommandType.SHOW_MY_CARDS.toString())) {
+            return d_ShowMyCardsCommand;
         }
 
         throw new InvalidCommandException("invalid command");
