@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.ContinentDto;
+import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
@@ -145,6 +147,14 @@ public class CountryService {
         countryDto.setId(p_country.getId());
         countryDto.setContinent(continentDto);
         countryDto.setNeighbors(neighborsDto);
+
+        if (p_country.getPlayer().isPresent()) {
+            PlayerDto playerDto = new PlayerDto();
+            Player player = p_country.getPlayer().get();
+            playerDto.setPlayerName(player.getPlayerName());
+            playerDto.setCountriesAssigned(player.getCountriesAssigned().stream().map(Country::getId).toList());
+            countryDto.setPlayer(playerDto);
+        }
 
         return countryDto;
     }
