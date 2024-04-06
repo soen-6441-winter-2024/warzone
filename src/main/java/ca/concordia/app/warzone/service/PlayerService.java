@@ -275,8 +275,15 @@ public class PlayerService {
     public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements,
             int p_playerGivingOrder, int gameTurn) {
         Player player = this.getAllPlayers().get(p_playerGivingOrder);
+        Optional<Country> countryToOptional = this.d_countryService.findCountryById(p_countryId);
+        
+        if(countryToOptional.isEmpty()){
+            return "Country not found.";
+        }
 
-        if (!player.ownsCountry(p_countryId)) {
+        Country countryTo = countryToOptional.get();
+
+        if (!countryTo.getPlayer().get().getPlayerName().equals(player.getPlayerName())) {
             LoggingService.log("player does not own country");
             throw new InvalidCommandException("player does not own country");
         }

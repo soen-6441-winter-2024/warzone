@@ -7,6 +7,7 @@ import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
@@ -399,9 +400,16 @@ public class GameEngineController {
         List<Player> players = this.d_playerService.getAllPlayers();
         Map<String, Integer> sizeBeforeLoop = this.d_playerCardService.getSizeOfCountriesAssigned();
 
+        // executes deploy orders first
         for (Player player : players) {
             for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
-                order.execute();
+                if(order instanceof DeployOrder) order.execute();
+            }
+        }
+        
+        for (Player player : players) {
+            for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
+                if(!(order instanceof DeployOrder)) order.execute();
             }
         }
 
