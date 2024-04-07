@@ -90,6 +90,9 @@ public class Player implements Entity {
         return d_cardsReceived.contains(card);
     }
 
+    public List<String> getCards(){
+        return d_cardsReceived;
+    }
     /**
      * Retrieves the player name.
      *
@@ -124,6 +127,10 @@ public class Player implements Entity {
      */
     public void setCountriesAssigned(List<Country> p_countriesAssigned){
         this.d_countriesAssigned = p_countriesAssigned;
+    }
+
+    public void  removeCountry(Country country){
+        d_countriesAssigned.remove(country);
     }
 
     /**
