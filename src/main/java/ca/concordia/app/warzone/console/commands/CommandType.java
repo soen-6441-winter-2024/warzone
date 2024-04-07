@@ -94,7 +94,15 @@ public enum CommandType {
     /**
      * Command to issue the blockade order
      */
-    BLOCKADE("blockade");
+    BLOCKADE("blockade"),
+
+
+
+    /**
+     * Command to issue Air Lift order
+     */
+
+    AIRLIFT("airlift");
 
     /**
      * The text representation of the command type.

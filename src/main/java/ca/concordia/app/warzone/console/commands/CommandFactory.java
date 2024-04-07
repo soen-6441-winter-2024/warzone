@@ -34,6 +34,8 @@ public class CommandFactory {
     private DiplomacyCommand d_DiplomacyCommand;
     private ShowPhaseCommand d_showPhaseCommand;
     private BlockadeCommand d_blockadeCommand;
+
+    private AirliftCommand d_AirliftCommand;
     private ShowMyCardsCommand d_ShowMyCardsCommand;
 
     /**
@@ -68,7 +70,7 @@ public class CommandFactory {
             LoadMapCommand p_loadMap, DeployCommand p_deployCommand, NextPhaseCommand p_nextPhaseCommand,
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
             BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
-            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand,
+            BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand, AirliftCommand p_airliftCommand,
             ShowMyCardsCommand p_ShowMyCardsCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
@@ -88,6 +90,7 @@ public class CommandFactory {
         this.d_showPhaseCommand = p_showPhaseCommand;
         this.d_DiplomacyCommand = p_diplomacyCommand;
         this.d_blockadeCommand = p_blockadeCommand;
+        this.d_AirliftCommand = p_airliftCommand;
         this.d_ShowMyCardsCommand = p_ShowMyCardsCommand;
     }
 
@@ -136,7 +139,9 @@ public class CommandFactory {
             return d_DiplomacyCommand;
         } else if (p_commandName.equals(CommandType.BLOCKADE.toString())) {
             return d_blockadeCommand;
-        } else if (p_commandName.equals(CommandType.SHOW_MY_CARDS.toString())) {
+        } else if (p_commandName.equals(CommandType.AIRLIFT.toString())) {
+            return d_AirliftCommand;
+        }else if (p_commandName.equals(CommandType.SHOW_MY_CARDS.toString())) {
             return d_ShowMyCardsCommand;
         }
 
