@@ -121,6 +121,18 @@ public class Player implements Entity {
     }
 
     /**
+     * Removes a country assigned to a player if they lose the country
+     * @param countryId the id of the country to remove
+     */
+    public void removeAssignedCountry(String countryId) {
+        for (int i = 0; i < d_countriesAssigned.size(); i++) {
+            if(d_countriesAssigned.get(i).equals(countryId)) {
+                d_countriesAssigned.remove(i);
+            }
+        }
+    }
+
+    /**
      * Sets the list of countries assigned to the player.
      *
      * @param p_countriesAssigned the list of countries assigned to the player
@@ -131,6 +143,14 @@ public class Player implements Entity {
 
     public void  removeCountry(Country country){
         d_countriesAssigned.remove(country);
+    }
+
+    /**
+     * Adds a country to list of countries owned by player
+     * @param p_newlyConqueredCountry the country to add.
+     */
+    public void addNewConqueredCountry(Country p_newlyConqueredCountry) {
+        this.d_countriesAssigned.add(p_newlyConqueredCountry);
     }
 
     /**
