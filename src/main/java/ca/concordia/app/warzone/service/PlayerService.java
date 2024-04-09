@@ -1,9 +1,6 @@
 package ca.concordia.app.warzone.service;
 
-import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
-import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.model.orders.*;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
@@ -12,8 +9,7 @@ import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.model.Continent;
 import org.springframework.stereotype.Service;
 import ca.concordia.app.warzone.logging.LoggingService;
-
-import java.util.ArrayList;
+import ca.concordia.app.warzone.model.Strategies.HumanPlayerStrategy;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -57,19 +53,26 @@ public class PlayerService {
     private final ContinentService d_continentService;
 
     /**
+     * Strategy for Human Player
+     */
+    private final HumanPlayerStrategy d_humanPlayerStrategy;
+
+    /**
      * Constructs a PlayerService with the specified PlayerRepository.
      *
      * @param p_repository       the PlayerRepository to be used
      * @param p_mapService       the MapService to be used
      * @param p_countryService   the CountryService to be used
      * @param p_continentService the ContinentService to be used
+     * @param p_humanPlayerStrategy the HumanPlayerStrategy to be used
      */
     public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService,
-            ContinentService p_continentService) {
+            ContinentService p_continentService, HumanPlayerStrategy p_humanPlayerStrategy) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
         this.d_continentService = p_continentService;
+        this.d_humanPlayerStrategy =  p_humanPlayerStrategy;
     }
 
     /**
@@ -205,27 +208,8 @@ public class PlayerService {
      */
     public String addAdvanceOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity,
             int p_playerGivingOrder, int gameTurn, List<List<String>> p_diplomacyList) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-        Optional<CountryDto> country = this.d_countryService.findById(p_countryTo);
-        String ownerOfTargetCountry = country.get().getPlayer().getPlayerName();
-
-        // check for diplomacy between player and target country's owner for the current
-        // round
-        if (p_diplomacyList.size() > 0) {
-            for (List<String> diplomacyContract : p_diplomacyList) {
-                if (diplomacyContract.get(0).equals(player.getPlayerName())
-                        && diplomacyContract.get(1).equals(ownerOfTargetCountry)) {
-                    return "Unable to issue attack order. Diplomacy is in active between player "
-                            + player.getPlayerName() + " and player " + ownerOfTargetCountry;
-                }
-            }
-        }
-
-        AdvanceOrder advanceOrder = new AdvanceOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity,
-                d_countryService);
-        player.issueOrder(advanceOrder, gameTurn);
-
-        return "";
+        return d_humanPlayerStrategy.addAdvanceOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
+                gameTurn, p_diplomacyList);
     }
 
     /**
@@ -239,12 +223,8 @@ public class PlayerService {
      * @return result of the operation
      */
     public String addAirliftOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-
-        AirliftOrder advanceOrder = new AirliftOrder(player.getPlayerName(), p_countryFrom, p_countryTo, armiesQuantity, d_countryService, this);
-        player.issueOrder(advanceOrder, gameTurn);
-        player.removeUsedCard("airlift_card");
-        return "";
+        return d_humanPlayerStrategy.addAirliftOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
+                gameTurn);
     }
 
     /**
@@ -256,11 +236,7 @@ public class PlayerService {
      * @return result of the operation
      */
     public String addBlockadeOrderToCurrentPlayer(String p_country, int p_playerGivingOrder, int gameTurn) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-        BlockadeOrder order = new BlockadeOrder(player.getPlayerName(), p_country, d_countryService);
-        player.issueOrder(order, gameTurn);
-        player.removeUsedCard("blockade_card");
-        return  "";
+        return d_humanPlayerStrategy.addBlockadeOrder(p_country, p_playerGivingOrder, gameTurn);
     }
 
      /**
@@ -274,48 +250,7 @@ public class PlayerService {
      */
     public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements,
             int p_playerGivingOrder, int gameTurn) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-        Optional<Country> countryToOptional = this.d_countryService.findCountryById(p_countryId);
-        
-        if(countryToOptional.isEmpty()){
-            return "Country not found.";
-        }
-
-        Country countryTo = countryToOptional.get();
-
-        if (!countryTo.getPlayer().get().getPlayerName().equals(player.getPlayerName())) {
-            LoggingService.log("player does not own country");
-            throw new InvalidCommandException("player does not own country");
-        }
-
-        if (p_numberOfReinforcements <= 0) {
-            LoggingService.log("Player entered invalid reinforcement armies number");
-            throw new InvalidCommandException("Invalid reinforcement armies number");
-        }
-
-        if (Math.abs(p_numberOfReinforcements) > player.getNumberOfReinforcements()) {
-            LoggingService.log("player does not have enough reinforcements");
-            throw new InvalidCommandException("player does not have enough reinforcements");
-        }
-
-        DeployOrder deployOrder = new DeployOrder(player.getPlayerName(), p_countryId, p_numberOfReinforcements,
-                d_countryService);
-        player.issueOrder(deployOrder, gameTurn);
-
-        int numberOfReinforcements = player.getNumberOfReinforcements() - Math.abs(p_numberOfReinforcements);
-        player.setNumberOfReinforcements(numberOfReinforcements);
-
-        LoggingService
-                .log("player: " + player.getPlayerName() + " set number of reinforcements: " + numberOfReinforcements);
-
-        if (player.getNumberOfReinforcements() == 0) {
-            return "";
-        } else {
-            // All of the current player's reinforcement have been deployed
-            this.askForDeployOrder(p_playerGivingOrder);
-        }
-
-        return "";
+        return d_humanPlayerStrategy.addDeployOrder(p_countryId, p_numberOfReinforcements, p_playerGivingOrder, gameTurn);
     }
 
     /**
@@ -327,25 +262,7 @@ public class PlayerService {
      * @return the state of the bomb order
      */
     public String addBombOrderToCurrentPlayer(String p_targetCountryId, int p_playerGivingOrder, int gameTurn) {
-        Player player = this.getAllPlayers().get(p_playerGivingOrder);
-        Optional<CountryDto> country = this.d_countryService.findById(p_targetCountryId);
-
-        if (!country.isPresent())
-            throw new InvalidCommandException("Country not found.");
-
-        // check if player has bomb card
-        if (!player.hasCard("bomb_card")) {
-            throw new InvalidCommandException(player.getPlayerName() + " You do not have a bomb card");
-        }
-
-        // create bomb order
-        BombOrder bombOrder = new BombOrder(player.getPlayerName(), d_countryService, p_targetCountryId);
-        player.issueOrder(bombOrder, gameTurn);
-        player.removeUsedCard("bomb_card");
-
-        LoggingService.log("player: " + player.getPlayerName() + " issued a bomb order on " + p_targetCountryId);
-
-        return "Bomb order issued. Issue more advance or special orders.";
+        return d_humanPlayerStrategy.addBombOrder(p_targetCountryId, p_playerGivingOrder, gameTurn);
     }
 
     /**

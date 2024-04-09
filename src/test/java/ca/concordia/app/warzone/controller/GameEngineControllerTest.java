@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.Strategies.HumanPlayerStrategy;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.PlayerRepository;
@@ -54,13 +55,19 @@ class GameEngineControllerTest {
     private PlayerService playerService;
 
     @InjectMocks
+    private GameService d_gameService;
+
+    @InjectMocks
     private GameEngineController gameEngineController;
+
+    @Mock
+    private HumanPlayerStrategy humanPlayerStrategy;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
-        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent, gameService);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService, humanPlayerStrategy);
+        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent, d_gameService);
     }
 
     @Test

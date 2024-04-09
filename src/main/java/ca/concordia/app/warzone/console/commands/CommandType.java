@@ -105,7 +105,12 @@ public enum CommandType {
      * Command to issue Air Lift order
      */
 
-    AIRLIFT("airlift");
+    AIRLIFT("airlift"),
+
+    /**
+     * Command to start a game in Tournament mode
+     */
+    TOURNAMENT("tournament");
 
     /**
      * The text representation of the command type.
