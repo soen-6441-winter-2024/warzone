@@ -11,12 +11,14 @@ import ca.concordia.app.warzone.service.PlayerService;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.logging.LoggingService;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Represents the strategy for a human player in the game.
  */
+@Service
 public class HumanPlayerStrategy extends HumanStrategy {
 
     /**
