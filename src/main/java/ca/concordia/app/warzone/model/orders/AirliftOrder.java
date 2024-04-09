@@ -148,7 +148,7 @@ public class AirliftOrder extends Order {
         Player countryToOwner = countryToOwnerOptional.get();
 
         // If the player is the owner, we just move the armies to the country
-        if(countryToOwner.ownsCountry(this.d_countryTo)) {
+        if(countryFromOwner.ownsCountry(this.d_countryTo)) {
             System.out.println("Advanced " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo );
             this.d_countryService.addArmiesToCountry(this.d_countryTo,  this.d_number);
             return;
@@ -185,6 +185,8 @@ public class AirliftOrder extends Order {
         System.out.println("Advanced " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". Attacking armies won armies won.");
         // Attacking won, the owner of the country changes
         this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
+        countryFromOwner.addNewConqueredCountry(countryTo);
         countryTo.setPlayer(Optional.of(countryFromOwner));
-    }
+        // remove the newly conquered country from it's previous owner.
+        countryToOwner.removeAssignedCountry(countryTo.getId());    }
 }

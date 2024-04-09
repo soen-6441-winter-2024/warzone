@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class MapRepositoryFileImplTest {
 
-    public static final String FILE_NAME = "src/test/resources/map.txt";
+    public static final String FILE_NAME = "map_files/map.txt";
     public static final String EXPECTED_FILE_NAME = "src/test/resources/expected_map.txt";
 
     @Mock
