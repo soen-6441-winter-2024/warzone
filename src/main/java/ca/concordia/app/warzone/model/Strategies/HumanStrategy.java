@@ -1,117 +1,19 @@
 package ca.concordia.app.warzone.model.Strategies;
 
-import ca.concordia.app.warzone.console.dto.CountryDto;
-import ca.concordia.app.warzone.console.dto.PlayerDto;
-import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.model.orders.*;
-import ca.concordia.app.warzone.repository.PlayerRepository;
-import ca.concordia.app.warzone.service.ContinentService;
-import ca.concordia.app.warzone.service.CountryService;
-import ca.concordia.app.warzone.service.MapService;
-import ca.concordia.app.warzone.service.PlayerService;
-import ca.concordia.app.warzone.service.exceptions.NotFoundException;
-import ca.concordia.app.warzone.model.Country;
-import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
-import ca.concordia.app.warzone.model.Continent;
-import org.springframework.stereotype.Service;
-import ca.concordia.app.warzone.logging.LoggingService;
-import ca.concordia.app.warzone.model.Strategies.HumanPlayerStrategy;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
 /**
  * Abstract class representing the strategy for a human player in the game.
  */
-@Service
+
 public abstract class HumanStrategy {
-    /**
-     * Data member for storing orders.
-     */
-    List<List<Order>> d_orders;
-
-    /**
-     * Default reinforcement number.
-     */
-    private final int DEFAULT_REINFORCEMENT_NUMBER = 3;
-
-    /**
-     * Repository for player operations.
-     */
-    private final PlayerRepository d_repository;
-
-    /**
-     * Service for the country operations
-     */
-    private final CountryService d_countryService;
-
-    /**
-     * Service for map operations
-     */
-    private final MapService d_mapService;
-
-    /**
-     * Service for continent-related operations
-     */
-    private final ContinentService d_continentService;
-
-    /**
-     * Strategy for Human Player
-     */
-    private final HumanPlayerStrategy d_humanPlayerStrategy;
-
-    /**
-     * Service for Player
-     */
-    private final PlayerService d_playerService;
-
-    /**
-     * Retrieves the CountryService.
-     *
-     * @return the CountryService
-     */
-    protected CountryService getCountryService() {
-        return d_countryService;
-    }
-
-    /**
-     * Retrieves the PlayerRepository.
-     *
-     * @return the PlayerRepository
-     */
-    protected PlayerRepository getPlayerRepository() {
-        return d_repository;
-    }
-
-    /**
-     * Retrieves the PlayerService.
-     *
-     * @return the PlayerService
-     */
-    protected PlayerService getPlayerService() {
-        return d_playerService;
-    }
 
     /**
      * Constructs a HumanStrategy with the specified PlayerRepository.
      *
-     * @param p_repository          the PlayerRepository to be used
-     * @param p_mapService          the MapService to be used
-     * @param p_countryService      the CountryService to be used
-     * @param p_continentService    the ContinentService to be used
-     * @param p_humanPlayerStrategy the HumanPlayerStrategy to be used
-     * @param p_playerService       the PlayerService to be used
      */
-    public HumanStrategy(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService, ContinentService p_continentService, HumanPlayerStrategy p_humanPlayerStrategy, PlayerService p_playerService) {
-        this.d_repository = p_repository;
-        this.d_mapService = p_mapService;
-        this.d_countryService = p_countryService;
-        this.d_continentService = p_continentService;
-        this.d_humanPlayerStrategy =  p_humanPlayerStrategy;
-        this.d_playerService =  p_playerService;
+    public HumanStrategy() {
+
     }
 
     /**
