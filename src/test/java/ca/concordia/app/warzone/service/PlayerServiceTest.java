@@ -54,7 +54,7 @@ public class PlayerServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, continentService, humanPlayerStrategy);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
     }
 
     @Test

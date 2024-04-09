@@ -60,13 +60,10 @@ class GameEngineControllerTest {
     @InjectMocks
     private GameEngineController gameEngineController;
 
-    @Mock
-    private HumanPlayerStrategy humanPlayerStrategy;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, continentService, humanPlayerStrategy);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
         gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent, d_gameService);
     }
 
