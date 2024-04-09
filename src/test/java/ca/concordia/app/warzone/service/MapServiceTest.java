@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class MapServiceTest {
 
