@@ -6,15 +6,26 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Default Map file formatter component
+ */
 @Component
 public class DefaultMapFileFormatter {
-    public String process(List<Continent> allContinents, List<Country> allCountries) {
+
+    /**
+     * Generate the map content in the default format, given a list of continents and countries
+     *
+     * @param p_allContinents continents to be represented
+     * @param p_allCountries countries to be represented
+     * @return the content in the default format
+     */
+    public String process(List<Continent> p_allContinents, List<Country> p_allCountries) {
         
         StringBuilder builder = new StringBuilder();
         
         builder.append("[continents]");
         builder.append("\n");
-        for (Continent continent : allContinents) {
+        for (Continent continent : p_allContinents) {
             builder.append(continent.getId() + " ");
             builder.append(continent.getValue() + "\n");
         }
@@ -22,7 +33,7 @@ public class DefaultMapFileFormatter {
 
         builder.append("[countries]");
         builder.append("\n");
-        for (Country country : allCountries) {
+        for (Country country : p_allCountries) {
             builder.append(country.getId() + " ");
             builder.append(country.getContinent().getId() + "\n");
         }
@@ -30,7 +41,7 @@ public class DefaultMapFileFormatter {
         builder.append("\n");
         builder.append("[borders]");
         builder.append("\n");
-        for (Country country : allCountries) {
+        for (Country country : p_allCountries) {
             // Assuming each country can have multiple neighbors
             List<Country> allNeighborsByCountry = country.getNeighbors();
             if (!allNeighborsByCountry.isEmpty()) {

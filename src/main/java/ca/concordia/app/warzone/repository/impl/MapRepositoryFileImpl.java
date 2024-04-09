@@ -9,9 +9,7 @@ import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import org.springframework.stereotype.Repository;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,7 +65,7 @@ public class MapRepositoryFileImpl implements MapRepository {
         if (!allContinents.isEmpty()) {
 
             String content = d_defaultMapFormatter.process(allContinents, allCountries);
-            storeMap(filePath, content);
+            storeContent(filePath, content);
 
             return "Map was saved in the following filepath " + filePath;
         } else {
@@ -75,9 +73,15 @@ public class MapRepositoryFileImpl implements MapRepository {
         }
     }
 
-    private void storeMap(String filePath, String content) {
+    /**
+     * method to store any string content in a given path
+     *
+     * @param p_filePath file path to store the content
+     * @param p_content content to be stored
+     */
+    private void storeContent(String p_filePath, String p_content) {
         try {
-            String directoryPath = filePath.substring(0, filePath.lastIndexOf(File.separator));
+            String directoryPath = p_filePath.substring(0, p_filePath.lastIndexOf(File.separator));
 
             // Create the directory if it doesn't exist
             File directory = new File(directoryPath);
@@ -87,8 +91,8 @@ public class MapRepositoryFileImpl implements MapRepository {
                 }
             }
 
-            Path path = Paths.get(filePath);
-            Files.writeString(path, content);
+            Path path = Paths.get(p_filePath);
+            Files.writeString(path, p_content);
         } catch (IOException e) {
             throw new RuntimeException("Error while writing the file", e);
         }
