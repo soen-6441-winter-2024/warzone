@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.model.orders.BombOrder;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.model.Country;
@@ -53,10 +54,6 @@ public class PlayerService {
      */
     private final ContinentService d_continentService;
 
-    /**
-     * Strategy for Human Player
-     */
-    private final HumanPlayerStrategy d_humanPlayerStrategy;
 
     /**
      * Constructs a PlayerService with the specified PlayerRepository.
@@ -65,15 +62,13 @@ public class PlayerService {
      * @param p_mapService       the MapService to be used
      * @param p_countryService   the CountryService to be used
      * @param p_continentService the ContinentService to be used
-     * @param p_humanPlayerStrategy the HumanPlayerStrategy to be used
      */
     public PlayerService(PlayerRepository p_repository, MapService p_mapService, CountryService p_countryService,
-            ContinentService p_continentService, HumanPlayerStrategy p_humanPlayerStrategy) {
+            ContinentService p_continentService) {
         this.d_repository = p_repository;
         this.d_mapService = p_mapService;
         this.d_countryService = p_countryService;
         this.d_continentService = p_continentService;
-        this.d_humanPlayerStrategy =  p_humanPlayerStrategy;
     }
 
     /**
@@ -209,7 +204,9 @@ public class PlayerService {
      */
     public String addAdvanceOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity,
             int p_playerGivingOrder, int gameTurn, List<List<String>> p_diplomacyList) {
-        return d_humanPlayerStrategy.addAdvanceOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
+        HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
+
+        return humanPlayerStrategy.addAdvanceOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
                 gameTurn, p_diplomacyList);
     }
 
@@ -224,7 +221,8 @@ public class PlayerService {
      * @return result of the operation
      */
     public String addAirliftOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
-        return d_humanPlayerStrategy.addAirliftOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
+        HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
+        return humanPlayerStrategy.addAirliftOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
                 gameTurn);
     }
 
@@ -237,7 +235,8 @@ public class PlayerService {
      * @return result of the operation
      */
     public String addBlockadeOrderToCurrentPlayer(String p_country, int p_playerGivingOrder, int gameTurn) {
-        return d_humanPlayerStrategy.addBlockadeOrder(p_country, p_playerGivingOrder, gameTurn);
+        HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
+        return humanPlayerStrategy.addBlockadeOrder(p_country, p_playerGivingOrder, gameTurn);
     }
 
      /**
@@ -251,7 +250,8 @@ public class PlayerService {
      */
     public String addDeployOrderToCurrentPlayer(String p_countryId, int p_numberOfReinforcements,
             int p_playerGivingOrder, int gameTurn) {
-        return d_humanPlayerStrategy.addDeployOrder(p_countryId, p_numberOfReinforcements, p_playerGivingOrder, gameTurn);
+        HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
+        return humanPlayerStrategy.addDeployOrder(p_countryId, p_numberOfReinforcements, p_playerGivingOrder, gameTurn);
     }
 
     /**
@@ -263,7 +263,8 @@ public class PlayerService {
      * @return the state of the bomb order
      */
     public String addBombOrderToCurrentPlayer(String p_targetCountryId, int p_playerGivingOrder, int gameTurn) {
-        return d_humanPlayerStrategy.addBombOrder(p_targetCountryId, p_playerGivingOrder, gameTurn);
+        HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
+        return humanPlayerStrategy.addBombOrder(p_targetCountryId, p_playerGivingOrder, gameTurn);
     }
 
     /**

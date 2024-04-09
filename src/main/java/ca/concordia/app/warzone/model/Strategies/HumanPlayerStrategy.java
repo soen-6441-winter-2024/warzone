@@ -58,7 +58,7 @@ public class HumanPlayerStrategy extends HumanStrategy {
     /**
      * Constructs a HumanPlayerStrategy with the specified dependencies.
      *
-     * @param p_playerRepository          the PlayerRepository to be used
+     * @param p_playerRepository    the PlayerRepository to be used
      * @param p_mapService          the MapService to be used
      * @param p_countryService      the CountryService to be used
      * @param p_continentService    the ContinentService to be used
