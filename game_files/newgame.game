@@ -1,0 +1,15 @@
+[map]
+null
+
+[phase]
+GameIssueDeployPhase
+
+[countries]
+c3 con1 0 p2
+c5 con1 0 p1
+c6 con1 0 p1
+c2 con1 0 p2
+
+[players]
+p1 strategyType []
+p2 strategyType []

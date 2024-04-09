@@ -37,7 +37,20 @@ public class MapService {
      * continents.
      */
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+    
+    /**
+     * Data member for storing name of game map
+     */
+    private String d_mapName;
 
+    /**
+     * Get map name
+     * @return map name
+     */
+    public String getMapName() {
+        return this.d_mapName;
+    }
+    
     /**
      * Constructs a MapService with the specified MapRepository, CountryRepository, and ContinentRepository.
      *
@@ -61,6 +74,7 @@ public class MapService {
         String filePath = p_mapDto.getFileName();
         if (validateMapStructure(filePath)) {
             this.readAndLoadMap(filePath);
+            this.d_mapName = p_mapDto.getFileName();
             return p_mapDto.getFileName() + " Map file loaded";
         } else {
             return "Map file didn't pass format validation";
@@ -397,7 +411,15 @@ public class MapService {
         MapFile mapFile = new MapFile();
         mapFile.setFileName(p_dto.getFileName());
 
-        return d_repoMap.saveMap(mapFile);
+        String result = "";
+        try {
+            result = d_repoMap.saveMap(mapFile);
+            this.d_mapName = p_dto.getFileName();
+        } catch (Exception e) {
+            result = e.getMessage();
+        }
+
+        return result;
     }
 
     /**
