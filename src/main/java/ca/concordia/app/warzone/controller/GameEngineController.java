@@ -63,6 +63,11 @@ public class GameEngineController {
     private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
 
     /**
+     * Game service
+     */
+    private final GameService d_gameService;
+
+    /**
      * Constructs a GameEngineController with the specified services.
      *
      * @param p_continentService  The ContinentService to use.
@@ -75,7 +80,7 @@ public class GameEngineController {
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
-            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_RepoContinent) {
+            PhaseRepository p_phaseRepository, PlayerCardService p_PlayerCardService, ContinentRepository p_RepoContinent, GameService p_gameService) {
         this.d_continentService = p_continentService;
         this.d_countryService = p_countryService;
         this.d_playerService = p_playerService;
@@ -84,6 +89,8 @@ public class GameEngineController {
         this.d_playerCardService = p_PlayerCardService;
         this.d_diplomacyList = new ArrayList<>();
         this.d_repoContinent = p_RepoContinent;
+        this.d_gameService = p_gameService;
+
 
         this.d_phaseRepository
                 .setPhase(new MapEditorPhase(d_mapService, d_continentService, d_countryService, d_playerService));
@@ -205,6 +212,10 @@ public class GameEngineController {
         }
 
         return result;
+    }
+
+    public String saveGame(String fileName) {
+        return this.d_gameService.saveGame(fileName);
     }
 
 

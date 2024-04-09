@@ -33,6 +33,9 @@ class GameEngineControllerTest {
     @Mock
     private MapService mapService;
 
+    @Mock
+    private GameService gameService;
+
 
     private List<List<Order>> d_orders;
 
@@ -57,7 +60,7 @@ class GameEngineControllerTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
-        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent);
+        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent, gameService);
     }
 
     @Test

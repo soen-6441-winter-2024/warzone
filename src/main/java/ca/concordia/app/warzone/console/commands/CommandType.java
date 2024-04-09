@@ -96,7 +96,10 @@ public enum CommandType {
      */
     BLOCKADE("blockade"),
 
-
+    /**
+     * Command to save game progress.
+     */
+    SAVEGAME("savegame"),
 
     /**
      * Command to issue Air Lift order
