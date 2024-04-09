@@ -2,7 +2,11 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.model.Order;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.Strategies.HumanPlayerStrategy;
+import ca.concordia.app.warzone.repository.ContinentRepository;
+import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.PlayerRepository;
+import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,19 +35,27 @@ class GameEngineControllerTest {
     private MapService mapService;
 
     @Mock
-    private OrdersService ordersService;
-
+    private GameService gameService;
 
 
     private List<List<Order>> d_orders;
 
     private int d_currentRound;
 
+    private ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+
+
     @Mock
     private PlayerCardService playerCardService;
 
+    @Mock
+    private PhaseRepository phaseRepository;
+
     @InjectMocks
     private PlayerService playerService;
+
+    @InjectMocks
+    private GameService d_gameService;
 
     @InjectMocks
     private GameEngineController gameEngineController;
@@ -51,8 +63,8 @@ class GameEngineControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        playerService = new PlayerService(playerRepository, mapService, countryService, ordersService, continentService);
-        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, ordersService, null, playerCardService);
+        playerService = new PlayerService(playerRepository, mapService, countryService, continentService);
+        gameEngineController = new GameEngineController(continentService, countryService, playerService, mapService, phaseRepository, playerCardService, d_repoContinent, d_gameService);
     }
 
     @Test

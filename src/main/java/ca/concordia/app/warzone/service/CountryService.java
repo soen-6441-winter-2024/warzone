@@ -2,9 +2,12 @@ package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.console.dto.ContinentDto;
+import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -94,6 +97,15 @@ public class CountryService {
     }
 
     /**
+     *
+     * @param p_id id of the country
+     * @return oprional containing the country if found
+     */
+    public Optional<Country> findCountryById(String p_id) {
+        return d_repoCountry.findById(p_id);
+    }
+
+    /**
      * Returns all the countries
      * @return all the countries
      */
@@ -135,6 +147,14 @@ public class CountryService {
         countryDto.setId(p_country.getId());
         countryDto.setContinent(continentDto);
         countryDto.setNeighbors(neighborsDto);
+
+        if (p_country.getPlayer().isPresent()) {
+            PlayerDto playerDto = new PlayerDto();
+            Player player = p_country.getPlayer().get();
+            playerDto.setPlayerName(player.getPlayerName());
+            playerDto.setCountriesAssigned(player.getCountriesAssigned().stream().map(Country::getId).toList());
+            countryDto.setPlayer(playerDto);
+        }
 
         return countryDto;
     }
@@ -214,6 +234,26 @@ public class CountryService {
 
         return result.toString();
     }
+    /**
+     * Checks if 2 countries are neighbors
+     * @param first the first country
+     * @param second the second country
+     * @return true if they are neighbors, false otherwise.
+     * @throws NotFoundException when country isnt found
+     */
+    public boolean areNeighbors(String first, String second) throws NotFoundException {
+        Optional<Country> countryOpt = d_repoCountry.findById(first);
+        if(!countryOpt.isPresent()) {
+            throw new NotFoundException("country does not exist");
+        }
+
+        Optional<Country> secondCountryOpt = d_repoCountry.findById(second);
+        if(!secondCountryOpt.isPresent()) {
+            throw new NotFoundException("country does not exist");
+        }
+
+        return countryOpt.get().getNeighbors().contains(secondCountryOpt.get());
+    }
 
     /**
      * Deletes a neighbor country from the specified country.
@@ -271,6 +311,43 @@ public class CountryService {
             int armiesCount = country.getArmiesCount();
             country.setArmiesCount(armiesCount + p_count);
             d_repoCountry.save(country);
+        });
+    }
+    /**
+     * Bombs a country causing it to lose half of it's armies.
+     * @param p_countryId the id of the country
+     */
+    public void bombACountry(String p_countryId) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(
+            country -> {
+                int armiesCount = country.getArmiesCount();
+                country.setArmiesCount((int) (armiesCount / 2));
+                d_repoCountry.save(country);
+            }
+        );
+    }
+
+    /**
+     * removes speciied number of armies
+     * @param p_countryId the id of the country from which armies are to be removed
+     * @param p_count the count of armies to be removed
+     */
+    public void removeArmiesFromCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            int armiesCount = country.getArmiesCount();
+            country.setArmiesCount(armiesCount - p_count);
+            d_repoCountry.save(country);
+        });
+    }
+
+    /**
+     * Sets number of armies for each country with the specified id
+     * @param p_countryId the id of the country
+     * @param p_count the new count of armies for the country
+     */
+    public void setArmiesCountToCountry(String p_countryId, int p_count) {
+        this.d_repoCountry.findById(p_countryId).ifPresent(country -> {
+            country.setArmiesCount(p_count);
         });
     }
 }

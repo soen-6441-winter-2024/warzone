@@ -19,6 +19,8 @@ public enum CommandType {
      */
     EDIT_NEIGHBOR("editneighbor"),
 
+    SHOW_MY_CARDS("showmycards"),
+
     /**
      * Command to show the map.
      */
@@ -58,11 +60,57 @@ public enum CommandType {
      * Command to validate the map.
      */
     VALIDATE_MAP("validatemap"),
+    /**
+     * Command to notify game engine that a player has given all his orders for a
+     * round
+     */
+    ORDERS_COMPLETED("orderscompleted"),
+
+    /**
+     * Command to bomb a target country.
+     */
+    BOMB_ORDER("bomb"),
+
+    /**
+     * Command to bomb a target country.
+     */
+    NEGOTIATE("negotiate"),
 
     /**
      * Command to move to the next phase.
      */
-    NEXT_PHASE("nextphase");
+    NEXT_PHASE("nextphase"),
+
+    /**
+     * Command to issue the advance order
+     */
+    ADVANCE("advance"),
+
+    /**
+     * Command to show the current phase
+     */
+    SHOW_PHASE("showphase"),
+
+    /**
+     * Command to issue the blockade order
+     */
+    BLOCKADE("blockade"),
+
+    /**
+     * Command to save game progress.
+     */
+    SAVEGAME("savegame"),
+
+    /**
+     * Command to issue Air Lift order
+     */
+
+    AIRLIFT("airlift"),
+
+    /**
+     * Command to start a game in Tournament mode
+     */
+    TOURNAMENT("tournament");
 
     /**
      * The text representation of the command type.

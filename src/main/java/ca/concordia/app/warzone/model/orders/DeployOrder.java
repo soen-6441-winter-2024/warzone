@@ -7,11 +7,15 @@ import ca.concordia.app.warzone.service.CountryService;
  * Represents a deploy order in the game, where a player deploys a certain number of armies to a country.
  */
 public class DeployOrder extends Order {
-
     /**
      * The ID of the country to deploy armies to.
      */
     private String countryId;
+
+    /**
+     * The country service
+     */
+    private CountryService d_countryService;
 
     /**
      * The number of armies to deploy.
@@ -24,11 +28,13 @@ public class DeployOrder extends Order {
      * @param player    The player issuing the deploy order.
      * @param countryId The ID of the country to deploy armies to.
      * @param number    The number of armies to deploy.
+     * @param p_countryService country service
      */
-    public DeployOrder(String player, String countryId, int number) {
+    public DeployOrder(String player, String countryId, int number, CountryService p_countryService) {
         super(player);
         this.countryId = countryId;
         this.number = number;
+        this.d_countryService = p_countryService;
     }
 
     /**
@@ -67,12 +73,13 @@ public class DeployOrder extends Order {
         this.number = number;
     }
 
-    public void execute(Order p_order, CountryService p_countryService) {
-        String countryId = ((DeployOrder) p_order).getCountryId();
-        int number = ((DeployOrder) p_order).getNumber();
-            // Add the reinforcements to the country
+    /**
+     * Executes the logic for the type of order.
+     */
+    @Override
+    public void execute() {
         System.out.println("Adding " + number + " armies to country " + countryId);
-        p_countryService.addArmiesToCountry(countryId, number);
+        d_countryService.addArmiesToCountry(countryId, number);
     }
 }
 

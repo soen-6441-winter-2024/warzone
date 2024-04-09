@@ -8,6 +8,9 @@ import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,12 +28,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class MapServiceTest {
 
     public static final String FILE_NAME = "src/test/resources/map.txt";
     public static final String EXPECTED_SHOW_MAP_FILE_NAME = "src/test/resources/expectedShowMap.txt";
     public static final String EXPECTED_SAVE_MAP_FILE_NAME = "src/test/resources/expected_map.txt";
     public static final String VALID_FILE_NAME = "src/test/resources/valid_map.txt";
+    public static final String VALID_FILE_NAME_EMPTY_BORDERS = "src/test/resources/valid_map_empty_section.txt";
+    public static final String INVALID_FILE_NAME_EMPTY_COUNTRIES = "src/test/resources/invalid_map_empty_countries.txt";
     public static final String INVALID_FILE_NAME = "src/test/resources/invalid_map.txt";
 
     @MockBean
@@ -54,6 +61,22 @@ public class MapServiceTest {
         boolean result = underTest.validateMapStructure(VALID_FILE_NAME);
 
         assertTrue(result);
+    }
+
+    @Test
+    public void testValidateMapStructureEmptyBorders() {
+
+        boolean result = underTest.validateMapStructure(VALID_FILE_NAME_EMPTY_BORDERS);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testValidateMapStructureEmptyCountries() {
+
+        boolean result = underTest.validateMapStructure(INVALID_FILE_NAME_EMPTY_COUNTRIES);
+
+        assertFalse(result);
     }
 
     @Test

@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.repository.DefaultMapFileFormatter;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +19,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MapRepositoryFileImplTest {
 
-    public static final String FILE_NAME = "src/test/resources/map.txt";
+    public static final String FILE_NAME = "map_files/map.txt";
     public static final String EXPECTED_FILE_NAME = "src/test/resources/expected_map.txt";
 
     @Mock
@@ -36,7 +39,7 @@ public class MapRepositoryFileImplTest {
 
     @BeforeEach
     public void before() {
-        underTest = new MapRepositoryFileImpl(countryRepository, continentRepository);
+        underTest = new MapRepositoryFileImpl(countryRepository, continentRepository, new DefaultMapFileFormatter());
         FileUtils.deleteQuietly(new File(FILE_NAME));
     }
 
@@ -83,6 +86,14 @@ public class MapRepositoryFileImplTest {
         assertEquals("Map was saved in the following filepath " + FILE_NAME,result);
         assertEquals(readFileToString(new File(EXPECTED_FILE_NAME), StandardCharsets.UTF_8),
                 readFileToString(new File(FILE_NAME), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void testGetMap() {
+
+        List<String> lines = underTest.getMap(EXPECTED_FILE_NAME);
+
+        assertThat(lines, hasSize(16));
     }
 
     private Country newCountry(String id, Continent continent) {

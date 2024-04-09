@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CommandDispatcherTest {
+public class CommandDispatcherIntegrationTest {
 
     @MockBean
     private ConsoleRunner runner;
@@ -53,22 +53,36 @@ public class CommandDispatcherTest {
         controller.executeLine("gameplayer -add player1 -add player2 -add player3");
         controller.executeLine("assigncountries");
 
-        issueOrders("player1");
-        issueOrders("player2");
-        issueOrders("player3");
+        issueDeployOrders("player1");
+        issueDeployOrders("player2");
+        issueDeployOrders("player3");
+
+        issueAdvanceOrders("player1", "player2");
 
     }
 
-    private void issueOrders(String playerId) {
+    private void issueAdvanceOrders(String playerIdFrom, String playerIdTo) {
+
+        Player playerFrom = getPlayer(playerIdFrom);
+        List<Country> countriesFrom = playerFrom.getCountriesAssigned();
+
+        Player playerTo = getPlayer(playerIdTo);
+        List<Country> countriesTo = playerTo.getCountriesAssigned();
+
+        assertThat(countriesFrom, hasSize(2));
+        controller.executeLine("advance " + countriesFrom.get(1).getId() + " " + countriesTo.get(0).getId() + " " + 2);
+    }
+
+    private Player getPlayer(String playerId) {
         Optional<Player> playerOpt = playerRepository.findById(playerId);
-
         assertTrue(playerOpt.isPresent());
+        return playerOpt.get();
+    }
 
-        Player player = playerOpt.get();
+    private void issueDeployOrders(String playerId) {
+        Player player = getPlayer(playerId);
         List<Country> countries = player.getCountriesAssigned();
-
         assertThat(countries, hasSize(2));
-
         controller.executeLine("deploy " + countries.get(0).getId() + " " + 1);
         controller.executeLine("deploy " + countries.get(1).getId() + " " + player.getNumberOfReinforcements());
     }
