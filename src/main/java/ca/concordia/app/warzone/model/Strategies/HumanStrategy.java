@@ -26,6 +26,7 @@ import java.util.Optional;
 /**
  * Abstract class representing the strategy for a human player in the game.
  */
+@Service
 public abstract class HumanStrategy {
     /**
      * Data member for storing orders.
