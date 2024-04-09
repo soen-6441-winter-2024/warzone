@@ -287,7 +287,7 @@ public class MapService {
      * @param p_file the path of the map file
      * @return true if there is at least one continent loaded, false otherwise
      */
-    private boolean readAndLoadMap(String p_file) {
+    protected boolean readAndLoadMap(String p_file) {
         boolean loadResult = true;
         boolean continentsFound = false;
         boolean countriesFound = false;
