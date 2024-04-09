@@ -5,6 +5,7 @@ import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
+import ca.concordia.app.warzone.repository.DefaultMapFileFormatter;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ public class MapRepositoryFileImplTest {
 
     @BeforeEach
     public void before() {
-        underTest = new MapRepositoryFileImpl(countryRepository, continentRepository);
+        underTest = new MapRepositoryFileImpl(countryRepository, continentRepository, new DefaultMapFileFormatter());
         FileUtils.deleteQuietly(new File(FILE_NAME));
     }
 
