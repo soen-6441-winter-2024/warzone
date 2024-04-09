@@ -143,6 +143,7 @@ public class AdvanceOrder extends Order {
             System.out.println("Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo );
             countryTo.setArmiesCount(countryTo.getArmiesCount() + this.d_number);
             countryTo.setPlayer(Optional.of(countryFromOwner));
+            countryFromOwner.addCard("airlift_card");
             return;
         }
 
@@ -180,6 +181,7 @@ public class AdvanceOrder extends Order {
         if(defendingArmies > attackingArmies) {
             System.out.println("Failed to advance " + this.d_number + "armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". Defending armies won.");
             this.d_countryService.setArmiesCountToCountry(this.d_countryTo, defendingArmies);
+
             return;
         }
 
@@ -187,5 +189,6 @@ public class AdvanceOrder extends Order {
         // Attacking won, the owner of the country changes
         this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
         countryTo.setPlayer(Optional.of(countryFromOwner));
+        countryFromOwner.addCard("airlift_card");
     }
 }
