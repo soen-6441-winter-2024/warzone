@@ -5,16 +5,31 @@ import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Represents the 'tournament' command.
+ * This command is used to initiate a tournament with specified parameters.
+ */
 @Component
 public class TournamentCommand extends Command {
 
     private final GameEngineController d_gameEngineController;
 
+    /**
+     * Constructs a TournamentCommand with the specified GameEngineController.
+     *
+     * @param p_GameEngineController the GameEngineController to be used
+     */
     public TournamentCommand(GameEngineController p_GameEngineController) {
         d_gameEngineController = p_GameEngineController;
     }
 
+    /**
+     * Executes the 'tournament' command with the specified subcommands and options.
+     *
+     * @param p_subCommandsAndOptions an array containing the subcommands and options
+     * @return a message indicating the success or failure of the command execution
+     * @throws InvalidCommandException if the number of arguments is incorrect or if the arguments are invalid
+     */
     @Override
     public String run(String[] p_subCommandsAndOptions) {
         if(p_subCommandsAndOptions.length != 8) {
