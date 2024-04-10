@@ -1,14 +1,15 @@
 package ca.concordia.app.warzone.repository.impl;
 
-import ca.concordia.app.warzone.console.dto.ContinentDto;
-import ca.concordia.app.warzone.console.dto.CountryDto;
 import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default Map file formatter component
