@@ -14,15 +14,15 @@ public class CheaterPlayerStrategy extends PlayerStrategy {
     }
 
     /**
-     * @return
+     * @return null
      */
     @Override
-    public Country attackCountry() {
+    public Country attackCountry(Country p_currentCountryToAttackFrom) {
         return null;
     }
 
     /**
-     * @return
+     * @return null
      */
     @Override
     public Country countryToAttackFrom() {
@@ -30,8 +30,10 @@ public class CheaterPlayerStrategy extends PlayerStrategy {
     }
 
     /**
-            * @return
-            */
+     * Creates orders based on the strategy.
+     *
+     * @return a string representing the created orders
+     */
     @Override
     public String createOrder() {
         List<Country> p_countrieslist = d_player.getCountriesAssigned();
