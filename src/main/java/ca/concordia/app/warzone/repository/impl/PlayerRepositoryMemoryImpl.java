@@ -10,8 +10,20 @@ import java.util.*;
  */
 @Repository
 public class PlayerRepositoryMemoryImpl extends AbstractRepositoryMemoryImpl<Player> implements PlayerRepository {
-    private Map<String, Player> d_players = new HashMap<>(); // Stores players with their names as keys
+    /**
+     * Constructor
+     */
+    public PlayerRepositoryMemoryImpl() {}
 
+    /**
+     * Representation of the players. Stores players with their names as keys
+     */
+    private Map<String, Player> d_players  = new HashMap<>(); // Stores players with their names as keys
+
+    /**
+     * Return the players
+     * @return the players
+     */
     @Override
     Map<String, Player> getMap() {
         return d_players;

@@ -104,6 +104,7 @@ public class PlayerService {
      * Retrieves the cards assigned to a player.
      *
      * @param p_playerId the player to return their cards.
+     * @return the result of the operation
      */
     public String showPlayerCards(int p_playerId) {
         Player player = this.getAllPlayers().get(p_playerId);
@@ -340,6 +341,10 @@ public class PlayerService {
         return this.d_repository.findAll();
     }
 
+    /**
+     * Returns all the players on the game in an array
+     * @return all the players on the game in an array
+     */
     public Player[] getAllPlayersArr() {
         List<Player> players = this.d_repository.findAll();
         Player[] out = new Player[players.size()];

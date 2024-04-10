@@ -64,9 +64,12 @@ public class CommandFactory {
      * @param p_showPhaseCommand       Command to show which phase you are
      * @param p_blockadeCommand        Command to issue blockage order
      * @param p_diplomacyCommand       Command to issue diplomacy order
+     * @param p_airliftCommand         Command to issue airlift order
+     * @param p_saveGameCommand         Command to save the game
      * @param p_ShowMyCardsCommand     Command to show current issuing player's special cards.
      * @param p_TournamentCommand      Command to start a game in Tournament Mode.
      */
+
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
             EditNeighborCommand p_editNeighborCommand, ShowMapCommand p_showMapCommand,
             GamePlayerCommand p_editGamePlayerCommand, SaveMapCommand p_saveMapCommand,

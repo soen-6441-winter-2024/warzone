@@ -14,7 +14,7 @@ import java.util.Optional;
 public class CheaterPlayerStrategy extends PlayerStrategy {
     /**
      *
-     *
+     * Constructor
      * @param d_player the player
      * @param d_countriesAssigned the list of countries assigned to the player
      */

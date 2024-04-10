@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -77,6 +76,7 @@ public class GameEngineController {
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
      * @param p_RepoContinent     The continent repository to use
+     * @param p_gameService       The game service to use
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
@@ -214,6 +214,11 @@ public class GameEngineController {
         return result;
     }
 
+    /**
+     * Saves a game to memory
+     * @param fileName the name of the file where the game is being saved to
+     * @return the result of the operation
+     */
     public String saveGame(String fileName) {
         return this.d_gameService.saveGame(fileName);
     }
@@ -437,6 +442,15 @@ public class GameEngineController {
         return this.d_phaseRepository.getPhase().getClass().getSimpleName();
     }
 
+    /**
+     * Performs a tournament
+     * @param mapFilenames the map filenames to be used
+     * @param playerStrategies the player strategies
+     * @param maxTurnNumber the max number of turns
+     * @param gameAmount amount of games per map
+     * @return the result of the tournament
+     * @throws NotFoundException a not found exception
+     */
 
     public String tournamentMode(String[] mapFilenames, String[] playerStrategies, int maxTurnNumber, int gameAmount) throws NotFoundException {
         System.out.println("Starting a tournament with: " + String.join(" ", mapFilenames));
@@ -490,11 +504,19 @@ public class GameEngineController {
         return "";
     }
 
+    /**
+     * Returns the winner of the current game
+     * @return The winner of the game
+     */
     public Player getWinner() {
         List<Country> countries = this.d_countryService.findAll();
         return countries.get(0).getPlayer().get();
     }
 
+    /**
+     * Return whether the current game is finished or not
+     * @return true if game is finished
+     */
     public boolean isGameFinished() {
         List<Country> countries = this.d_countryService.findAll();
         Player firstOwner = countries.get(0).getPlayer().get();
@@ -511,6 +533,13 @@ public class GameEngineController {
         return true;
     }
 
+    /**
+     * Plays a single tournament game
+     * @param maxTurnNumber max number of turns
+     * @param playerStrategies the player strategies
+     * @param mapName the map name for the current game
+     * @return the result of this game
+     */
     public String playTournamentGame(int maxTurnNumber, String[] playerStrategies, String mapName) {
 
         this.d_phaseRepository.setPhase(new GameIssueDeployPhase(this.d_playerService));

@@ -107,6 +107,10 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
             }
         }
 
+        if(minNeighbor == null && !p_neighbors.isEmpty()){
+            minNeighbor = p_neighbors.get(0);
+        }
+
         return minNeighbor;
     }
 
