@@ -339,4 +339,15 @@ public class PlayerService {
     public List<Player> getAllPlayers() {
         return this.d_repository.findAll();
     }
+
+    public Player[] getAllPlayersArr() {
+        List<Player> players = this.d_repository.findAll();
+        Player[] out = new Player[players.size()];
+
+        for(int i = 0; i < players.size(); i++) {
+            out[i] = players.get(i);
+        }
+
+        return out;
+    }
 }

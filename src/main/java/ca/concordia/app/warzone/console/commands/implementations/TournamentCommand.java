@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.console.commands.implementations;
 import ca.concordia.app.warzone.console.commands.Command;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.controller.GameEngineController;
+import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -43,8 +44,11 @@ public class TournamentCommand extends Command {
         int gamesAmount = this.getGamesAmount(p_subCommandsAndOptions);
 
 
-
-        return d_gameEngineController.tournamentMode(mapFilenames, playerStrategies, maxTurns, gamesAmount);
+        try {
+            return d_gameEngineController.tournamentMode(mapFilenames, playerStrategies, maxTurns, gamesAmount);
+        } catch (NotFoundException e) {
+            return "An error has occurred";
+        }
     }
 
     private int getMaxTurns(String[] p_subCommandsAndOptions) {
