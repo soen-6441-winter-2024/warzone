@@ -3,6 +3,7 @@ package ca.concordia.app.warzone.model.Strategies;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,11 +25,11 @@ public class CheaterComputerPlayerStrategy extends ComputerStrategy {
 
     /**
      * Determines the country to attack (not applicable for cheater strategy).
-     *
+     * @param p_currentCountryToAttackFrom the current country to attack from
      * @return null (not applicable for cheater strategy)
      */
     @Override
-    public Country attackCountry() {
+    public Country attackCountry(Country p_currentCountryToAttackFrom) {
         return null;
     }
 
