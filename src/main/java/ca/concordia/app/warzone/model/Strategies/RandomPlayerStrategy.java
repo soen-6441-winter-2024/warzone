@@ -12,6 +12,10 @@ import ca.concordia.app.warzone.service.PlayerService;
 
 import java.util.*;
 
+
+/**
+ * Represents the strategy for a random computer player in the game.
+ */
 public class RandomPlayerStrategy extends PlayerStrategy {
 
     private int d_currentRound;
@@ -50,7 +54,7 @@ public class RandomPlayerStrategy extends PlayerStrategy {
     public Country countryToAttackFrom(){
         Random rand = new Random();
         int targetCountry;
-        targetCountry = rand.nextInt(d_player.getCountriesAssigned().size() - 1);
+        targetCountry = rand.nextInt(d_player.getCountriesAssigned().size());
         Country countryToAttackFrom = d_player.getCountriesAssigned().get(targetCountry);
         if(countryToAttackFrom.getArmiesCount() == 0){
             return countryToAttackFrom();
@@ -68,7 +72,7 @@ public class RandomPlayerStrategy extends PlayerStrategy {
     public Country attackCountry(Country p_currentCountryToAttackFrom){
         Random rand = new Random();
         int targetCountry;
-        targetCountry = rand.nextInt(p_currentCountryToAttackFrom.getNeighbors().size() - 1);
+        targetCountry = rand.nextInt(p_currentCountryToAttackFrom.getNeighbors().size());
         Country countryToAttack = d_player.getCountriesAssigned().get(targetCountry);
         Optional <Player> optionalplayer = countryToAttack.getPlayer();
         /*if(optionalplayer.isPresent()){
@@ -100,7 +104,7 @@ public class RandomPlayerStrategy extends PlayerStrategy {
         Country currentCountryToAttackFrom = countryToAttackFrom();
         while (armiesdeployed < this.d_player.getNumberOfReinforcements()){
             int numOfArmiesToDeploy = rand.nextInt(d_player.getNumberOfReinforcements());
-            int posOfCountryToDeployTo = rand.nextInt(d_player.getCountriesAssigned().size() - 1);
+            int posOfCountryToDeployTo = rand.nextInt(d_player.getCountriesAssigned().size());
             String countryToDeployTo = d_player.getCountriesAssigned().get(posOfCountryToDeployTo).getId();
             armiesdeployed += numOfArmiesToDeploy;
             this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToDeployTo, numOfArmiesToDeploy, d_currentPlayerGivingOrder, d_currentRound);
