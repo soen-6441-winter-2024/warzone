@@ -84,12 +84,12 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
 
     /**
      * Selects the country to attack.
-     *
+     * @param p_currentCountryToAttackFrom the current country to attack from
      * @return the country to attack
      */
     @Override
-    public Country attackCountry() {
-        List<Country> p_neighbors = countryToAttackFrom().getNeighbors();
+    public Country attackCountry(Country p_currentCountryToAttackFrom) {
+        List<Country> p_neighbors = p_currentCountryToAttackFrom.getNeighbors();
         int min = Integer.MAX_VALUE;
         Country minNeighbor = null;
 
@@ -107,8 +107,8 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
             }
         }
 
-        if(minNeighbor == null && !p_neighbors.isEmpty()){
-            minNeighbor = p_neighbors.get(0);
+        if(minNeighbor == null){
+            minNeighbor = p_currentCountryToAttackFrom;
         }
 
         return minNeighbor;
@@ -123,22 +123,23 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
     public String createOrder() {
         int armiestobedeployed = this.d_player.getNumberOfReinforcements();
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
-        this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
-        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry().getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        Country currentCountryToAttackFrom = countryToAttackFrom();
+        this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(currentCountryToAttackFrom.getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
+        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(currentCountryToAttackFrom.getId(), attackCountry(currentCountryToAttackFrom).getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();
         Collections.shuffle(playerCards);
         for(String card : playerCards) {
             switch (card) {
                 case "Airlift":
-                    this.d_phaseRepository.getPhase().addAirliftOrderToPlayer(countryToAttackFrom().getId(), attackCountry().getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound);
+                    this.d_phaseRepository.getPhase().addAirliftOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound);
                     break;
 
                 case "Blockade":
-                    this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(attackCountry().getId(), d_currentPlayerGivingOrder, d_currentRound);
+                    this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(attackCountry(currentCountryToAttackFrom).getId(), d_currentPlayerGivingOrder, d_currentRound);
                     break;
 
                 case "Bomb":
-                    this.d_playerService.addBombOrderToCurrentPlayer(attackCountry().getId(), d_currentPlayerGivingOrder, d_currentRound);
+                    this.d_playerService.addBombOrderToCurrentPlayer(attackCountry(currentCountryToAttackFrom).getId(), d_currentPlayerGivingOrder, d_currentRound);
                     break;
                 default:
                     break;

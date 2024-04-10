@@ -39,10 +39,10 @@ public abstract class ComputerStrategy {
 
     /**
      * Selects a country to attack.
-     *
+     * @param p_country the country
      * @return the country to attack
      */
-    public abstract Country attackCountry();
+    public abstract Country attackCountry(Country p_country);
 
     /**
      * Selects a country from which to launch an attack.

@@ -63,11 +63,11 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
 
     /**
      * Selects the country to be attacked.
-     *
+     * @param p_currentCountryToAttackFrom the current country to attack from
      * @return the country to be attacked
      */
     @Override
-    public Country attackCountry() {
+    public Country attackCountry(Country p_currentCountryToAttackFrom) {
         List<Country> p_countriesassigned = d_player.getCountriesAssigned();
         int min = Integer.MAX_VALUE;
         Country minTerritory = null;
@@ -113,18 +113,19 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
         int armiestobedeployed = this.d_player.getNumberOfReinforcements();
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         int halfForceArmy = fullForceArmy / 2;
+        Country currentCountryToAttackFrom = countryToAttackFrom();
         this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
-        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry().getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();
         Collections.shuffle(playerCards);
         for(String card : playerCards) {
             switch (card) {
                 case "Airlift":
-                    this.d_phaseRepository.getPhase().addAirliftOrderToPlayer(countryToAttackFrom().getId(), attackCountry().getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound);
+                    this.d_phaseRepository.getPhase().addAirliftOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound);
                     break;
 
                 case "Blockade":
-                    this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(attackCountry().getId(), d_currentPlayerGivingOrder, d_currentRound);
+                    this.d_phaseRepository.getPhase().addBlockadeOrderToPlayer(attackCountry(currentCountryToAttackFrom).getId(), d_currentPlayerGivingOrder, d_currentRound);
                     break;
 
                 default:
