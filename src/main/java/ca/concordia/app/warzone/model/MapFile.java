@@ -11,6 +11,7 @@ public class MapFile {
     private List<Continent> d_continents;
 
     private List<Country> d_countries;
+    private MapFileFormat d_format = MapFileFormat.DEFAULT;
 
     /**
      * Default constructor
@@ -70,5 +71,23 @@ public class MapFile {
      */
     public void setCountries(List<Country> d_countries) {
         this.d_countries = d_countries;
+    }
+
+    /**
+     * Get map format
+     *
+     * @return map format
+     */
+    public MapFileFormat getFormat() {
+        return d_format;
+    }
+
+    /**
+     * Set the map format
+     *
+     * @param d_format map format
+     */
+    public void setFormat(MapFileFormat d_format) {
+        this.d_format = d_format;
     }
 }
