@@ -9,6 +9,10 @@ import ca.concordia.app.warzone.service.PlayerService;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * Represents the strategy for a benevolent computer player in the game.
+ */
 public class BenevolentPlayerStrategy extends PlayerStrategy{
     private int d_currentRound;
 

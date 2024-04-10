@@ -8,6 +8,10 @@ import ca.concordia.app.warzone.service.PlayerService;
 
 import java.util.*;
 
+
+/**
+ * Represents the strategy for a Agressive computer player in the game.
+ */
 public class AggresivePlayerStrategy extends PlayerStrategy{
     private int d_currentRound;
 
@@ -67,6 +71,8 @@ public class AggresivePlayerStrategy extends PlayerStrategy{
         List<Country> p_neighbors = p_currentCountryToAttackFrom.getNeighbors();
         int min = Integer.MAX_VALUE;
         Country minNeighbor = null;
+
+
 
         for(Country country : p_neighbors){
             Optional<Player> optionalplayer = country.getPlayer();
