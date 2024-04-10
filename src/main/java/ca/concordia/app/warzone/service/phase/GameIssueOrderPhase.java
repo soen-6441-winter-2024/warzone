@@ -64,4 +64,19 @@ public class GameIssueOrderPhase extends GamePhase {
     public String addBlockadeOrderToPlayer(String country, int p_currentPlayerGivingOrder, int p_currentRound) {
         return this.d_playerService.addBlockadeOrderToCurrentPlayer(country, p_currentPlayerGivingOrder, p_currentRound);
     }
+
+    /**
+     * Adds deploy orders to the current player.
+     *
+     * @param countryId The ID of the country to deploy armies to.
+     * @param numOfReinforcements The number of armies to deploy.
+     * @param p_currentPlayerGivingOrder The ID of the current player giving the order.
+     * @param p_currentRound The current round number.
+     * @return A message indicating the success or failure of the operation.
+     */
+    @Override
+    public String addDeployOrdersToPlayer(String countryId, int numOfReinforcements, int p_currentPlayerGivingOrder, int p_currentRound) {
+        return this.d_playerService.addDeployOrderToCurrentPlayer(countryId, numOfReinforcements,
+                p_currentPlayerGivingOrder, p_currentRound);
+    }
 }

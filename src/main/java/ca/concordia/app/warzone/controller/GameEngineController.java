@@ -418,6 +418,10 @@ public class GameEngineController {
 
         // executes deploy orders first
         for (Player player : players) {
+            if(player.getPlayerCurrentTurnOrders(p_currentRound) == null || player.getPlayerCurrentTurnOrders(p_currentRound).size() == 0) {
+                continue;
+            }
+
             for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
                 if(order instanceof DeployOrder) order.execute();
             }
@@ -542,7 +546,7 @@ public class GameEngineController {
      */
     public String playTournamentGame(int maxTurnNumber, String[] playerStrategies, String mapName) {
 
-        this.d_phaseRepository.setPhase(new GameIssueDeployPhase(this.d_playerService));
+        this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
 
         ComputerStrategy[] computerStrategies = new ComputerStrategy[playerStrategies.length];
 
@@ -563,7 +567,12 @@ public class GameEngineController {
                 }
 
                 System.out.println(playerStrategies[i]);
-                computerStrategies[i].createOrder();
+                try {
+                    computerStrategies[i].createOrder();
+                } catch (InvalidCommandException e) {
+                    continue;
+                }
+
             }
 
             this.d_phaseRepository.setPhase(new GameExecuteOrderPhase());
