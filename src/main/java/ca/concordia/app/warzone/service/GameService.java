@@ -1,22 +1,15 @@
 package ca.concordia.app.warzone.service;
 
+import ca.concordia.app.warzone.logging.LoggingService;
+import ca.concordia.app.warzone.model.Country;
+import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.repository.impl.PhaseRepository;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
-import ca.concordia.app.warzone.logging.LoggingService;
-import ca.concordia.app.warzone.model.Continent;
-import ca.concordia.app.warzone.model.Country;
-import ca.concordia.app.warzone.model.MapFile;
-import ca.concordia.app.warzone.model.Player;
-import ca.concordia.app.warzone.repository.impl.PhaseRepository;
-import ca.concordia.app.warzone.service.phase.Phase;
-
 
 /**
  * Game service to load and save game progress
