@@ -18,7 +18,7 @@ public abstract class PlayerStrategy {
 
     public abstract String createOrder();
 
-    public abstract Country attackCountry();
+    public abstract Country attackCountry(Country p_country);
 
     public abstract Country countryToAttackFrom();
 }

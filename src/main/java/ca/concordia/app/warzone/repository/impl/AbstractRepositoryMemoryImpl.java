@@ -35,6 +35,11 @@ public abstract class AbstractRepositoryMemoryImpl<T extends Entity> implements 
         return new ArrayList<>(getMap().values());
     }
 
+    @Override
+    public void deleteAll() {
+        getMap().clear();
+    }
+
     /**
      * Abstract method that must return the map representation of the repository
      *

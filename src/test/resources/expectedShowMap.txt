@@ -1,0 +1,3 @@
+Continent ID: Europe, Continent Value: 10
+ - Country: France Armies: 0, Owner: Not yet assigned, Neighbors:
+ - Country: Spain Armies: 0, Owner: Not yet assigned, Neighbors: France,
