@@ -8,7 +8,6 @@ import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +36,7 @@ public class MapServiceTest {
     public static final String VALID_FILE_NAME_EMPTY_BORDERS = "src/test/resources/valid_map_empty_section.txt";
     public static final String INVALID_FILE_NAME_EMPTY_COUNTRIES = "src/test/resources/invalid_map_empty_countries.txt";
     public static final String INVALID_FILE_NAME = "src/test/resources/invalid_map.txt";
+    public static final String INVALID_FILE_NAME_EMPTY_CONTINENTS = "src/test/resources/invalid_map_empty_continents.txt";
 
     @MockBean
     private ConsoleRunner consoleRunner;
@@ -200,5 +199,23 @@ public class MapServiceTest {
         object.setValue(value);
 
         return object;
+    }
+
+    @Test
+    public void testReadAndLoadMap() {
+        boolean result = underTest.readAndLoadMap(VALID_FILE_NAME);
+
+        assertTrue(result);
+        assertThat(continentRepository.findAll(), hasSize(2));
+        assertThat(countryRepository.findAll(), hasSize(4));
+    }
+
+    @Test
+    public void testReadAndLoadMap_Invalid() {
+        boolean result = underTest.readAndLoadMap(INVALID_FILE_NAME_EMPTY_CONTINENTS);
+
+        assertFalse(result);
+        assertTrue(continentRepository.findAll().isEmpty());
+        assertTrue(countryRepository.findAll().isEmpty());
     }
 }

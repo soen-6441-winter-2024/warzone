@@ -3,7 +3,6 @@ package ca.concordia.app.warzone.repository.impl;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
-import ca.concordia.app.warzone.repository.DefaultMapFileFormatter;
 import ca.concordia.app.warzone.repository.MapRepository;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,17 +57,16 @@ public class MapRepositoryFileImpl implements MapRepository {
      */
     @Override
     public String saveMap(MapFile p_map) {
-        String filePath = p_map.getFileName();
 
-        List<Continent> allContinents = d_repoContinent.findAll();
-        List<Country> allCountries = d_repoCountry.findAll();
+        p_map.setContinents(d_repoContinent.findAll());
+        p_map.setCountries(d_repoCountry.findAll());
 
-        if (!allContinents.isEmpty()) {
+        if (!d_repoContinent.findAll().isEmpty()) {
 
-            String content = d_defaultMapFormatter.process(allContinents, allCountries);
-            storeContent(filePath, content);
+            String content = d_defaultMapFormatter.mapToString(p_map);
+            storeContent(p_map.getFileName(), content);
 
-            return "Map was saved in the following filepath " + filePath;
+            return "Map was saved in the following filepath " + p_map.getFileName();
         } else {
             return "There are no continents to save";
         }
@@ -99,7 +98,7 @@ public class MapRepositoryFileImpl implements MapRepository {
     }
 
     @Override
-    public List<String> getMap(String p_filePath) {
+    public List<String> getMapAsString(String p_filePath) {
 
         try {
             Path path = Paths.get(p_filePath);
@@ -107,5 +106,13 @@ public class MapRepositoryFileImpl implements MapRepository {
         } catch (IOException e) {
             throw new RuntimeException("Error while reading the file", e);
         }
+    }
+
+    @Override
+    public MapFile getMap(String p_filePath) {
+
+        List<String> lines = getMapAsString(p_filePath);
+
+        return d_defaultMapFormatter.stringToMap(lines);
     }
 }

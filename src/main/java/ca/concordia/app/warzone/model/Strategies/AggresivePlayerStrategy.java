@@ -88,6 +88,10 @@ public class AggresivePlayerStrategy extends PlayerStrategy{
             }
         }
 
+        if(minNeighbor == null){
+            minNeighbor = p_currentCountryToAttackFrom;
+        }
+
         return minNeighbor;
     }
 
