@@ -35,13 +35,14 @@ public abstract class PlayerStrategy {
 
     /**
      * Selects the country to attack.
-     *
+     * @param p_country country parameter to be used
+     * @return country to be attacked
      */
     public abstract Country attackCountry(Country p_country);
 
     /**
      * Selects the country from which to launch an attack.
-     *
+     * @return country to attack from
      *
      */
     public abstract Country countryToAttackFrom();
