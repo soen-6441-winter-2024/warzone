@@ -2,7 +2,10 @@ package ca.concordia.app.warzone.console;
 
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.repository.ContinentRepository;
+import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.PlayerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,19 @@ public class CommandDispatcherIntegrationTest {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private ContinentRepository continentRepository;
+
+    @Autowired
+    private CountryRepository countryRepository;
+
+    @BeforeEach
+    public void before() {
+        playerRepository.deleteAll();
+        countryRepository.deleteAll();
+        continentRepository.deleteAll();
+    }
 
     @Test
     public void testMapEditorPhase() {
