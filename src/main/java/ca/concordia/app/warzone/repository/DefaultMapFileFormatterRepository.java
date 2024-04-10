@@ -10,11 +10,11 @@ import java.util.List;
  * Default Map file formatter component
  */
 @Component
-public class DefaultMapFileFormatter {
+public class DefaultMapFileFormatterRepository {
     /**
      * Constructor
      */
-    public DefaultMapFileFormatter() {}
+    public DefaultMapFileFormatterRepository() {}
     /**
      * Generate the map content in the default format, given a list of continents and countries
      *

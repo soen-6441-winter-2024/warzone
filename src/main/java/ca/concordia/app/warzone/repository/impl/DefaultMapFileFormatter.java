@@ -15,7 +15,10 @@ import java.util.*;
  */
 @Component
 public class DefaultMapFileFormatter {
-
+    /**
+     * Constructor
+     */
+    public DefaultMapFileFormatter() {}
     /**
      * Generate the map content in the default format, given a list of continents and countries
      *
