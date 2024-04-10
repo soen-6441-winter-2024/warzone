@@ -7,7 +7,10 @@ import java.time.format.DateTimeFormatter;
  * The LoggingService class provides methods for logging messages to a file.
  */
 public class LoggingService {
-
+    /**
+     * Constructor
+     */
+    public LoggingService() {}
     private static final String LOG_FILE_NAME = "src/main/resources/warzone.log";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static LogEntryBuffer s_LogEntryBuffer;

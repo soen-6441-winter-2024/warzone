@@ -11,7 +11,10 @@ import ca.concordia.app.warzone.console.dto.PlayerDto;
  * Represents the phases of the game.
  */
 public abstract class Phase {
-
+    /**
+     * Constructor
+     */
+    public Phase() {}
     /**
      * Loads a map into the game.
      *

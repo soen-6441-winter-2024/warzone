@@ -11,6 +11,11 @@ import ca.concordia.app.warzone.console.dto.PlayerDto;
  * Represents a generic game phase.
  */
 public class GamePhase extends Phase {
+
+    /**
+     * Constructor
+     */
+    public GamePhase(){}
     @Override
     public String loadMap(MapDto mapDto) {
         return null;

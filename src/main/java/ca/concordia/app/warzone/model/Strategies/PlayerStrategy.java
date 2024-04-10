@@ -7,18 +7,24 @@ import ca.concordia.app.warzone.model.Player;
 import java.util.List;
 
 /**
- * Abstract class representing the strategy for a computer player in the game.
+ * Represents a player strategy for handling the logic of the game
  */
 public abstract class PlayerStrategy {
+    /**
+     * The player
+     */
     public Player d_player;
 
+    /**
+     * Assigned countries of the Player
+     */
     private List<Country> d_countriesAssigned;
 
 
     /**
-     * Constructs a ComputerStrategy with the specified player and list of assigned countries.
-     * @param d_player  the player associated with this strategy
-     * @param d_countriesAssigned the list of countries assigned to the player
+     * Constructor
+     * @param d_player the player
+     * @param d_countriesAssigned the countries assigned
      */
     public PlayerStrategy(Player d_player, List<Country> d_countriesAssigned) {
         this.d_player = d_player;
@@ -35,15 +41,14 @@ public abstract class PlayerStrategy {
 
     /**
      * Selects the country to attack.
-     * @param p_country country parameter to be used
-     * @return country to be attacked
+     * @param p_country the country
+     * @return p_country the country
      */
     public abstract Country attackCountry(Country p_country);
 
     /**
      * Selects the country from which to launch an attack.
-     * @return country to attack from
-     *
+     * @return the country
      */
     public abstract Country countryToAttackFrom();
 }

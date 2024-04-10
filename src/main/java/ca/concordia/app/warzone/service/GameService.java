@@ -17,16 +17,25 @@ import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.phase.Phase;
 
-@Service
+
 /**
  * Game service to load and save game progress
  */
+@Service
 public class GameService {
     private final PlayerService d_playerService;
     private final CountryService d_countryService;
     private final MapService d_mapService;
     private final PhaseRepository d_phaseRepository;
 
+    /**
+     * Constructor
+     * @param p_playerService playerService
+     * @param p_countryService countryService
+     * @param p_mapService mapService
+     * @param p_phaseRepository phaseRepository
+     *
+     */
     public GameService(
             PlayerService p_playerService,
             CountryService p_countryService,
@@ -34,7 +43,6 @@ public class GameService {
             PhaseRepository p_phaseRepository) {
         this.d_playerService = p_playerService;
         this.d_countryService = p_countryService;
-        // this.d_continentService = p_continentService;
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
     }
@@ -43,6 +51,7 @@ public class GameService {
      * saves the current game to the specified file name
      * 
      * @param p_gameFileName file name of the game to be saved
+     * @return the result of the operation
      */
     public String saveGame(String p_gameFileName) {
         // if (this.d_mapService.getMapName() == null)

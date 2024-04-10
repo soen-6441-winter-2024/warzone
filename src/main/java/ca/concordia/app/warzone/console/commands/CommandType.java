@@ -19,6 +19,9 @@ public enum CommandType {
      */
     EDIT_NEIGHBOR("editneighbor"),
 
+    /**
+     * Command to see a players cards
+     */
     SHOW_MY_CARDS("showmycards"),
 
     /**

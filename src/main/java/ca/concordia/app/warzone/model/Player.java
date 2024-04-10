@@ -108,6 +108,10 @@ public class Player implements Entity {
         return d_cardsReceived.contains(card);
     }
 
+    /**
+     * Returns the cards of a player
+     * @return The cards of a player
+     */
     public List<String> getCards(){
         return d_cardsReceived;
     }
