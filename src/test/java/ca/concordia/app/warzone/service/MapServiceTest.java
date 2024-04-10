@@ -33,6 +33,7 @@ public class MapServiceTest {
     public static final String EXPECTED_SHOW_MAP_FILE_NAME = "src/test/resources/expectedShowMap.txt";
     public static final String EXPECTED_SAVE_MAP_FILE_NAME = "src/test/resources/expected_map.txt";
     public static final String VALID_FILE_NAME = "src/test/resources/valid_map.txt";
+    public static final String VALID_FILE_NAME_NON_EXISTING = "src/test/resources/valid_map_2.txt";
     public static final String VALID_FILE_NAME_EMPTY_BORDERS = "src/test/resources/valid_map_empty_section.txt";
     public static final String INVALID_FILE_NAME_EMPTY_COUNTRIES = "src/test/resources/invalid_map_empty_countries.txt";
     public static final String INVALID_FILE_NAME = "src/test/resources/invalid_map.txt";
@@ -57,6 +58,22 @@ public class MapServiceTest {
     public void testValidateMapStructure() {
 
         boolean result = underTest.validateMapStructure(VALID_FILE_NAME);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testValidateEditMapStructure() {
+
+        boolean result = underTest.validateEditMapStructure(VALID_FILE_NAME);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testValidateEditMapStructure_NonExisting() {
+
+        boolean result = underTest.validateEditMapStructure(VALID_FILE_NAME_NON_EXISTING);
 
         assertTrue(result);
     }
