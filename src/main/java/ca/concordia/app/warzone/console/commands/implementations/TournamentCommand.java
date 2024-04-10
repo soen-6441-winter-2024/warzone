@@ -44,11 +44,11 @@ public class TournamentCommand extends Command {
 
 
 
-        return "";
+        return d_gameEngineController.tournamentMode(mapFilenames, playerStrategies, maxTurns, gamesAmount);
     }
 
     private int getMaxTurns(String[] p_subCommandsAndOptions) {
-        Pattern pattern = Pattern.compile("(?<=-D) ((((\\S+))\\s)+)");
+        Pattern pattern = Pattern.compile("(?<=-D)\\s\\d+");
         Matcher matcher = pattern.matcher(String.join(" ", p_subCommandsAndOptions));
 
         if(!matcher.find()) {

@@ -2,6 +2,7 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
 import ca.concordia.app.warzone.model.Continent;
@@ -435,5 +436,44 @@ public class GameEngineController {
      */
     public String getCurrentPhase() {
         return this.d_phaseRepository.getPhase().getClass().getSimpleName();
+    }
+
+
+    public String tournamentMode(String[] mapFilenames, String[] playerStrategies, int maxTurnNumber, int gameAmount) throws NotFoundException {
+        System.out.println("Starting a tournament with: " + String.join(" ", mapFilenames));
+        System.out.println("Player strategies: " + String.join(" ", playerStrategies));
+        System.out.println("Max turn number: " + maxTurnNumber);
+        System.out.println("Game amount: " + gameAmount);
+
+        for(String mapFilename : mapFilenames) {
+            System.out.println("Playing with " + mapFilename);
+            MapDto mapDto = new MapDto();
+            mapDto.setFileName(mapFilename);
+
+            for(int currentGameNumber = 1; currentGameNumber <= gameAmount; currentGameNumber++) {
+                String result = this.d_mapService.loadMap(mapDto);
+                if(!result.contains("Map file loaded")) {
+                    throw new InvalidCommandException(result);
+                }
+
+
+                for(int i = 0; i < playerStrategies.length; i++) {
+                    PlayerDto playerDto = new PlayerDto();
+                    playerDto.setPlayerName("Player " + (i + 1));
+                    this.addPlayer(playerDto);
+                }
+
+                System.out.println(this.assignCountries());
+
+                this.playTournamentGame(maxTurnNumber);
+            }
+
+        }
+
+        return "";
+    }
+
+    public String playTournamentGame(int maxTurnNumber) {
+        return "";
     }
 }
