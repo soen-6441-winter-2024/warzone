@@ -222,64 +222,7 @@ public class MapService {
             return true;
         }
 
-        boolean resultValidation = true;
-        boolean continentsFound = false;
-        boolean countriesFound = false;
-        boolean bordersFound = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(p_file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Remove leading and trailing whitespace
-
-                if (line.equals("[continents]")) {
-                    continentsFound = true;
-                    countriesFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[countries]")) {
-                    if (!continentsFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [countries] section before [continents]
-                    }
-                    countriesFound = true;
-                    continentsFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[borders]")) {
-                    if (!countriesFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [borders] section before [countries]
-                    }
-                    bordersFound = true;
-                    countriesFound = false;
-                    continentsFound = false;
-                } else {
-                    // Validate content format
-                    if (continentsFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [continents] should contain two elements separated by one blank space
-                        }
-                    } else if (countriesFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [countries] should contain two elements separated by one blank space
-                        }
-                    } else if (bordersFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length <= 1) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [borders] should contain at least two elements or more separated by one blank space
-                        }
-                    }
-                }
-            }
-            return resultValidation;
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return false; // Error reading file
-        }
+        return validateMapStructure(p_file);
     }
 
     /**
