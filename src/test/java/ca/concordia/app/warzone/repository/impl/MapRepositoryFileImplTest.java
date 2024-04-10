@@ -5,7 +5,6 @@ import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
-import ca.concordia.app.warzone.repository.DefaultMapFileFormatter;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -89,11 +88,25 @@ public class MapRepositoryFileImplTest {
     }
 
     @Test
-    public void testGetMap() {
+    public void testGetMapAsString() {
 
-        List<String> lines = underTest.getMap(EXPECTED_FILE_NAME);
+        List<String> lines = underTest.getMapAsString(EXPECTED_FILE_NAME);
 
         assertThat(lines, hasSize(16));
+    }
+
+    @Test
+    public void testGetMap() {
+
+        MapFile map = underTest.getMap(EXPECTED_FILE_NAME);
+
+        assertThat(map, is(notNullValue()));
+        assertThat(map.getContinents(), hasSize(3));
+        assertThat(map.getCountries(), hasSize(4));
+        assertThat(map.getCountries().get(0).getNeighbors(), hasSize(1));
+        assertThat(map.getCountries().get(1).getNeighbors(), hasSize(2));
+        assertThat(map.getCountries().get(2).getNeighbors(), hasSize(1));
+        assertThat(map.getCountries().get(3).getNeighbors(), hasSize(1));
     }
 
     private Country newCountry(String id, Continent continent) {
