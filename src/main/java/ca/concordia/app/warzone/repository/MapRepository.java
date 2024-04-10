@@ -23,5 +23,13 @@ public interface MapRepository {
      * @param p_filePath file path where to get the map from
      * @return map as a list of string lines.
      */
-    List<String> getMap(String p_filePath);
+    List<String> getMapAsString(String p_filePath);
+
+    /**
+     * Get a map given a path
+     *
+     * @param p_filePath file path where to get the map from
+     * @return map containing countries and continents.
+     */
+    MapFile getMap(String p_filePath);
 }
