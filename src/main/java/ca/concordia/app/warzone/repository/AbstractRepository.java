@@ -40,4 +40,10 @@ public interface AbstractRepository<T extends Entity> {
      * @return a list of all entities
      */
     List<T> findAll();
+
+    /**
+     * Deletes all the data in the repository
+     *
+     */
+    void deleteAll();
 }
