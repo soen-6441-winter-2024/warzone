@@ -58,7 +58,7 @@ public class PlayerCardService {
     }
 
     /**
-     *
+     * Build a new countryConquered
      * @param sizeBeforeLoop map containing size of the countries assigned before each loop
      * @param sizeAfterLoop map containing size of the countries assigned after each loop
      */

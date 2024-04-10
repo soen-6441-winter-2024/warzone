@@ -76,6 +76,7 @@ public class GameEngineController {
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
      * @param p_RepoContinent     The continent repository to use
+     * @param p_gameService       The game service to use
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
@@ -213,6 +214,11 @@ public class GameEngineController {
         return result;
     }
 
+    /**
+     * Saves a game to memory
+     * @param fileName the name of the file where the game is being saved to
+     * @return the result of the operation
+     */
     public String saveGame(String fileName) {
         return this.d_gameService.saveGame(fileName);
     }
@@ -443,7 +449,7 @@ public class GameEngineController {
      * @param maxTurnNumber the max number of turns
      * @param gameAmount amount of games per map
      * @return the result of the tournament
-     * @throws NotFoundException
+     * @throws NotFoundException a not found exception
      */
 
     public String tournamentMode(String[] mapFilenames, String[] playerStrategies, int maxTurnNumber, int gameAmount) throws NotFoundException {
