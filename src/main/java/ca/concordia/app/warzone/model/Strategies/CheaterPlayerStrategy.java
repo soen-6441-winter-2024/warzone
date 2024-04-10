@@ -8,21 +8,30 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Represents the strategy for a cheater computer player in the game.
+ */
 public class CheaterPlayerStrategy extends PlayerStrategy {
+    /**
+     *
+     *
+     * @param d_player the player
+     * @param d_countriesAssigned the list of countries assigned to the player
+     */
     public CheaterPlayerStrategy(Player d_player, List<Country> d_countriesAssigned) {
         super(d_player, d_countriesAssigned);
     }
 
     /**
-     * @return
+     * @return null
      */
     @Override
-    public Country attackCountry() {
+    public Country attackCountry(Country p_currentCountryToAttackFrom) {
         return null;
     }
 
     /**
-     * @return
+     * @return null
      */
     @Override
     public Country countryToAttackFrom() {
@@ -30,8 +39,10 @@ public class CheaterPlayerStrategy extends PlayerStrategy {
     }
 
     /**
-            * @return
-            */
+     * Creates orders based on the strategy.
+     *
+     * @return a string representing the created orders
+     */
     @Override
     public String createOrder() {
         List<Country> p_countrieslist = d_player.getCountriesAssigned();
