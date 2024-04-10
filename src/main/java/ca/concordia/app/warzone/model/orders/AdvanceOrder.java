@@ -162,9 +162,23 @@ public class AdvanceOrder extends Order {
             return;
         }
 
+
         // Otherwise, there's a battle
         int attackingArmies = this.d_number;
         int defendingArmies = countryTo.getArmiesCount();
+
+        // If there are no defending armies, we just move the armies
+        if(defendingArmies == 0) {
+            System.out.println(
+                    "Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". No defending armies");
+            this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
+            countryFromOwner.addNewConqueredCountry(countryTo);
+            countryTo.setPlayer(Optional.of(countryFromOwner));
+            countryFromOwner.addCard("airlift_card");
+            // remove the newly conquered country from it's previous owner.
+            countryToOwner.removeAssignedCountry(countryTo.getId());
+            return;
+        }
 
         while (true) {
             double randomNumberForAttacking = Math.random();
