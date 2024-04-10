@@ -378,7 +378,7 @@ public class MapService {
         if (l_allContinents.isEmpty() && l_allCountries.isEmpty())
             return "No map found: Map has not been created or loaded.";
 
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
 
         for (Continent l_continent : l_allContinents) {
             result.append("Continent ID: " + l_continent.getId() + ", Continent Value: " + l_continent.getValue() +  "\n");
@@ -388,10 +388,10 @@ public class MapService {
                     result.append(" - Country: " + country.getId() + " Armies: " + country.getArmiesCount() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
                                     : country.getPlayer().get().getPlayerName())
-                            + ", Neighbors: ");
+                            + ", Neighbors:");
 
                     for (Country neighborCountry : country.getNeighbors()) {
-                        result.append(neighborCountry.getId() + ", ");
+                        result.append(" " + neighborCountry.getId() + ",");
                     }
                     result.append("\n");
                 }
