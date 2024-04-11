@@ -86,6 +86,7 @@ public class PlayerService {
         } else {
             Player player = new Player();
             player.setPlayerName(playerName);
+            player.d_cardsReceived = p_playerDto.getCardsAssigned();
             d_repository.save(player);
             return "Player " + playerName + " joined the game";
         }

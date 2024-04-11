@@ -105,6 +105,11 @@ public enum CommandType {
     SAVEGAME("savegame"),
 
     /**
+     * Command to load game from game file.
+     */
+    LOAD_GAME("loadgame"),
+
+    /**
      * Command to issue Air Lift order
      */
 
