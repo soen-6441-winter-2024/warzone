@@ -26,7 +26,13 @@ public class GameService {
     private final CountryService d_countryService;
     private final MapService d_mapService;
     private final PhaseRepository d_phaseRepository;
-
+    /**
+     * Game service constructor
+     * @param p_playerService player service
+     * @param p_countryService country service
+     * @param p_mapService map service
+     * @param p_phaseRepository phase repository
+     */
     public GameService(
             PlayerService p_playerService,
             CountryService p_countryService,
@@ -34,7 +40,6 @@ public class GameService {
             PhaseRepository p_phaseRepository) {
         this.d_playerService = p_playerService;
         this.d_countryService = p_countryService;
-        // this.d_continentService = p_continentService;
         this.d_mapService = p_mapService;
         this.d_phaseRepository = p_phaseRepository;
     }
@@ -45,8 +50,7 @@ public class GameService {
      * @param p_gameFileName file name of the game to be saved
      */
     public String saveGame(String p_gameFileName) {
-        // if (this.d_mapService.getMapName() == null)
-        // return "Failed to save game. Kindly save the game map.";
+        if (this.d_mapService.getMapName() == null) return "Failed to save game. Kindly save the game map.";
         String directoryPath = "game_files";
 
         File directory = new File(directoryPath);
@@ -138,7 +142,6 @@ public class GameService {
         } catch (IOException e) {
             LoggingService.log(e.getMessage());
             return e.getMessage();
-
         }
     }
 }
