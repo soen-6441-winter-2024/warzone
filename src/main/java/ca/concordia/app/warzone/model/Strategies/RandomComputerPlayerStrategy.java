@@ -52,12 +52,9 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
         int targetCountry;
         targetCountry = rand.nextInt(d_player.getCountriesAssigned().size());
         Country countryToAttackFrom = d_player.getCountriesAssigned().get(targetCountry);
-        if(countryToAttackFrom.getArmiesCount() == 0){
-            return countryToAttackFrom();
-        }
-        else{
-            return countryToAttackFrom;
-        }
+
+        return countryToAttackFrom;
+
     }
 
     /**
@@ -70,17 +67,7 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
         int targetCountry;
         targetCountry = rand.nextInt(p_currentCountryToAttackFrom.getNeighbors().size());
         Country countryToAttack = d_player.getCountriesAssigned().get(targetCountry);
-        Optional <Player> optionalplayer = countryToAttack.getPlayer();
-        /*if(optionalplayer.isPresent()){
-            Player player = optionalplayer.get();
-            String playerId = player.getId();
-            if(Objects.equals(playerId, d_player.getId())){
-                attackCountry();
-            }
-            else {
-                return countryToAttack;
-            }
-        }*/
+
         return countryToAttack;
     }
 

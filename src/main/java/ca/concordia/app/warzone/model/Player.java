@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
 import ca.concordia.app.warzone.model.Strategies.HumanStrategy;
 
 /**
@@ -147,11 +149,13 @@ public class Player implements Entity {
      * @param countryId the id of the country to remove
      */
     public void removeAssignedCountry(String countryId) {
-        for (int i = 0; i < d_countriesAssigned.size(); i++) {
-            if(d_countriesAssigned.get(i).equals(countryId)) {
-                d_countriesAssigned.remove(i);
-            }
-        }
+
+        List<Country> filteredCountryList = this.getCountriesAssigned()
+                .stream()
+                .filter(c -> !c.getId().equals(countryId))
+                .toList();
+
+        this.d_countriesAssigned = new ArrayList<>(filteredCountryList);
     }
 
     /**

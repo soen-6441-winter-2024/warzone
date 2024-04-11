@@ -243,12 +243,12 @@ public class CountryService {
      */
     public boolean areNeighbors(String first, String second) throws NotFoundException {
         Optional<Country> countryOpt = d_repoCountry.findById(first);
-        if(!countryOpt.isPresent()) {
+        if(countryOpt.isEmpty()) {
             throw new NotFoundException("country does not exist");
         }
 
         Optional<Country> secondCountryOpt = d_repoCountry.findById(second);
-        if(!secondCountryOpt.isPresent()) {
+        if(secondCountryOpt.isEmpty()) {
             throw new NotFoundException("country does not exist");
         }
 
