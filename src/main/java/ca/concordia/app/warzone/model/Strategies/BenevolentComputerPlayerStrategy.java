@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.model.Strategies;
 
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.AdvanceOrder;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.PlayerService;
@@ -42,6 +44,7 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
      * List of diplomacy contracts.
      */
     private List<List<String>> d_diplomacyList;
+    private CountryService d_countryService;
 
     /**
      * Constructs a BenevolentComputerPlayerStrategy with the specified parameters.
@@ -53,12 +56,13 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy contracts
      */
-    public BenevolentComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList) {
+    public BenevolentComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, CountryService p_countryService) {
         super(d_player, d_countriesAssigned);
         this.d_currentRound = p_currentRound;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerService = p_playerService;
         this.d_diplomacyList = p_diplomacyList;
+        this.d_countryService = p_countryService;
     }
 
     /**
@@ -110,12 +114,18 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
      */
     @Override
     public String createOrder() {
-        int armiestobedeployed = this.d_player.getNumberOfReinforcements();
+        int armiestobedeployed = 8;
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         int halfForceArmy = fullForceArmy / 2;
         Country currentCountryToAttackFrom = countryToAttackFrom();
-        this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
-        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        DeployOrder deployOrder = new DeployOrder(d_player.getPlayerName(), countryToAttackFrom().getId(), armiestobedeployed,
+                this.d_countryService);
+        d_player.issueOrder(deployOrder, d_currentRound);
+        AdvanceOrder advanceOrder = new AdvanceOrder(d_player.getPlayerName(), countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy,
+                this.d_countryService);
+        d_player.issueOrder(advanceOrder, d_currentRound);
+        //this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
+        //this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();
         Collections.shuffle(playerCards);
         for(String card : playerCards) {

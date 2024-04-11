@@ -555,11 +555,10 @@ public class GameEngineController {
 
         for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
             for(int i = 0; i < computerStrategies.length; i++) {
-
-                if(playerStrategies[i].equals("aggressive")) {
-                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
+                if(playerStrategies[i].equals("aggresive")) {
+                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService);
                 } else if (playerStrategies[i].equals("benevolent")) {
-                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
+                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService);
                 } else if(playerStrategies[i].equals("random")) {
                     computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
                 } else if(playerStrategies[i].equals("cheater")) {
@@ -567,6 +566,7 @@ public class GameEngineController {
                 }
 
                 System.out.println(playerStrategies[i]);
+                System.out.println("im here " + computerStrategies[i]);
                 try {
                     computerStrategies[i].createOrder();
                 } catch (InvalidCommandException e) {
@@ -585,4 +585,5 @@ public class GameEngineController {
 
         return "draw";
     }
-}
+
+};
