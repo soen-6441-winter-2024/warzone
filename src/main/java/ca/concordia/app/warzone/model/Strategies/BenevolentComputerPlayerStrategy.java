@@ -42,6 +42,7 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
      * List of diplomacy contracts.
      */
     private List<List<String>> d_diplomacyList;
+    private CountryService d_countryService;
 
     /**
      * Constructs a BenevolentComputerPlayerStrategy with the specified parameters.
@@ -52,13 +53,18 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
      * @param p_phaseRepository the phase repository
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy contracts
+     * @param p_countryService the country service
+     * @param p_currentPlayerGivingOrder the current player giving order
      */
-    public BenevolentComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList) {
+
+    public BenevolentComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, CountryService p_countryService, int p_currentPlayerGivingOrder) {
         super(d_player, d_countriesAssigned);
         this.d_currentRound = p_currentRound;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerService = p_playerService;
         this.d_diplomacyList = p_diplomacyList;
+        this.d_countryService = p_countryService;
+        this.d_currentPlayerGivingOrder = p_currentPlayerGivingOrder;
     }
 
     /**
@@ -114,6 +120,7 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         int halfForceArmy = fullForceArmy / 2;
         Country currentCountryToAttackFrom = countryToAttackFrom();
+
         this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
         this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();

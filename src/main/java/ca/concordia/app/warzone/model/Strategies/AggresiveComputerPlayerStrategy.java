@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.model.Strategies;
 
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.AdvanceOrder;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.PlayerService;
@@ -42,6 +44,8 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
      */
     private List<List<String>> d_diplomacyList;
 
+    private CountryService d_countryService;
+
     /**
      * Constructs an AggresiveComputerPlayerStrategy with the specified parameters.
      *
@@ -51,13 +55,18 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
      * @param p_phaseRepository the phase repository
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy contracts
+     * @param p_countryService the country service
+     * @param p_currentPlayerGivingOrder the player giving order
      */
-    public AggresiveComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList) {
+
+    public AggresiveComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, CountryService p_countryService, int p_currentPlayerGivingOrder) {
         super(d_player, d_countriesAssigned);
         this.d_currentRound = p_currentRound;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerService = p_playerService;
         this.d_diplomacyList = p_diplomacyList;
+        this.d_countryService = p_countryService;
+        this.d_currentPlayerGivingOrder = p_currentPlayerGivingOrder;
     }
 
     /**
@@ -124,6 +133,7 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
         int armiestobedeployed = this.d_player.getNumberOfReinforcements();
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         Country currentCountryToAttackFrom = countryToAttackFrom();
+
         this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(currentCountryToAttackFrom.getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
         this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(currentCountryToAttackFrom.getId(), attackCountry(currentCountryToAttackFrom).getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();

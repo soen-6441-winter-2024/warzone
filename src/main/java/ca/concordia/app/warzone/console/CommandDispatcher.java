@@ -52,6 +52,7 @@ public class CommandDispatcher {
         } catch (Exception e) {
             LoggingService.log("Exception: " + e.getMessage());
             System.out.println("General Exception during execution: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
