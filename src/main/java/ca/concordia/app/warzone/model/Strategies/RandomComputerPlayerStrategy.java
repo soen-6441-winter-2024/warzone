@@ -33,6 +33,7 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
      * @param p_phaseRepository the phase repository
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy agreements
+     *  @param p_currentPlayerGivingOrder the current player giving order
      */
     public RandomComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, int p_currentPlayerGivingOrder) {
         super(d_player, d_countriesAssigned);
