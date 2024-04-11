@@ -117,6 +117,7 @@ public class BenevolentComputerPlayerStrategy extends ComputerStrategy{
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         int halfForceArmy = fullForceArmy / 2;
         Country currentCountryToAttackFrom = countryToAttackFrom();
+
         this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToAttackFrom().getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
         this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), halfForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();

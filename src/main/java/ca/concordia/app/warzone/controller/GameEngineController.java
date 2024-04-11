@@ -553,6 +553,8 @@ public class GameEngineController {
         Player[] players = this.d_playerService.getAllPlayersArr();
 
 
+
+
         for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
             this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
             for(int i = 0; i < players.length; i++) {
@@ -567,7 +569,6 @@ public class GameEngineController {
                     computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i],players[i].getCountriesAssigned());
                 }
 
-                System.out.println(playerStrategies[i]);
                 try {
                     computerStrategies[i].createOrder();
                 } catch (InvalidCommandException e) {
@@ -585,5 +586,6 @@ public class GameEngineController {
         }
 
         return "draw";
+
     }
 }

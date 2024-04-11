@@ -53,15 +53,15 @@ public class CheaterComputerPlayerStrategy extends ComputerStrategy {
      */
     @Override
     public String createOrder() {
-        List<Country> p_countrieslist = d_player.getCountriesAssigned();
+        List<Country> p_countrieslist = new ArrayList<>(d_player.getCountriesAssigned());
+        for(Country country : p_countrieslist){
 
-        for(Country p_countriesassigned : p_countrieslist){
-            int doubleArmy = p_countriesassigned.getArmiesCount() * 2;
-            p_countriesassigned.setArmiesCount(doubleArmy);
-            if(p_countriesassigned.getNeighbors() == null || p_countriesassigned.getNeighbors().size() == 0) {
+            int doubleArmy = country.getArmiesCount() > 0 ? country.getArmiesCount() * 2 : 2;
+            country.setArmiesCount(doubleArmy);
+            if(country.getNeighbors() == null || country.getNeighbors().isEmpty()) {
                 return null;
             }
-            for(Country p_neighborCountry : p_countriesassigned.getNeighbors()){
+            for(Country p_neighborCountry : country.getNeighbors()){
                 Optional<Player> optionalplayer = p_neighborCountry.getPlayer();
 
                 if(optionalplayer.isPresent()){

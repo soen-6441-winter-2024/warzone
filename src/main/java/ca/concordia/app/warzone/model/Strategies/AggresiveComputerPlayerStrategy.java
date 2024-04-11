@@ -2,6 +2,8 @@ package ca.concordia.app.warzone.model.Strategies;
 
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.orders.AdvanceOrder;
+import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
 import ca.concordia.app.warzone.service.CountryService;
 import ca.concordia.app.warzone.service.PlayerService;
@@ -42,7 +44,7 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
      */
     private List<List<String>> d_diplomacyList;
 
-    private  CountryService d_countryService;
+    private CountryService d_countryService;
 
     /**
      * Constructs an AggresiveComputerPlayerStrategy with the specified parameters.
@@ -128,6 +130,7 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
         int armiestobedeployed = this.d_player.getNumberOfReinforcements();
         int fullForceArmy = this.countryToAttackFrom().getArmiesCount();
         Country currentCountryToAttackFrom = countryToAttackFrom();
+
         this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(currentCountryToAttackFrom.getId(), armiestobedeployed, d_currentPlayerGivingOrder, d_currentRound);
         this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(currentCountryToAttackFrom.getId(), attackCountry(currentCountryToAttackFrom).getId(), fullForceArmy, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
         List<String> playerCards = d_player.getCards();
