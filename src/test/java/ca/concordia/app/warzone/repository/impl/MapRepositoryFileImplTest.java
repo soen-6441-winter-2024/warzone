@@ -1,5 +1,6 @@
 package ca.concordia.app.warzone.repository.impl;
 
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
@@ -98,7 +99,10 @@ public class MapRepositoryFileImplTest {
     @Test
     public void testGetMap() {
 
-        MapFile map = underTest.getMap(EXPECTED_FILE_NAME);
+        MapDto dto = new MapDto();
+        dto.setFileName(EXPECTED_FILE_NAME);
+
+        MapFile map = underTest.getMap(dto);
 
         assertThat(map, is(notNullValue()));
         assertThat(map.getContinents(), hasSize(3));

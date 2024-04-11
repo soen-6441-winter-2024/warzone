@@ -1,4 +1,5 @@
 package ca.concordia.app.warzone.repository;
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.model.MapFile;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public interface MapRepository {
     /**
      * Get a map given a path
      *
-     * @param p_filePath file path where to get the map from
+     * @param p_mapDto map dto containing the file path where to get the map from and the format
      * @return map containing countries and continents.
      */
-    MapFile getMap(String p_filePath);
+    MapFile getMap(MapDto p_mapDto);
 }
