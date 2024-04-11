@@ -10,11 +10,20 @@ import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.Player;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
+import ca.concordia.app.warzone.service.phase.GameExecuteOrderPhase;
+import ca.concordia.app.warzone.service.phase.GameIssueDeployPhase;
+import ca.concordia.app.warzone.service.phase.GameIssueOrderPhase;
+import ca.concordia.app.warzone.service.phase.GameStartupPhase;
+import ca.concordia.app.warzone.service.phase.MapEditorPhase;
+import ca.concordia.app.warzone.service.phase.Phase;
+
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -24,10 +33,25 @@ import java.util.Scanner;
  */
 @Service
 public class GameService {
+    /**
+     * Player service
+     */
     private final PlayerService d_playerService;
+    /**
+     * Country service
+     */
     private final CountryService d_countryService;
+    /**
+     * Map service
+     */
     private final MapService d_mapService;
+    /**
+     * Phase repository
+     */
     private final PhaseRepository d_phaseRepository;
+    /**
+     * Continent service
+     */
     private final ContinentService d_continentService;
 
     /**
@@ -38,7 +62,6 @@ public class GameService {
      * @param p_mapService       mapService
      * @param p_phaseRepository  phaseRepository
      * @param p_continentService continent service
-     *
      */
     public GameService(
             PlayerService p_playerService,
@@ -96,10 +119,10 @@ public class GameService {
 
             // continent
             StringBuilder l_continentData = new StringBuilder();
-            l_continentData.append("[continent]");
+            l_continentData.append("\n[continent]");
             List<Continent> continents = this.d_continentService.findAll();
             for (Continent continent : continents) {
-                l_continentData.append("\n" + continent.getId() + " " + continent.getSizeOfContinent());
+                l_continentData.append("\n" + continent.getId() + " " + continent.getValue());
             }
             l_continentData.append("\n");
             l_fileWriter.write(l_continentData.toString());
@@ -193,13 +216,40 @@ public class GameService {
                 String l_stringLine = scanner.nextLine();
 
                 switch (l_stringLine) {
+                    case "[phase]":
+                        String phaseString = scanner.nextLine();
+
+                        Phase phase = null;
+
+                        if (phaseString.equals("GameIssueDeployPhase")) {
+                            phase = new GameIssueDeployPhase(d_playerService);
+                        } else if (phaseString.equals("GameStartupPhase")) {
+                            phase = new GameStartupPhase(d_playerService);
+                        } else if (phaseString.equals("GameIssueOrderPhase")) {
+                            phase = new GameIssueOrderPhase(d_playerService);
+                        } else if (phaseString.equals("GameExecuteOrderPhase")) {
+                            phase = new GameExecuteOrderPhase();
+                        } else {
+                            phase = new MapEditorPhase(d_mapService, d_continentService, d_countryService,
+                                    d_playerService);
+                        }
+                        this.d_phaseRepository.setPhase(phase);
+                        break;
                     case "[map]":
                         MapDto l_mapDto = new MapDto();
                         String fileName = scanner.nextLine();
+
                         if (fileName.equals(null))
                             throw new InvalidMapContentFormat("Invalid map: Game map not found.");
                         l_mapDto.setFileName(fileName);
-                        this.d_mapService.loadMap(l_mapDto);
+
+                        try {
+                            this.d_mapService.loadMap(l_mapDto);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return e.getMessage();
+                        }
+
                         break;
                     case "[countries]":
                         while (scanner.hasNextLine()) {
@@ -255,23 +305,88 @@ public class GameService {
                             PlayerDto playerDto = new PlayerDto();
                             playerDto.setPlayerName(l_playerId);
 
-                            // assigned cards
-                            for (int i = 1; i < l_parts.length; i++) {
-                                if(l_parts[i] != null) playerDto.addCardToPlayer(l_parts[i]);
+                            if (l_parts.length > 1) {
+                                // assigned player cards
+                                for (int i = 1; i < l_parts.length; i++) {
+                                    if (l_parts[i] != null)
+                                        playerDto.addCardToPlayer(l_parts[i]);
+                                }
                             }
-                            
+
                             this.d_playerService.add(playerDto);
                         }
                         break;
+                    case "[borders]":
+                        while (scanner.hasNextLine()) {
+                            String l_line = scanner.nextLine();
+                            if (l_line.equals(""))
+                                break;
+
+                            String[] l_parts = l_line.split(" ");
+                            String l_countryId = l_parts[0];
+
+                            Optional<Country> country = this.d_countryService.findCountryById(l_countryId);
+
+                            if (country.isEmpty())
+                                throw new Exception("Invalid map: Country not found.");
+
+                            // add neighbors
+                            if (l_parts.length > 1) {
+                                for (int i = 1; i < l_parts.length - 1; i++) {
+                                    Optional<Country> neighbor = this.d_countryService.findCountryById(l_parts[i]);
+                                    if (!country.isEmpty()
+                                            && !(country.get().getNeighbors().contains(neighbor.get()))) {
+                                        country.get().addNeighbor(neighbor.get());
+                                    }
+                                }
+                            }
+
+                        }
+                        break;
+                    case "[ownership]": {
+                        while (scanner.hasNextLine()) {
+                            String l_line = scanner.nextLine();
+                            if (l_line.equals(""))
+                                break;
+
+                            String[] l_parts = l_line.split(" ");
+                            String l_playerId = l_parts[0];
+
+                            Optional<Player> player = this.d_playerService.findByName(l_playerId);
+
+                            if (!player.isEmpty()) {
+                                if (l_parts.length > 1) {
+                                    // assigned player cards
+                                    for (int i = 1; i < l_parts.length; i++) {
+
+                                        if (l_parts[i] != null) {
+                                            Optional<Country> country = this.d_countryService
+                                                    .findCountryById(l_parts[i]);
+                                            player.get().addCountry(country.get());
+                                            country.get().setPlayer(player);
+                                        }
+                                    }
+                                }
+
+                                this.d_playerService.updatePlayer(player.get());
+                            }
+
+                        }
+                    }
                     default:
                         break;
                 }
             }
+            return "Game loaded successfully";
+        } catch (NoSuchFileException e) {
+            LoggingService.log("Game file " + p_gameFileName + " not found.");
+            return "Game file " + p_gameFileName + " not found.";
+        } catch (FileNotFoundException e) {
+            LoggingService.log("Game file " + p_gameFileName + " not found.");
+            return "Game file " + p_gameFileName + " not found.";
         } catch (Exception e) {
-            return e.getMessage();
-            // TODO: handle exception
+            LoggingService.log(e.getMessage());
+            return "Unable to load game file. Error: " + e.getMessage();
         }
-
-        return null;
     }
 }
