@@ -215,7 +215,7 @@ public class GameEngineController {
     }
 
     /**
-     * Saves a game to memory
+     * Saves a game to file
      * @param fileName the name of the file where the game is being saved to
      * @return the result of the operation
      */
@@ -223,6 +223,14 @@ public class GameEngineController {
         return this.d_gameService.saveGame(fileName);
     }
 
+    /**
+     * Loads a game file to memory
+     * @param fileName the name of the file where the game is being saved
+     * @return the result of the operation
+     */
+    public String loadGame(String fileName) {
+        return this.d_gameService.loadGame(fileName);
+    }
 
     /**
      * Issues an order to advance on a country.

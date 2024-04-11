@@ -1,0 +1,14 @@
+[continents]
+con1 3
+
+[countries]
+c3 con1
+c5 con1
+c6 con1
+c2 con1
+
+[borders]
+c3 c5
+c5 c2
+c6 c3 c2
+c2 c3 c6 c6
