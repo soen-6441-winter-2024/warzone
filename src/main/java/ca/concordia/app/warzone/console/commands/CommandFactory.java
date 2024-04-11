@@ -40,6 +40,7 @@ public class CommandFactory {
     private ShowMyCardsCommand d_ShowMyCardsCommand;
 
     private TournamentCommand d_TournamentCommand;
+    private LoadGameCommand d_loadGameCommand;
 
     /**
      * Constructs a CommandFactory object.
@@ -68,6 +69,7 @@ public class CommandFactory {
      * @param p_saveGameCommand         Command to save the game
      * @param p_ShowMyCardsCommand     Command to show current issuing player's special cards.
      * @param p_TournamentCommand      Command to start a game in Tournament Mode.
+     * @param p_loadGameCommand        Command to load a game from game file.
      */
 
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,
@@ -78,7 +80,7 @@ public class CommandFactory {
             ValidateMapCommand p_validateMapCommand, OrdersCompletedCommand p_ordersCompletedCommand,
             BombCommand p_bombCommand, AdvanceCommand p_advanceCommand, ShowPhaseCommand p_showPhaseCommand,
             BlockadeCommand p_blockadeCommand, DiplomacyCommand p_diplomacyCommand, AirliftCommand p_airliftCommand,
-            ShowMyCardsCommand p_ShowMyCardsCommand, SaveGameCommand p_saveGameCommand, TournamentCommand p_TournamentCommand) {
+            ShowMyCardsCommand p_ShowMyCardsCommand, SaveGameCommand p_saveGameCommand, TournamentCommand p_TournamentCommand, LoadGameCommand p_loadGameCommand) {
         this.d_EditContinentCommand = p_editContinentCommand;
         this.d_EditCountryCommand = p_editCountryCommand;
         this.d_EditNeighborCommand = p_editNeighborCommand;
@@ -101,6 +103,7 @@ public class CommandFactory {
         this.d_ShowMyCardsCommand = p_ShowMyCardsCommand;
         this.d_saveGameCommand = p_saveGameCommand;
         this.d_TournamentCommand = p_TournamentCommand;
+        this.d_loadGameCommand = p_loadGameCommand;
     }
 
 
@@ -156,6 +159,8 @@ public class CommandFactory {
             return d_saveGameCommand;
         } else if (p_commandName.equals(CommandType.TOURNAMENT.toString())) {
             return d_TournamentCommand;
+        }  else if (p_commandName.equals(CommandType.LOAD_GAME.toString())) {
+            return d_loadGameCommand;
         }
 
         throw new InvalidCommandException("invalid command");

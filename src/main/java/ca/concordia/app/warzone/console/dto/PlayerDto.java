@@ -1,5 +1,6 @@
 package ca.concordia.app.warzone.console.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,12 +11,18 @@ public class PlayerDto {
     /**
      * Default constructor
      */
-    public PlayerDto() {}
+    public PlayerDto() {
+        this.d_cardsAssigned = new ArrayList<String>();
+    }
     /** The name of the player. */
     private String d_PlayerName;
 
     /** The list of countries assigned to the player. */
     private List<String> d_CountriesAssigned;
+    /*
+     * List of cards assigned to player
+     */
+    private List<String> d_cardsAssigned;
 
     /**
      * Gets the name of the player.
@@ -52,4 +59,20 @@ public class PlayerDto {
     public void setCountriesAssigned(List<String> countriesAssigned) {
         this.d_CountriesAssigned = countriesAssigned;
     }
+
+    /**
+     * Add a card to a player
+     * @param card card to be added
+     */
+    public void addCardToPlayer(String card) {
+        this.d_cardsAssigned.add(card);
+    }
+    /**
+     * Get the cards assigned to a player
+     * @return a list (strings) of cards
+     */
+    public List<String> getCardsAssigned() {
+        return d_cardsAssigned;
+    }
+
 }

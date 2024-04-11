@@ -1,26 +1,37 @@
 [map]
-null
+map_files/mymapss.map
 
 [phase]
 GameIssueDeployPhase
 
+[continent]
+con1 3
+con2 2
+con3 4
+
 [countries]
 c3 con1 0
-c5 con1 0
-c6 con1 0
-c2 con1 0
+c4 con1 0
+c5 con3 1
+c6 con1 3
+c1 con2 3
+c2 con2 1
 
 [borders]
 c3 c5 
+c4 c2 
 c5 c2 
 c6 c3 c2 
-c2 c3 c6 c6 
+c1 c5 c2 
+c2 c3 c6 c5 
 
 [players]
-p1 strategyType 
-p2 strategyType 
+p1 airlift_card diplomacy_card 
+p2 
+p3 
 
 [ownership]
-p1 c5 c3 
-p2 c6 c2 
+p1 c1 c5 c2 
+p2 c6 c4 
+p3 c3 
 

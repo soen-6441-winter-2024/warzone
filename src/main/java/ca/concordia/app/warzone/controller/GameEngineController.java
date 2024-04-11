@@ -215,7 +215,7 @@ public class GameEngineController {
     }
 
     /**
-     * Saves a game to memory
+     * Saves a game to file
      * @param fileName the name of the file where the game is being saved to
      * @return the result of the operation
      */
@@ -223,6 +223,14 @@ public class GameEngineController {
         return this.d_gameService.saveGame(fileName);
     }
 
+    /**
+     * Loads a game file to memory
+     * @param fileName the name of the file where the game is being saved
+     * @return the result of the operation
+     */
+    public String loadGame(String fileName) {
+        return this.d_gameService.loadGame(fileName);
+    }
 
     /**
      * Issues an order to advance on a country.
@@ -553,20 +561,22 @@ public class GameEngineController {
         Player[] players = this.d_playerService.getAllPlayersArr();
 
 
-        for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
-            for(int i = 0; i < computerStrategies.length; i++) {
 
-                if(playerStrategies[i].equals("aggressive")) {
-                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if (playerStrategies[i].equals("benevolent")) {
-                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if(playerStrategies[i].equals("random")) {
-                    computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if(playerStrategies[i].equals("cheater")) {
-                    computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i], players[i].getCountriesAssigned());
+
+        for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
+            this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+            for(int i = 0; i < players.length; i++) {
+                this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+                if(players[i].getPlayerName().equals("aggressive")) {
+                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService,i);
+                } else if (players[i].getPlayerName().equals("benevolent")) {
+                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService,i);
+                } else if(players[i].getPlayerName().equals("random")) {
+                    computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, i);
+                } else if(players[i].getPlayerName().equals("cheater")) {
+                    computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i],players[i].getCountriesAssigned());
                 }
 
-                System.out.println(playerStrategies[i]);
                 try {
                     computerStrategies[i].createOrder();
                 } catch (InvalidCommandException e) {
@@ -584,5 +594,6 @@ public class GameEngineController {
         }
 
         return "draw";
+
     }
 }

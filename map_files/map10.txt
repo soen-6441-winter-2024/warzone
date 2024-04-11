@@ -15,5 +15,12 @@ country2 continent1
 
 [borders]
 country9 country10
-country1 country2 country3 country4 country5
+country1 country2 country3
+country2 country3 country4
+country3 country4 country5
+country4 country5
+country5 country6
 country2 country6 country7
+country6 country7
+country7 country1
+country10 country2

@@ -67,6 +67,7 @@ public class CountryService {
                 Country country = new Country();
                 country.setId(p_dto.getId());
                 country.setContinent(continent);
+                country.setArmiesCount(p_dto.getNumberOfArmies());
 
                 d_repoCountry.save(country);
                 result.append("\n");
