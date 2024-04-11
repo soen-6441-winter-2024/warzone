@@ -8,7 +8,9 @@ import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
+import ca.concordia.app.warzone.model.MapFileFormat;
 import ca.concordia.app.warzone.repository.MapRepository;
+import ca.concordia.app.warzone.repository.impl.ConquestMapFileAdapter;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -17,6 +19,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
+
+import static ca.concordia.app.warzone.common.Util.validateParagraph;
 
 /**
  * Service class for managing map-related operations.
@@ -73,9 +77,8 @@ public class MapService {
      * @return a message indicating success or failure
      */
     public String loadMap(MapDto p_mapDto) {
-        String filePath = p_mapDto.getFileName();
-        if (validateMapStructure(filePath)) {
-            this.readAndLoadMap(filePath);
+        if (validateMapStructure(p_mapDto)) {
+            this.readAndLoadMap(p_mapDto);
             this.d_mapName = p_mapDto.getFileName();
             return p_mapDto.getFileName() + " Map file loaded";
         } else {
@@ -90,9 +93,8 @@ public class MapService {
      * @return a message indicating success or failure
      */
     public String editMap(MapDto p_mapDto) {
-        String filePath = p_mapDto.getFileName();
-        if (validateEditMapStructure(filePath)) {
-            if (this.readAndLoadMap(filePath)) {
+        if (validateEditMapStructure(p_mapDto)) {
+            if (this.readAndLoadMap(p_mapDto)) {
                 return p_mapDto.getFileName() + " Map file loaded";
             }
             else
@@ -107,68 +109,24 @@ public class MapService {
     /**
      * Validates the structure of the map file.
      *
-     * @param p_file the path of the map file
+     * @param p_dto dto containing the path of the map file and format
      * @return true if the map file structure is valid, false otherwise
      */
-    public boolean validateMapStructure(String p_file) {
+    public boolean validateMapStructure(MapDto p_dto) {
 
-        List<String> mapLines = d_repoMap.getMapAsString(p_file);
-        Iterator<String> iterator = mapLines.iterator();
+        List<String> mapLines = d_repoMap.getMapAsString(p_dto.getFileName());
 
-        return validateParagraph(iterator, "continents", this::isValidContinent) &&
-                validateParagraph(iterator, "countries", this::isValidCountry) &&
-                validateParagraph(iterator, "borders", this::isValidBorder);
-    }
-
-    /**
-     * Validates is a paragraph is formatted correctly
-     *
-     * @param p_iterator Iterator of the lines
-     * @param p_title Title of the paragraph
-     * @param p_lineValidator Predicate method to validate each line
-     * @return true if valid, else false.
-     */
-    protected boolean validateParagraph(Iterator<String> p_iterator, String p_title, Predicate<String> p_lineValidator) {
-
-        String line = getFirstNonEmptyLine(p_iterator);
-
-        if (p_iterator.hasNext() && line.equals("[" + p_title +"]")) {
-            line = p_iterator.next();
+        if (MapFileFormat.CONQUEST.equals(p_dto.getFormat())) {
+            ConquestMapFileAdapter adapter = new ConquestMapFileAdapter();
+            return adapter.validate(mapLines);
         } else {
-            return false;
+
+            Iterator<String> iterator = mapLines.iterator();
+
+            return validateParagraph(iterator, "continents", this::isValidContinent) &&
+                    validateParagraph(iterator, "countries", this::isValidCountry) &&
+                    validateParagraph(iterator, "borders", this::isValidBorder);
         }
-
-        while (!line.trim().isEmpty()){
-
-            if (!p_lineValidator.test(line)) {
-                return false;
-            }
-
-            if (p_iterator.hasNext()) {
-                line = p_iterator.next();
-            } else {
-                break;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Get the first non-empty line from the lines of the file
-     *
-     * @param p_iterator Iterator referencing the lines of the file
-     * @return Non-empty line
-     */
-    private String getFirstNonEmptyLine(Iterator<String> p_iterator) {
-
-        String line = "";
-
-        while (p_iterator.hasNext() && line.trim().isEmpty()) {
-            line = p_iterator.next();
-        }
-
-        return line;
     }
 
     /**
@@ -213,28 +171,29 @@ public class MapService {
     /**
      * Validates the structure of the map file for the Edit Map Functionality.
      *
-     * @param p_file the path of the map file
+     * @param p_mapDto map dto containing the path of the map file and format
      * @return true if the map file structure is valid, false otherwise
      */
-    public boolean validateEditMapStructure(String p_file) {
-        File file = new File(p_file);
+    public boolean validateEditMapStructure(MapDto p_mapDto) {
+        String l_file = p_mapDto.getFileName();
+        File file = new File(l_file);
         if (!file.exists()) {
-            System.out.println("File not found: " + p_file);
+            System.out.println("File not found: " + l_file);
             return true;
         }
 
-        return validateMapStructure(p_file);
+        return validateMapStructure(p_mapDto);
     }
 
     /**
      * Reads and loads the map from the specified file.
      *
-     * @param p_file the path of the map file
+     * @param p_mapDto the map file
      * @return true if there is at least one continent loaded, false otherwise
      */
-    protected boolean readAndLoadMap(String p_file) {
+    protected boolean readAndLoadMap(MapDto p_mapDto) {
 
-        MapFile map = d_repoMap.getMap(p_file);
+        MapFile map = d_repoMap.getMap(p_mapDto);
         return loadMap(map);
     }
 
@@ -372,6 +331,7 @@ public class MapService {
     public String saveMap(MapDto p_dto) {
         MapFile mapFile = new MapFile();
         mapFile.setFileName(p_dto.getFileName());
+        mapFile.setFormat(p_dto.getFormat());
 
         String result = "";
         try {

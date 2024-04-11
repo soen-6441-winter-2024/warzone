@@ -1,8 +1,10 @@
 package ca.concordia.app.warzone.repository.impl;
 
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
+import ca.concordia.app.warzone.model.MapFileFormat;
 import ca.concordia.app.warzone.repository.MapRepository;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.CountryRepository;
@@ -43,7 +45,8 @@ public class MapRepositoryFileImpl implements MapRepository {
      * @param p_repoContinent the ContinentRepository to be used
      * @param p_defaultMapFormatter the default map file formatter to be used
      */
-    public MapRepositoryFileImpl(CountryRepository p_repoCountry, ContinentRepository p_repoContinent, DefaultMapFileFormatter p_defaultMapFormatter) {
+    public MapRepositoryFileImpl(CountryRepository p_repoCountry, ContinentRepository p_repoContinent,
+                                 DefaultMapFileFormatter p_defaultMapFormatter) {
         this.d_repoCountry = p_repoCountry;
         this.d_repoContinent = p_repoContinent;
         this.d_defaultMapFormatter = p_defaultMapFormatter;
@@ -63,7 +66,7 @@ public class MapRepositoryFileImpl implements MapRepository {
 
         if (!d_repoContinent.findAll().isEmpty()) {
 
-            String content = d_defaultMapFormatter.mapToString(p_map);
+            String content = getContent(p_map);
             storeContent(p_map.getFileName(), content);
 
             return "Map was saved in the following filepath " + p_map.getFileName();
@@ -109,10 +112,31 @@ public class MapRepositoryFileImpl implements MapRepository {
     }
 
     @Override
-    public MapFile getMap(String p_filePath) {
+    public MapFile getMap(MapDto p_mapDto) {
 
-        List<String> lines = getMapAsString(p_filePath);
+        List<String> lines = getMapAsString(p_mapDto.getFileName());
+
+        if (MapFileFormat.CONQUEST.equals(p_mapDto.getFormat())) {
+            ConquestMapFileAdapter adapter =  new ConquestMapFileAdapter();
+            return adapter.stringToMap(lines);
+        }
 
         return d_defaultMapFormatter.stringToMap(lines);
+    }
+
+    /**
+     * Given a map file with format and file path, get content based on specific format
+     *
+     * @param p_mapFile map containing the file path and format
+     * @return map content as string
+     */
+    public String getContent(MapFile p_mapFile) {
+
+        if (MapFileFormat.CONQUEST.equals(p_mapFile.getFormat())) {
+            ConquestMapFileAdapter adapter = new ConquestMapFileAdapter();
+            return adapter.mapToString(p_mapFile);
+        } else {
+            return d_defaultMapFormatter.mapToString(p_mapFile);
+        }
     }
 }
