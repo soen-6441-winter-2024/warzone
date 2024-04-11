@@ -7,9 +7,7 @@ import java.util.List;
  */
 public class MapFile {
     private String d_FileName;
-
     private List<Continent> d_continents;
-
     private List<Country> d_countries;
     private MapFileFormat d_format = MapFileFormat.DEFAULT;
 

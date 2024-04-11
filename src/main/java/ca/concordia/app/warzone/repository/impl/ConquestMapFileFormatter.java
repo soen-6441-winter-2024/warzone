@@ -6,10 +6,7 @@ import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Conquest map file formatter which is in charge to format the map into a string and viceversa
@@ -72,7 +69,7 @@ public class ConquestMapFileFormatter {
      */
     public MapFile stringToMap(List<String> p_lines) {
         List<Continent> continents = new ArrayList<>();
-        Map<String, Country> countries = new HashMap<>();
+        List<Country> countries = new ArrayList<>();
 
         boolean continentsFound = false;
         boolean territoriesFound = false;
@@ -87,53 +84,63 @@ public class ConquestMapFileFormatter {
                 continentsFound = false;
             } else {
                 if (continentsFound && !line.isEmpty()) {
-                    String[] l_splitContinent = line.split("\\s+");
-                    if (l_splitContinent.length == 2) {
-                        String l_continentId = l_splitContinent[0];
-                        String l_continentValue = l_splitContinent[1];
-                        Continent continent = new Continent();
-                        continent.setId(l_continentId);
-                        continent.setValue(l_continentValue);
-                        continents.add(continent);
-                    }
+
+                    Optional<Continent> continent = getContinent(line);
+                    continent.ifPresent(continents::add);
+
                 } else if (territoriesFound && !line.isEmpty()) {
-                    String[] l_splitCountry = line.split("\\s+");
-                    if (l_splitCountry.length == 2) {
-                        String l_countryId = l_splitCountry[0];
-                        String l_continentId = l_splitCountry[1];
 
-                        Continent continent = new Continent();
-                        continent.setId(l_continentId);
-
-                        Country l_country = new Country();
-                        l_country.setId(l_countryId);
-                        l_country.setContinent(continent);
-                        countries.put(l_countryId, l_country);
-                    }
-//                } else if (bordersFound && !line.isEmpty()) {
-                    String[] l_splitNeighbor = line.split("\\s+");
-                    String l_countryId = l_splitNeighbor[0];
-
-                    if (countries.containsKey(l_countryId)) {
-
-                        Country country = countries.get(l_countryId);
-
-                        // add neighboring countries to the country
-                        for (int i = 1; i < l_splitNeighbor.length; i++) {
-                            Country neighbor = new Country();
-                            neighbor.setId(l_splitNeighbor[i]);
-                            country.addNeighbor(neighbor);
-                        }
-                    } else {
-                        throw new InvalidMapContentFormat("Invalid Map: Country Id=" + l_countryId + " not found.");
-                    }
+                    Optional<Country> country = getCountry(line);
+                    country.ifPresent(countries::add);
                 }
             }
         }
 
         MapFile mapFile = new MapFile();
         mapFile.setContinents(continents);
-        mapFile.setCountries(new ArrayList<>(countries.values()));
+        mapFile.setCountries(countries);
         return mapFile;
+    }
+
+    private Optional<Country> getCountry(String line) {
+
+        String[] l_splitCountry = line.split(",");
+        if (l_splitCountry.length > 3) {
+            String l_countryId = l_splitCountry[0];
+            String l_continentId = l_splitCountry[3];
+
+            Continent continent = new Continent();
+            continent.setId(l_continentId);
+
+            Country l_country = new Country();
+            l_country.setId(l_countryId);
+            l_country.setContinent(continent);
+
+            if (l_splitCountry.length > 4) {
+                for (int i = 4; i < l_splitCountry.length; i++) {
+                    Country neighbor = new Country();
+                    neighbor.setId(l_splitCountry[i]);
+                    l_country.addNeighbor(neighbor);
+                }
+            }
+            return Optional.of(l_country);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Continent> getContinent(String line) {
+
+        String[] l_splitContinent = line.split("=");
+        if (l_splitContinent.length >= 2) {
+            String l_continentId = l_splitContinent[0];
+            String l_continentValue = l_splitContinent[1];
+            Continent continent = new Continent();
+            continent.setId(l_continentId);
+            continent.setValue(l_continentValue);
+            return Optional.of(continent);
+        } else {
+            return Optional.empty();
+        }
     }
 }
