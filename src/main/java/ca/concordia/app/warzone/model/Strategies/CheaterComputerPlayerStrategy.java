@@ -58,6 +58,9 @@ public class CheaterComputerPlayerStrategy extends ComputerStrategy {
         for(Country p_countriesassigned : p_countrieslist){
             int doubleArmy = p_countriesassigned.getArmiesCount() * 2;
             p_countriesassigned.setArmiesCount(doubleArmy);
+            if(p_countriesassigned.getNeighbors() == null || p_countriesassigned.getNeighbors().size() == 0) {
+                return null;
+            }
             for(Country p_neighborCountry : p_countriesassigned.getNeighbors()){
                 Optional<Player> optionalplayer = p_neighborCountry.getPlayer();
 
