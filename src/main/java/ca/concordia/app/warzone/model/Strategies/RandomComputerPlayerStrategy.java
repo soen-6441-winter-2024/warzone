@@ -34,12 +34,13 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy agreements
      */
-    public RandomComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList) {
+    public RandomComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, int p_currentPlayerGivingOrder) {
         super(d_player, d_countriesAssigned);
         this.d_currentRound = p_currentRound;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerService = p_playerService;
         this.d_diplomacyList = p_diplomacyList;
+        this.d_currentPlayerGivingOrder = p_currentPlayerGivingOrder;
     }
 
     /**
@@ -63,6 +64,11 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
      * @return the randomly selected neighboring country to attack
      */
     public Country attackCountry(Country p_currentCountryToAttackFrom){
+        // country has no neighbor
+        if(p_currentCountryToAttackFrom.getNeighbors().size() == 0) {
+            return null;
+        }
+
         Random rand = new Random();
         int targetCountry;
         targetCountry = rand.nextInt(p_currentCountryToAttackFrom.getNeighbors().size());
@@ -90,7 +96,12 @@ public class RandomComputerPlayerStrategy extends ComputerStrategy {
             this.d_phaseRepository.getPhase().addDeployOrdersToPlayer(countryToDeployTo, numOfArmiesToDeploy, d_currentPlayerGivingOrder, d_currentRound);
         }
 
-        this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), randomNumofArmies, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        // Countries has no neighbors. Cannot attack
+        if(!(currentCountryToAttackFrom.getNeighbors() == null || currentCountryToAttackFrom.getNeighbors().size() == 0)) {
+            this.d_phaseRepository.getPhase().addAdvanceOrderToPlayer(countryToAttackFrom().getId(), attackCountry(currentCountryToAttackFrom).getId(), randomNumofArmies, d_currentPlayerGivingOrder, d_currentRound, d_diplomacyList);
+        }
+
+
         List<String> playerCards = d_player.getCards();
         Collections.shuffle(playerCards);
         for(String card : playerCards) {

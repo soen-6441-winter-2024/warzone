@@ -1,6 +1,7 @@
 package ca.concordia.app.warzone.service;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
+import ca.concordia.app.warzone.model.Strategies.ComputerStrategy;
 import ca.concordia.app.warzone.model.orders.BombOrder;
 import ca.concordia.app.warzone.repository.PlayerRepository;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
@@ -205,6 +206,7 @@ public class PlayerService {
      */
     public String addAdvanceOrderToCurrentPlayer(String p_countryFrom, String p_countryTo, int armiesQuantity,
             int p_playerGivingOrder, int gameTurn, List<List<String>> p_diplomacyList) {
+
         HumanPlayerStrategy humanPlayerStrategy = new HumanPlayerStrategy(this.d_repository, this.d_mapService, this.d_countryService, this.d_continentService, this);
 
         return humanPlayerStrategy.addAdvanceOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder,
