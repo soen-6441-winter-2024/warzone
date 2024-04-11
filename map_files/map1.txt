@@ -1,0 +1,15 @@
+[continents]
+continent1 5
+
+[countries]
+country7 continent1
+country6 continent1
+country1 continent1
+country5 continent1
+country4 continent1
+country3 continent1
+country2 continent1
+
+[borders]
+country1 country2 country3 country4 country5
+country2 country6 country7

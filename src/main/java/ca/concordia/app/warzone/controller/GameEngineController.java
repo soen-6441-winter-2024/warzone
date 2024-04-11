@@ -554,16 +554,17 @@ public class GameEngineController {
 
 
         for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
-            for(int i = 0; i < computerStrategies.length; i++) {
-
-                if(playerStrategies[i].equals("aggressive")) {
-                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if (playerStrategies[i].equals("benevolent")) {
-                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if(playerStrategies[i].equals("random")) {
-                    computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList);
-                } else if(playerStrategies[i].equals("cheater")) {
-                    computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i], players[i].getCountriesAssigned());
+            this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+            for(int i = 0; i < players.length; i++) {
+                this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+                if(players[i].getPlayerName().equals("aggressive")) {
+                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, i);
+                } else if (players[i].getPlayerName().equals("benevolent")) {
+                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, i);
+                } else if(players[i].getPlayerName().equals("random")) {
+                    computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, i);
+                } else if(players[i].getPlayerName().equals("cheater")) {
+                    computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i],players[i].getCountriesAssigned());
                 }
 
                 System.out.println(playerStrategies[i]);

@@ -43,6 +43,10 @@ public class Player implements Entity {
     public Player(){
         this.d_countriesAssigned = new ArrayList<>();
         this.d_playerOrders = new ArrayList<>();
+        for(int i = 0; i < 100; i++) {
+            this.d_playerOrders.add(new ArrayList<>());
+        }
+
         this.d_cardsReceived = new ArrayList<>();
         this.d_continent = new ArrayList<>();
     }

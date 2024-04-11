@@ -17,6 +17,10 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
      */
     private int d_currentRound;
 
+    public void setD_currentPlayerGivingOrder(int d_currentPlayerGivingOrder) {
+        this.d_currentPlayerGivingOrder = d_currentPlayerGivingOrder;
+    }
+
     /**
      * Index of the current player giving order.
      */
@@ -52,12 +56,13 @@ public class AggresiveComputerPlayerStrategy extends ComputerStrategy{
      * @param p_playerService the player service
      * @param p_diplomacyList the list of diplomacy contracts
      */
-    public AggresiveComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList) {
+    public AggresiveComputerPlayerStrategy(Player d_player, List<Country> d_countriesAssigned, int p_currentRound, PhaseRepository p_phaseRepository, PlayerService p_playerService, List<List<String>> p_diplomacyList, int p_currentPlayerGivingOrder) {
         super(d_player, d_countriesAssigned);
         this.d_currentRound = p_currentRound;
         this.d_phaseRepository = p_phaseRepository;
         this.d_playerService = p_playerService;
         this.d_diplomacyList = p_diplomacyList;
+        this.d_currentPlayerGivingOrder = p_currentPlayerGivingOrder;
     }
 
     /**
