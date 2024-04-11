@@ -1,18 +1,20 @@
 package ca.concordia.app.warzone.repository.impl;
 
-import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
-import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
+import static ca.concordia.app.warzone.common.Util.validateParagraph;
 
 /**
  * Conquest map file formatter which is in charge to format the map into a string and viceversa
  *
  */
-@Component
 public class ConquestMapFileFormatter {
 
     /**
@@ -30,7 +32,7 @@ public class ConquestMapFileFormatter {
         builder.append("[Continents]");
         builder.append("\n");
         for (Continent continent : continents) {
-            builder.append(continent.getId() + " ");
+            builder.append(continent.getId() + "=");
             builder.append(continent.getValue() + "\n");
         }
         builder.append("\n");
@@ -38,26 +40,12 @@ public class ConquestMapFileFormatter {
         builder.append("[Territories]");
         builder.append("\n");
         for (Country country : countries) {
-            builder.append(country.getId() + " ");
-            builder.append(country.getContinent().getId() + "\n");
+            builder.append(country.getId() + ",,,");
+            builder.append(country.getContinent().getId() + ",");
+            String[] neighborIds = country.getNeighbors().stream().map(Country::getId).toArray(String[]::new);
+            builder.append(String.join(",", neighborIds));
+            builder.append("\n");
         }
-
-        builder.append("\n");
-        builder.append("[borders]");
-        builder.append("\n");
-        for (Country country : countries) {
-            // Assuming each country can have multiple neighbors
-            List<Country> allNeighborsByCountry = country.getNeighbors();
-            if (!allNeighborsByCountry.isEmpty()) {
-                builder.append(country.getId());
-                for (Country neighbor : allNeighborsByCountry) {
-                    builder.append(" ");
-                    builder.append(neighbor.getId());
-                }
-                builder.append("\n");
-            }
-        }
-
         return builder.toString();
     }
 
@@ -102,9 +90,9 @@ public class ConquestMapFileFormatter {
         return mapFile;
     }
 
-    private Optional<Country> getCountry(String line) {
+    private Optional<Country> getCountry(String p_line) {
 
-        String[] l_splitCountry = line.split(",");
+        String[] l_splitCountry = p_line.split(",");
         if (l_splitCountry.length > 3) {
             String l_countryId = l_splitCountry[0];
             String l_continentId = l_splitCountry[3];
@@ -129,9 +117,9 @@ public class ConquestMapFileFormatter {
         }
     }
 
-    private Optional<Continent> getContinent(String line) {
+    private Optional<Continent> getContinent(String p_line) {
 
-        String[] l_splitContinent = line.split("=");
+        String[] l_splitContinent = p_line.split("=");
         if (l_splitContinent.length >= 2) {
             String l_continentId = l_splitContinent[0];
             String l_continentValue = l_splitContinent[1];
@@ -142,5 +130,44 @@ public class ConquestMapFileFormatter {
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Validate the lines of the file as CONQUEST format
+     *
+     * @param p_lines list of lines from the file
+     * @return true if valid, false otherwise
+     */
+    public boolean validate(List<String> p_lines) {
+        Iterator<String> iterator = p_lines.iterator();
+
+        return validateParagraph(iterator, "Continents", this::isValidContinent) &&
+                validateParagraph(iterator, "Territories", this::isValidTerritory);
+    }
+
+    /**
+     * Validates if a line is a valid continent format
+     *
+     * @param p_line line of a file
+     * @return true if valid, else false
+     */
+    private boolean isValidContinent(String p_line) {
+        String[] words = p_line.split("=");
+        // Invalid format: Each line after [Continents] should contain two
+        // words separated by one equal symbol
+        return words.length == 2;
+    }
+
+    /**
+     * Validates if a line is a valid country format
+     *
+     * @param p_line line of a file
+     * @return true if valid, else false
+     */
+    private boolean isValidTerritory(String p_line) {
+        String[] words = p_line.split(",");
+        // Invalid format: Each line after [Territories] should contain at least
+        // four words separated by comma,
+        return words.length >= 4;
     }
 }

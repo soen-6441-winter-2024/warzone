@@ -57,7 +57,10 @@ public class MapServiceTest {
     @Test
     public void testValidateMapStructure() {
 
-        boolean result = underTest.validateMapStructure(VALID_FILE_NAME);
+        MapDto dto = new MapDto();
+        dto.setFileName(VALID_FILE_NAME);
+
+        boolean result = underTest.validateMapStructure(dto);
 
         assertTrue(result);
     }
@@ -65,7 +68,10 @@ public class MapServiceTest {
     @Test
     public void testValidateEditMapStructure() {
 
-        boolean result = underTest.validateEditMapStructure(VALID_FILE_NAME);
+        MapDto dto = new MapDto();
+        dto.setFileName(VALID_FILE_NAME);
+
+        boolean result = underTest.validateEditMapStructure(dto);
 
         assertTrue(result);
     }
@@ -73,15 +79,20 @@ public class MapServiceTest {
     @Test
     public void testValidateEditMapStructure_NonExisting() {
 
-        boolean result = underTest.validateEditMapStructure(VALID_FILE_NAME_NON_EXISTING);
+        MapDto dto = new MapDto();
+        dto.setFileName(VALID_FILE_NAME_NON_EXISTING);
+
+        boolean result = underTest.validateEditMapStructure(dto);
 
         assertTrue(result);
     }
 
     @Test
     public void testValidateMapStructureEmptyBorders() {
+        MapDto dto = new MapDto();
+        dto.setFileName(VALID_FILE_NAME_EMPTY_BORDERS);
 
-        boolean result = underTest.validateMapStructure(VALID_FILE_NAME_EMPTY_BORDERS);
+        boolean result = underTest.validateMapStructure(dto);
 
         assertFalse(result);
     }
@@ -89,7 +100,10 @@ public class MapServiceTest {
     @Test
     public void testValidateMapStructureEmptyCountries() {
 
-        boolean result = underTest.validateMapStructure(INVALID_FILE_NAME_EMPTY_COUNTRIES);
+        MapDto dto = new MapDto();
+        dto.setFileName(INVALID_FILE_NAME_EMPTY_COUNTRIES);
+
+        boolean result = underTest.validateMapStructure(dto);
 
         assertFalse(result);
     }
@@ -97,7 +111,10 @@ public class MapServiceTest {
     @Test
     public void testValidateMapStructure_Invalid() {
 
-        boolean result = underTest.validateMapStructure(INVALID_FILE_NAME);
+        MapDto dto = new MapDto();
+        dto.setFileName(INVALID_FILE_NAME);
+
+        boolean result = underTest.validateMapStructure(dto);
 
         assertFalse(result);
     }
@@ -220,7 +237,11 @@ public class MapServiceTest {
 
     @Test
     public void testReadAndLoadMap() {
-        boolean result = underTest.readAndLoadMap(VALID_FILE_NAME);
+
+        MapDto dto = new MapDto();
+        dto.setFileName(VALID_FILE_NAME);
+
+        boolean result = underTest.readAndLoadMap(dto);
 
         assertTrue(result);
         assertThat(continentRepository.findAll(), hasSize(2));
@@ -229,7 +250,11 @@ public class MapServiceTest {
 
     @Test
     public void testReadAndLoadMap_Invalid() {
-        boolean result = underTest.readAndLoadMap(INVALID_FILE_NAME_EMPTY_CONTINENTS);
+
+        MapDto dto = new MapDto();
+        dto.setFileName(INVALID_FILE_NAME_EMPTY_CONTINENTS);
+
+        boolean result = underTest.readAndLoadMap(dto);
 
         assertFalse(result);
         assertTrue(continentRepository.findAll().isEmpty());
