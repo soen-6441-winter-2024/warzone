@@ -69,7 +69,7 @@ public class CommandFactory {
      * @param p_saveGameCommand         Command to save the game
      * @param p_ShowMyCardsCommand     Command to show current issuing player's special cards.
      * @param p_TournamentCommand      Command to start a game in Tournament Mode.
-     * @param p_LoadGameCommand        Command to load a game from game file.
+     * @param p_loadGameCommand        Command to load a game from game file.
      */
 
     public CommandFactory(EditContinentCommand p_editContinentCommand, EditCountryCommand p_editCountryCommand,

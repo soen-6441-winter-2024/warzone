@@ -62,7 +62,7 @@ public class PlayerDto {
 
     /**
      * Add a card to a player
-     * @param card
+     * @param card card to be added
      */
     public void addCardToPlayer(String card) {
         this.d_cardsAssigned.add(card);
