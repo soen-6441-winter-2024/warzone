@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.model.Order;
+import ca.concordia.app.warzone.model.Strategies.HumanPlayerStrategy;
 import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +45,11 @@ public class PlayerServiceTest {
 
     private int d_currentRound;
 
-
-
     @InjectMocks
     private PlayerService playerService;
+
+    @Mock
+    private HumanPlayerStrategy humanPlayerStrategy;
 
     @BeforeEach
     public void setUp() {

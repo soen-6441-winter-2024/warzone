@@ -19,6 +19,9 @@ public enum CommandType {
      */
     EDIT_NEIGHBOR("editneighbor"),
 
+    /**
+     * Command to see a players cards
+     */
     SHOW_MY_CARDS("showmycards"),
 
     /**
@@ -102,10 +105,20 @@ public enum CommandType {
     SAVEGAME("savegame"),
 
     /**
+     * Command to load game from game file.
+     */
+    LOAD_GAME("loadgame"),
+
+    /**
      * Command to issue Air Lift order
      */
 
-    AIRLIFT("airlift");
+    AIRLIFT("airlift"),
+
+    /**
+     * Command to start a game in Tournament mode
+     */
+    TOURNAMENT("tournament");
 
     /**
      * The text representation of the command type.

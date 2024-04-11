@@ -2,6 +2,9 @@ package ca.concordia.app.warzone.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import ca.concordia.app.warzone.model.Strategies.HumanStrategy;
 
 /**
  * Represents a player in the game.
@@ -29,14 +32,34 @@ public class Player implements Entity {
     private int numberOfReinforcementsAvailable;
 
     /**
+     * The strategy that will be adopted by the Human player during the game
+     */
+    private HumanStrategy d_humanStrategy;
+
+    /**
      * Default constructor for Player.
      * Initializes player ID and countries assigned list.
      */
     public Player(){
         this.d_countriesAssigned = new ArrayList<>();
         this.d_playerOrders = new ArrayList<>();
+        for(int i = 0; i < 100; i++) {
+            this.d_playerOrders.add(new ArrayList<>());
+        }
+
         this.d_cardsReceived = new ArrayList<>();
         this.d_continent = new ArrayList<>();
+    }
+
+    /**
+     * Constructor for Human Player with strategy.
+     * Initializes player ID, countries assigned list, and strategy.
+     *
+     * @param p_humanStrategy the strategy to set
+     */
+    public Player(HumanStrategy p_humanStrategy) {
+        this();
+        this.d_humanStrategy = p_humanStrategy;
     }
 
     /**
@@ -65,8 +88,9 @@ public class Player implements Entity {
     public List<String> getContinents(){
         return d_continent;
     }
+
     /**
-     *method that adds card to list of cards
+     * Method that adds card to list of cards
      * @param card the card to be added
      */
     public void addCard(String card){
@@ -74,7 +98,7 @@ public class Player implements Entity {
     }
 
     /**
-     *method that removes used card from players list of cards
+     * Method that removes used card from players list of cards
      * @param card the card to be added
      */
     public void removeUsedCard(String card){
@@ -90,6 +114,10 @@ public class Player implements Entity {
         return d_cardsReceived.contains(card);
     }
 
+    /**
+     * Returns the cards of a player
+     * @return The cards of a player
+     */
     public List<String> getCards(){
         return d_cardsReceived;
     }
@@ -125,11 +153,13 @@ public class Player implements Entity {
      * @param countryId the id of the country to remove
      */
     public void removeAssignedCountry(String countryId) {
-        for (int i = 0; i < d_countriesAssigned.size(); i++) {
-            if(d_countriesAssigned.get(i).equals(countryId)) {
-                d_countriesAssigned.remove(i);
-            }
-        }
+
+        List<Country> filteredCountryList = this.getCountriesAssigned()
+                .stream()
+                .filter(c -> !c.getId().equals(countryId))
+                .toList();
+
+        this.d_countriesAssigned = new ArrayList<>(filteredCountryList);
     }
 
     /**
@@ -141,20 +171,27 @@ public class Player implements Entity {
         this.d_countriesAssigned = p_countriesAssigned;
     }
 
+    /**
+     * Removes a country from the list of countries owned by the player.
+     *
+     * @param country the country to remove
+     */
     public void  removeCountry(Country country){
         d_countriesAssigned.remove(country);
     }
 
     /**
-     * Adds a country to list of countries owned by player
-     * @param p_newlyConqueredCountry the country to add.
+     * Adds a newly conquered country to the list of countries owned by the player.
+     *
+     * @param p_newlyConqueredCountry the country to add
      */
     public void addNewConqueredCountry(Country p_newlyConqueredCountry) {
         this.d_countriesAssigned.add(p_newlyConqueredCountry);
     }
 
     /**
-     * Returns the number of reinforcement this player has available
+     * Returns the number of reinforcement armies available to the player.
+     *
      * @return the number of reinforcement armies available
      */
     public int getNumberOfReinforcements() {
@@ -162,17 +199,19 @@ public class Player implements Entity {
     }
 
     /**
-     * Sets the number of reinforcement available
-     * @param p_numberOfReinforcements the new number of reinforcements available
+     * Sets the number of reinforcement armies available to the player.
+     *
+     * @param p_numberOfReinforcements the new number of reinforcement armies available
      */
     public void setNumberOfReinforcements(int p_numberOfReinforcements) {
         this.numberOfReinforcementsAvailable = p_numberOfReinforcements;
     }
 
     /**
-     * Returns whether a player owns a given country
-     * @param p_countryId The countryId
-     * @return true if the player owns the given country, false otherwise
+     * Checks if the player owns a given country.
+     *
+     * @param p_countryId the ID of the country to check
+     * @return true if the player owns the country, false otherwise
      */
     public boolean ownsCountry(String p_countryId) {
         for(Country currentCountry : this.d_countriesAssigned) {
@@ -180,7 +219,6 @@ public class Player implements Entity {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -199,12 +237,22 @@ public class Player implements Entity {
     }
 
     /**
-     * Returns the list of orders player has issue for the currentTurn
-     * @param currentTurn turn
-     * @return list of orders
+     * Returns the list of orders the player has issued for the current turn.
+     *
+     * @param currentTurn the current turn
+     * @return the list of orders
      */
     public List<Order> getPlayerCurrentTurnOrders(int currentTurn) {
         return this.d_playerOrders.get(currentTurn);
+    }
+
+    /**
+     * Sets the strategy of the Human player.
+     *
+     * @param p_humanStrategy the strategy of the player
+     */
+    public void setHumanStrategy(HumanStrategy p_humanStrategy) {
+        this.d_humanStrategy = p_humanStrategy;
     }
 
     /**
@@ -218,4 +266,73 @@ public class Player implements Entity {
         }
         this.d_playerOrders.get(round).add(order);
     }
+
+    /**
+     * Issues an advance order using the human player's strategy.
+     *
+     * @param p_countryFrom     origin country
+     * @param p_countryTo       destination country
+     * @param armiesQuantity    quantity of armies
+     * @param p_playerGivingOrder player issuing the order
+     * @param gameTurn          current turn
+     * @param p_diplomacyList   list of diplomacy
+     * @return result message
+     */
+    public String addAdvanceOrder(String p_countryFrom, String p_countryTo, int armiesQuantity,
+                                  int p_playerGivingOrder, int gameTurn, List<List<String>> p_diplomacyList) {
+        return d_humanStrategy.addAdvanceOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder, gameTurn, p_diplomacyList);
+    }
+
+    /**
+     * Issues an airlift order using the human player's strategy.
+     *
+     * @param p_countryFrom     origin country
+     * @param p_countryTo       destination country
+     * @param armiesQuantity    quantity of armies
+     * @param p_playerGivingOrder player issuing the order
+     * @param gameTurn          current turn
+     * @return result message
+     */
+    public String addAirliftOrder(String p_countryFrom, String p_countryTo, int armiesQuantity, int p_playerGivingOrder, int gameTurn) {
+        return d_humanStrategy.addAirliftOrder(p_countryFrom, p_countryTo, armiesQuantity, p_playerGivingOrder, gameTurn);
+    }
+
+    /**
+     * Issues a blockade order using the human player's strategy.
+     *
+     * @param p_country         country to blockade
+     * @param p_playerGivingOrder player issuing the order
+     * @param gameTurn          current turn
+     * @return result message
+     */
+    public String addBlockadeOrder(String p_country, int p_playerGivingOrder, int gameTurn) {
+        return d_humanStrategy.addBlockadeOrder(p_country, p_playerGivingOrder, gameTurn);
+    }
+
+    /**
+     * Issues a deploy order using the human player's strategy.
+     *
+     * @param p_countryId           country to deploy armies to
+     * @param p_numberOfReinforcements quantity of armies to deploy
+     * @param p_playerGivingOrder player issuing the order
+     * @param gameTurn              current turn
+     * @return result message
+     */
+    public String addDeployOrder(String p_countryId, int p_numberOfReinforcements,
+                                 int p_playerGivingOrder, int gameTurn) {
+        return d_humanStrategy.addDeployOrder(p_countryId, p_numberOfReinforcements, p_playerGivingOrder, gameTurn);
+    }
+
+    /**
+     * Issues a bomb order using the human player's strategy.
+     *
+     * @param p_targetCountryId    country to bomb
+     * @param p_playerGivingOrder player issuing the order
+     * @param gameTurn             current turn
+     * @return result message
+     */
+    public String addBombOrder(String p_targetCountryId, int p_playerGivingOrder, int gameTurn) {
+        return d_humanStrategy.addBombOrder(p_targetCountryId, p_playerGivingOrder, gameTurn);
+    }
+
 }

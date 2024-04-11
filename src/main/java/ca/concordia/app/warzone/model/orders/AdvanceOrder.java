@@ -148,6 +148,7 @@ public class AdvanceOrder extends Order {
                     "Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo);
             countryTo.setArmiesCount(countryTo.getArmiesCount() + this.d_number);
             countryTo.setPlayer(Optional.of(countryFromOwner));
+            countryFromOwner.addCard("airlift_card");
             return;
         }
 
@@ -161,9 +162,23 @@ public class AdvanceOrder extends Order {
             return;
         }
 
+
         // Otherwise, there's a battle
         int attackingArmies = this.d_number;
         int defendingArmies = countryTo.getArmiesCount();
+
+        // If there are no defending armies, we just move the armies
+        if(defendingArmies == 0) {
+            System.out.println(
+                    "Advanced " + this.d_number + " armies from " + this.d_countryFrom + " to " + this.d_countryTo + ". No defending armies");
+            this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
+            countryFromOwner.addNewConqueredCountry(countryTo);
+            countryTo.setPlayer(Optional.of(countryFromOwner));
+            countryFromOwner.addCard("airlift_card");
+            // remove the newly conquered country from it's previous owner.
+            countryToOwner.removeAssignedCountry(countryTo.getId());
+            return;
+        }
 
         while (true) {
             double randomNumberForAttacking = Math.random();
@@ -186,6 +201,7 @@ public class AdvanceOrder extends Order {
             System.out.println("Failed to advance " + this.d_number + "armies from " + this.d_countryFrom + " to "
                     + this.d_countryTo + ". Defending armies won.");
             this.d_countryService.setArmiesCountToCountry(this.d_countryTo, defendingArmies);
+
             return;
         }
 
@@ -195,6 +211,7 @@ public class AdvanceOrder extends Order {
         this.d_countryService.setArmiesCountToCountry(this.d_countryTo, attackingArmies);
         countryFromOwner.addNewConqueredCountry(countryTo);
         countryTo.setPlayer(Optional.of(countryFromOwner));
+        countryFromOwner.addCard("airlift_card");
         // remove the newly conquered country from it's previous owner.
         countryToOwner.removeAssignedCountry(countryTo.getId());
     }

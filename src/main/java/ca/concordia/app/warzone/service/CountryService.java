@@ -67,6 +67,7 @@ public class CountryService {
                 Country country = new Country();
                 country.setId(p_dto.getId());
                 country.setContinent(continent);
+                country.setArmiesCount(p_dto.getNumberOfArmies());
 
                 d_repoCountry.save(country);
                 result.append("\n");
@@ -97,7 +98,7 @@ public class CountryService {
     }
 
     /**
-     *
+     * Finds a country by its id
      * @param p_id id of the country
      * @return oprional containing the country if found
      */
@@ -243,12 +244,12 @@ public class CountryService {
      */
     public boolean areNeighbors(String first, String second) throws NotFoundException {
         Optional<Country> countryOpt = d_repoCountry.findById(first);
-        if(!countryOpt.isPresent()) {
+        if(countryOpt.isEmpty()) {
             throw new NotFoundException("country does not exist");
         }
 
         Optional<Country> secondCountryOpt = d_repoCountry.findById(second);
-        if(!secondCountryOpt.isPresent()) {
+        if(secondCountryOpt.isEmpty()) {
             throw new NotFoundException("country does not exist");
         }
 

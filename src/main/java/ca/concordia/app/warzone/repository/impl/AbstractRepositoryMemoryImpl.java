@@ -15,6 +15,10 @@ import java.util.Optional;
  * @param <T> Entity to be persisted, must implement @see ca.concordia.app.warzone.model.Entity interface
  */
 public abstract class AbstractRepositoryMemoryImpl<T extends Entity> implements AbstractRepository<T> {
+    /**
+     * Constructor
+     */
+    public AbstractRepositoryMemoryImpl() {}
     @Override
     public void save(T p_entity) {
         getMap().put(p_entity.getId(), p_entity);
@@ -33,6 +37,11 @@ public abstract class AbstractRepositoryMemoryImpl<T extends Entity> implements 
     @Override
     public List<T> findAll() {
         return new ArrayList<>(getMap().values());
+    }
+
+    @Override
+    public void deleteAll() {
+        getMap().clear();
     }
 
     /**

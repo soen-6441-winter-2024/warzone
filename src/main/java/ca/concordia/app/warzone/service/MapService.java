@@ -7,12 +7,13 @@ import ca.concordia.app.warzone.exceptions.InvalidMapContentFormat;
 import ca.concordia.app.warzone.model.Continent;
 import ca.concordia.app.warzone.model.Country;
 import ca.concordia.app.warzone.model.MapFile;
-import ca.concordia.app.warzone.repository.ContinentRepository;
-import ca.concordia.app.warzone.repository.CountryRepository;
 import ca.concordia.app.warzone.repository.MapRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -25,18 +26,18 @@ public class MapService {
      * Data member for storing the MapRepository, for fetching and storing
      * countries.
      */
-    private final MapRepository d_repoMap; // Data member for the MapRepository
+    private final MapRepository d_repoMap;
     /**
-     * Data member for storing the CountryRepository, for fetching and storing
+     * Data member for storing the CountryService, for fetching and storing
      * countries.
      */
-    private final CountryRepository d_repoCountry; // Data member for the CountryRepository
+    private final CountryService d_countryService;
 
     /**
-     * Data member for storing the ContinentRepository, for fetching and storing
+     * Data member for storing the ContinentService, for fetching and storing
      * continents.
      */
-    private final ContinentRepository d_repoContinent; // Data member for the ContinentRepository
+    private final ContinentService d_continentService;
     
     /**
      * Data member for storing name of game map
@@ -52,16 +53,16 @@ public class MapService {
     }
     
     /**
-     * Constructs a MapService with the specified MapRepository, CountryRepository, and ContinentRepository.
+     * Constructs a MapService with the specified MapRepository, CountryService, and ContinentService.
      *
      * @param p_repoMap   the MapRepository to be used
-     * @param p_repoCountry   the CountryRepository to be used
-     * @param p_repoContinent the ContinentRepository to be used
+     * @param p_countryService   the CountryService to be used
+     * @param p_continentService the ContinentService to be used
      */
-    public MapService(MapRepository p_repoMap, CountryRepository p_repoCountry, ContinentRepository p_repoContinent) {
+    public MapService(MapRepository p_repoMap, CountryService p_countryService, ContinentService p_continentService) {
         this.d_repoMap = p_repoMap;
-        this.d_repoCountry = p_repoCountry;
-        this.d_repoContinent = p_repoContinent;
+        this.d_countryService = p_countryService;
+        this.d_continentService = p_continentService;
     }
 
     /**
@@ -110,7 +111,7 @@ public class MapService {
      */
     public boolean validateMapStructure(String p_file) {
 
-        List<String> mapLines = d_repoMap.getMap(p_file);
+        List<String> mapLines = d_repoMap.getMapAsString(p_file);
         Iterator<String> iterator = mapLines.iterator();
 
         return validateParagraph(iterator, "continents", this::isValidContinent) &&
@@ -221,64 +222,7 @@ public class MapService {
             return true;
         }
 
-        boolean resultValidation = true;
-        boolean continentsFound = false;
-        boolean countriesFound = false;
-        boolean bordersFound = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(p_file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Remove leading and trailing whitespace
-
-                if (line.equals("[continents]")) {
-                    continentsFound = true;
-                    countriesFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[countries]")) {
-                    if (!continentsFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [countries] section before [continents]
-                    }
-                    countriesFound = true;
-                    continentsFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[borders]")) {
-                    if (!countriesFound) {
-                        resultValidation = false;
-                        return resultValidation; // Invalid structure: [borders] section before [countries]
-                    }
-                    bordersFound = true;
-                    countriesFound = false;
-                    continentsFound = false;
-                } else {
-                    // Validate content format
-                    if (continentsFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [continents] should contain two elements separated by one blank space
-                        }
-                    } else if (countriesFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length != 2) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [countries] should contain two elements separated by one blank space
-                        }
-                    } else if (bordersFound && !line.isEmpty()) {
-                        String[] parts = line.split("\\s+");
-                        if (parts.length <= 1) {
-                            resultValidation = false;
-                            return resultValidation; // Invalid format: Each line after [borders] should contain at least two elements or more separated by one blank space
-                        }
-                    }
-                }
-            }
-            return resultValidation;
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return false; // Error reading file
-        }
+        return validateMapStructure(p_file);
     }
 
     /**
@@ -287,81 +231,98 @@ public class MapService {
      * @param p_file the path of the map file
      * @return true if there is at least one continent loaded, false otherwise
      */
-    private boolean readAndLoadMap(String p_file) {
-        boolean loadResult = true;
-        boolean continentsFound = false;
-        boolean countriesFound = false;
-        boolean bordersFound = false;
+    protected boolean readAndLoadMap(String p_file) {
 
-        ContinentService l_continentService = new ContinentService(d_repoContinent);
-        CountryService l_countryService = new CountryService(d_repoCountry, l_continentService);
+        MapFile map = d_repoMap.getMap(p_file);
+        return loadMap(map);
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(p_file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Remove leading and trailing whitespace
-                if (line.equals("[continents]")) {
-                    continentsFound = true;
-                    countriesFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[countries]")) {
-                    countriesFound = true;
-                    continentsFound = false;
-                    bordersFound = false;
-                } else if (line.equals("[borders]")) {
-                    bordersFound = true;
-                    countriesFound = false;
-                    continentsFound = false;
-                } else {
-                    if (continentsFound && !line.isEmpty()) {
-                        String[] l_splitContinent = line.split("\\s+");
-                        if (l_splitContinent.length == 2) {
-                            String l_continentId = l_splitContinent[0];
-                            String l_continentValue = l_splitContinent[1];
-                            ContinentDto continentDto = new ContinentDto();
-                            continentDto.setId(l_continentId);
-                            continentDto.setValue(l_continentValue);
-                            l_continentService.add(continentDto);
-                        }
-                    } else if (countriesFound && !line.isEmpty()) {
-                        String[] l_splitCountry = line.split("\\s+");
-                        if (l_splitCountry.length == 2) {
-                            String l_countryId = l_splitCountry[0];
-                            String l_continentId = l_splitCountry[1];
-                            Optional<ContinentDto> continentDtoOptional = l_continentService.findById(l_continentId);
+    /**
+     * Loads the map into the system.
+     *
+     * @param p_map map contents
+     * @return true if there is at least one continent loaded, false otherwise
+     */
+    protected boolean loadMap(MapFile p_map) {
+        try {
+            saveContinents(p_map.getContinents());
+            saveCountries(p_map.getCountries());
+            saveNeighbors(p_map.getCountries());
+        } catch (InvalidMapContentFormat e) {
+            return false;
+        }
+        return !d_continentService.findAll().isEmpty();
+    }
 
-                            if (continentDtoOptional.isEmpty())
-                                throw new InvalidMapContentFormat(
-                                        "Invalid Map: Continent Id=" + l_continentId + " not found.");
-
-                            CountryDto l_countryDto = new CountryDto();
-                            l_countryDto.setId(l_countryId);
-                            l_countryDto.setContinent(continentDtoOptional.get());
-                            l_countryService.add(l_countryDto);
-                        }
-                    } else if (bordersFound && !line.isEmpty()) {
-                        String[] l_splitNeighbor = line.split("\\s+");
-                        String l_countryId = l_splitNeighbor[0];
-                        Optional<CountryDto> countryDto = l_countryService.findById(l_countryId);
-                        if (countryDto.isEmpty())
-                            throw new InvalidMapContentFormat("Invalid Map: Country Id=" + l_countryId + " not found.");
-
-                        // add neighboring countries to the country
-                        for (int i = 1; i < l_splitNeighbor.length; i++) {
-                            countryDto.get().setNeighborId(l_splitNeighbor[i]);
-                            l_countryService.addNeighbor(countryDto.get());
-                        }
-                    }
-                }
+    /**
+     * Save neighbor countries in the system
+     *
+     * @param p_countries country list with neighbors to save
+     */
+    private void saveNeighbors(List<Country> p_countries) {
+        for (Country country : p_countries) {
+            for (Country neighbor : country.getNeighbors()) {
+                CountryDto countryDto = mapCountryDto(country);
+                countryDto.setNeighborId(neighbor.getId());
+                d_countryService.addNeighbor(countryDto);
             }
-        } catch (IOException | InvalidMapContentFormat e) {
-            System.out.println(e.getMessage());
         }
-        if (l_continentService.findAll().isEmpty())
-        {
-            loadResult =false;
+    }
+
+    /**
+     * Save countries in the system
+     *
+     * @param p_countries country list to save
+     */
+    private void saveCountries(List<Country> p_countries) {
+        for (Country country : p_countries) {
+            Optional<ContinentDto> continentDtoOptional = d_continentService.findById(country.getContinent().getId());
+
+            if (continentDtoOptional.isEmpty()) {
+                throw new InvalidMapContentFormat(
+                        "Invalid Map: Continent Id=" + country.getContinent().getId() + " not found.");
+            }
+
+            CountryDto countryDto = mapCountryDto(country);
+            d_countryService.add(countryDto);
         }
-        return loadResult;
+    }
+
+    /**
+     * Save continents in the system
+     *
+     * @param p_continents continent list to save
+     */
+    private void saveContinents(List<Continent> p_continents) {
+        for (Continent continent : p_continents) {
+            d_continentService.add(mapContinentDto(continent));
+        }
+    }
+
+    /**
+     * map country as dto
+     *
+     * @param p_country country object
+     * @return country dto
+     */
+    private CountryDto mapCountryDto(Country p_country) {
+        CountryDto dto = new CountryDto();
+        dto.setId(p_country.getId());
+        dto.setContinent(mapContinentDto(p_country.getContinent()));
+        return dto;
+    }
+
+    /**
+     * map continent as dto
+     *
+     * @param p_continent continent object
+     * @return continent dto
+     */
+    private ContinentDto mapContinentDto(Continent p_continent) {
+        ContinentDto dto = new ContinentDto();
+        dto.setId(p_continent.getId());
+        dto.setValue(p_continent.getValue());
+        return dto;
     }
 
     /**
@@ -372,13 +333,13 @@ public class MapService {
     public String showMap() {
         System.out.println();
         // retrieve lists of all continents and countries in memory
-        List<Continent> l_allContinents = d_repoContinent.findAll();
-        List<Country> l_allCountries = d_repoCountry.findAll();
+        List<Continent> l_allContinents = d_continentService.findAll();
+        List<Country> l_allCountries = d_countryService.findAll();
 
         if (l_allContinents.isEmpty() && l_allCountries.isEmpty())
             return "No map found: Map has not been created or loaded.";
 
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
 
         for (Continent l_continent : l_allContinents) {
             result.append("Continent ID: " + l_continent.getId() + ", Continent Value: " + l_continent.getValue() +  "\n");
@@ -388,10 +349,10 @@ public class MapService {
                     result.append(" - Country: " + country.getId() + " Armies: " + country.getArmiesCount() + ", Owner: "
                             + (country.getPlayer().isEmpty() ? "Not yet assigned"
                                     : country.getPlayer().get().getPlayerName())
-                            + ", Neighbors: ");
+                            + ", Neighbors:");
 
                     for (Country neighborCountry : country.getNeighbors()) {
-                        result.append(neighborCountry.getId() + ", ");
+                        result.append(" " + neighborCountry.getId() + ",");
                     }
                     result.append("\n");
                 }
@@ -430,8 +391,8 @@ public class MapService {
     public String validate() {
         Map<String, Map<String, List<String>>> l_map = new HashMap<String, Map<String, List<String>>>();
 
-        List<Continent> allContinents = d_repoContinent.findAll();
-        List<Country> allCountries = d_repoCountry.findAll();
+        List<Continent> allContinents = d_continentService.findAll();
+        List<Country> allCountries = d_countryService.findAll();
 
         if(allContinents.isEmpty() && allCountries.isEmpty()) return "No map found. Create or load a map to validate.";
 
@@ -590,7 +551,7 @@ public class MapService {
      * @return number of countries
      */
     public int getCountriesByContinentId(String continentId){
-        List<Country> l_allCountries = d_repoCountry.findAll();
+        List<Country> l_allCountries = d_countryService.findAll();
         int sizeOfContinent = 0;
         for(Country country : l_allCountries){
             if(country.getContinent().getId().equals(continentId)){

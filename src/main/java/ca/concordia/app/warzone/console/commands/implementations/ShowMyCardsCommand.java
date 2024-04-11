@@ -18,7 +18,7 @@ public class ShowMyCardsCommand extends Command {
     /**
      * Constructs a ShowMyCardsCommand object.
      *
-     * @param p_MapEditorController The controller for map editing.
+     * @param p_GameEngineController The controller for map editing.
      */
     public ShowMyCardsCommand(GameEngineController p_GameEngineController) {
         this.d_GameEngineController = p_GameEngineController;

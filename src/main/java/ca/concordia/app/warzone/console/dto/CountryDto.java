@@ -23,12 +23,35 @@ public class CountryDto {
     /** The player associated with the country. */
     private PlayerDto d_Player;
 
+    /** */
+    private int d_numberOfArmies;
+
+
+
+
     /**
      * Default constructor for CountryDto.
      * Initializes the list of neighbors.
      */
     public CountryDto() {
         this.d_Neighbors = new ArrayList<>();
+        this.d_numberOfArmies = 0;
+    } 
+
+    /**
+     * Get the number of armies
+     * @return number of armies a country has
+     */
+    public int getNumberOfArmies() {
+        return d_numberOfArmies;
+    }
+
+    /**
+     * Set the number of armies fo a country
+     * @param numberOfArmies number of armies.
+     */
+    public void setNumberOfArmies(int numberOfArmies) {
+        this.d_numberOfArmies = numberOfArmies;
     }
 
     /**

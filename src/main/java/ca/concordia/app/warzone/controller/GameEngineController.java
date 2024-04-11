@@ -2,11 +2,11 @@ package ca.concordia.app.warzone.controller;
 
 import ca.concordia.app.warzone.console.dto.ContinentDto;
 import ca.concordia.app.warzone.console.dto.CountryDto;
+import ca.concordia.app.warzone.console.dto.MapDto;
 import ca.concordia.app.warzone.console.dto.PlayerDto;
 import ca.concordia.app.warzone.console.exceptions.InvalidCommandException;
-import ca.concordia.app.warzone.model.Continent;
-import ca.concordia.app.warzone.model.Order;
-import ca.concordia.app.warzone.model.Player;
+import ca.concordia.app.warzone.model.*;
+import ca.concordia.app.warzone.model.Strategies.*;
 import ca.concordia.app.warzone.model.orders.DeployOrder;
 import ca.concordia.app.warzone.repository.ContinentRepository;
 import ca.concordia.app.warzone.repository.impl.PhaseRepository;
@@ -15,9 +15,8 @@ import ca.concordia.app.warzone.service.exceptions.NotFoundException;
 import ca.concordia.app.warzone.service.phase.*;
 import org.springframework.stereotype.Component;
 import ca.concordia.app.warzone.logging.LoggingService;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -77,6 +76,7 @@ public class GameEngineController {
      * @param p_phaseRepository   The PhaseRepository to use.
      * @param p_PlayerCardService The PlayerCardService to use.
      * @param p_RepoContinent     The continent repository to use
+     * @param p_gameService       The game service to use
      */
     public GameEngineController(ContinentService p_continentService, CountryService p_countryService,
             PlayerService p_playerService, MapService p_mapService,
@@ -214,10 +214,23 @@ public class GameEngineController {
         return result;
     }
 
+    /**
+     * Saves a game to file
+     * @param fileName the name of the file where the game is being saved to
+     * @return the result of the operation
+     */
     public String saveGame(String fileName) {
         return this.d_gameService.saveGame(fileName);
     }
 
+    /**
+     * Loads a game file to memory
+     * @param fileName the name of the file where the game is being saved
+     * @return the result of the operation
+     */
+    public String loadGame(String fileName) {
+        return this.d_gameService.loadGame(fileName);
+    }
 
     /**
      * Issues an order to advance on a country.
@@ -413,6 +426,10 @@ public class GameEngineController {
 
         // executes deploy orders first
         for (Player player : players) {
+            if(player.getPlayerCurrentTurnOrders(p_currentRound) == null || player.getPlayerCurrentTurnOrders(p_currentRound).size() == 0) {
+                continue;
+            }
+
             for (Order order : player.getPlayerCurrentTurnOrders(p_currentRound)) {
                 if(order instanceof DeployOrder) order.execute();
             }
@@ -435,5 +452,148 @@ public class GameEngineController {
      */
     public String getCurrentPhase() {
         return this.d_phaseRepository.getPhase().getClass().getSimpleName();
+    }
+
+    /**
+     * Performs a tournament
+     * @param mapFilenames the map filenames to be used
+     * @param playerStrategies the player strategies
+     * @param maxTurnNumber the max number of turns
+     * @param gameAmount amount of games per map
+     * @return the result of the tournament
+     * @throws NotFoundException a not found exception
+     */
+
+    public String tournamentMode(String[] mapFilenames, String[] playerStrategies, int maxTurnNumber, int gameAmount) throws NotFoundException {
+        System.out.println("Starting a tournament with: " + String.join(" ", mapFilenames));
+        System.out.println("Player strategies: " + String.join(" ", playerStrategies));
+        System.out.println("Max turn number: " + maxTurnNumber);
+        System.out.println("Game amount: " + gameAmount);
+
+        List<MapGameResult> tournamentResult = new ArrayList<>();
+
+        for(String mapFilename : mapFilenames) {
+            System.out.println("Playing with " + mapFilename);
+            MapDto mapDto = new MapDto();
+            mapDto.setFileName(mapFilename);
+
+            MapGameResult mapGameResult = new MapGameResult(mapFilename);
+
+            for(int currentGameNumber = 1; currentGameNumber <= gameAmount; currentGameNumber++) {
+                String result = this.d_mapService.loadMap(mapDto);
+                if(!result.contains("Map file loaded")) {
+                    throw new InvalidCommandException(result);
+                }
+
+
+                for(int i = 0; i < playerStrategies.length; i++) {
+                    PlayerDto playerDto = new PlayerDto();
+                    playerDto.setPlayerName(playerStrategies[i]);
+                    this.addPlayer(playerDto);
+                }
+
+                this.d_phaseRepository.setPhase(new GameStartupPhase(this.d_playerService));
+                System.out.println(this.assignCountries());
+
+                String winner = this.playTournamentGame(maxTurnNumber, playerStrategies, mapFilename);
+                mapGameResult.addGameResult(winner);
+            }
+
+            tournamentResult.add(mapGameResult);
+        }
+
+        System.out.println("Tournament result: ");
+        System.out.println("------------------------------");
+        for(int i = 0; i < tournamentResult.size(); i++) {
+            MapGameResult currentResult = tournamentResult.get(i);
+            System.out.println("Results for map: " + mapFilenames[i]);
+            for (int j = 0; j < currentResult.getD_gameWinners().size(); j++) {
+                System.out.println("Game " + (j + 1) + ": " + currentResult.getD_gameWinners().get(j));
+            }
+
+            System.out.println("------------------------------");
+        }
+        return "";
+    }
+
+    /**
+     * Returns the winner of the current game
+     * @return The winner of the game
+     */
+    public Player getWinner() {
+        List<Country> countries = this.d_countryService.findAll();
+        return countries.get(0).getPlayer().get();
+    }
+
+    /**
+     * Return whether the current game is finished or not
+     * @return true if game is finished
+     */
+    public boolean isGameFinished() {
+        List<Country> countries = this.d_countryService.findAll();
+        Player firstOwner = countries.get(0).getPlayer().get();
+        for(Country country : countries) {
+            if(country.getPlayer().isEmpty()) {
+                return false;
+            }
+
+            if(!country.getPlayer().get().getPlayerName().equals(firstOwner.getPlayerName())) {
+                return  false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Plays a single tournament game
+     * @param maxTurnNumber max number of turns
+     * @param playerStrategies the player strategies
+     * @param mapName the map name for the current game
+     * @return the result of this game
+     */
+    public String playTournamentGame(int maxTurnNumber, String[] playerStrategies, String mapName) {
+
+        this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+
+        ComputerStrategy[] computerStrategies = new ComputerStrategy[playerStrategies.length];
+
+        Player[] players = this.d_playerService.getAllPlayersArr();
+
+
+
+
+        for(int currentRound = 0; currentRound < maxTurnNumber; currentRound++) {
+            this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+            for(int i = 0; i < players.length; i++) {
+                this.d_phaseRepository.setPhase(new GameIssueOrderPhase(this.d_playerService));
+                if(players[i].getPlayerName().equals("aggressive")) {
+                    computerStrategies[i] = new AggresiveComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService,i);
+                } else if (players[i].getPlayerName().equals("benevolent")) {
+                    computerStrategies[i] = new BenevolentComputerPlayerStrategy(players[i],players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, this.d_countryService,i);
+                } else if(players[i].getPlayerName().equals("random")) {
+                    computerStrategies[i] = new RandomComputerPlayerStrategy(players[i], players[i].getCountriesAssigned(), currentRound, this.d_phaseRepository, this.d_playerService, this.d_diplomacyList, i);
+                } else if(players[i].getPlayerName().equals("cheater")) {
+                    computerStrategies[i] = new CheaterComputerPlayerStrategy(players[i],players[i].getCountriesAssigned());
+                }
+
+                try {
+                    computerStrategies[i].createOrder();
+                } catch (InvalidCommandException e) {
+                    continue;
+                }
+
+            }
+
+            this.d_phaseRepository.setPhase(new GameExecuteOrderPhase());
+            this.executeTurnOrders(currentRound);
+
+            if(this.isGameFinished()) {
+                return this.getWinner().getPlayerName();
+            }
+        }
+
+        return "draw";
+
     }
 }

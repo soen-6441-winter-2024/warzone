@@ -1,0 +1,3 @@
+[borders]
+country1 country2 country3 country4 country5
+country2 country6 country7

@@ -3,7 +3,7 @@ package ca.concordia.app.warzone.exceptions;
 /**
  * Exception thrown when the format of the map content is invalid.
  */
-public class InvalidMapContentFormat extends Exception {
+public class InvalidMapContentFormat extends RuntimeException {
     /**
      * Constructs a new InvalidMapContentFormat with the specified detail message.
      *
